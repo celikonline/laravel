@@ -8,10 +8,12 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('districts', function (Blueprint $table) {
+        Schema::create('vehicle_colors', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('city_id')->constrained()->onDelete('cascade');
+            $table->string('hex_code');
+            $table->text('description')->nullable();
+            $table->boolean('is_metallic')->default(false);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
@@ -19,6 +21,6 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('districts');
+        Schema::dropIfExists('vehicle_colors');
     }
 }; 

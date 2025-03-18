@@ -10,10 +10,13 @@ return new class extends Migration
     {
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('code', 10)->unique();
+            $table->string('name', 100);
+            $table->string('code', 10);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
+            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->boolean('is_deleted')->default(false);
         });
     }
 

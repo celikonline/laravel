@@ -8,20 +8,20 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('service_packages', function (Blueprint $table) {
+        Schema::create('vehicle_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->decimal('price', 10, 2);
-            $table->integer('duration_days');
+            $table->boolean('requires_special_license')->default(false);
+            $table->integer('max_passengers')->nullable();
+            $table->decimal('max_weight', 10, 2)->nullable();
             $table->boolean('is_active')->default(true);
-            $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('service_packages');
+        Schema::dropIfExists('vehicle_types');
     }
 }; 

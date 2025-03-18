@@ -8,18 +8,20 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('vehicle_models', function (Blueprint $table) {
+        Schema::create('districts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('brand_id')->constrained('vehicle_brands');
-            $table->string('name');
-            $table->timestamps();
+            $table->string('name', 100);
+            $table->foreignId('city_id')->constrained('cities')->onDelete('cascade');
             $table->boolean('is_active')->default(true);
+            $table->timestamps();
+            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->boolean('is_deleted')->default(false);
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('vehicle_models');
+        Schema::dropIfExists('districts');
     }
 }; 

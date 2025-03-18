@@ -8,10 +8,10 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('vehicle_models', function (Blueprint $table) {
+        Schema::create('plate_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('brand_id')->constrained('vehicle_brands');
-            $table->string('name');
+            $table->string('name', 50);
+            $table->string('description', 200)->nullable();
             $table->timestamps();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_deleted')->default(false);
@@ -20,6 +20,6 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('vehicle_models');
+        Schema::dropIfExists('plate_types');
     }
 }; 
