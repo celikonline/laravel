@@ -6,159 +6,186 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Paket Oluştur</div>
-
+                <div class="card-header">
+                    <h4>Paket Seçimi</h4>
+                </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('packages.store') }}">
                         @csrf
-                        
-                        <!-- Paket Seçimi -->
-                        <div class="card mb-4">
-                            <div class="card-header">1. Paket Seçimi</div>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label>Servis Paketi</label>
-                                    <select name="package_type_id" class="form-control @error('package_type_id') is-invalid @enderror">
-                                        <option value="">Seçiniz</option>
-                                        @foreach($packageTypes as $type)
-                                            <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('package_type_id')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                        <!-- 1. Paket Seçimi -->
+                        <div class="mb-4">
+                            <h5>1. Paket Seçimi</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Servis Paketi*</label>
+                                        <select class="form-select" name="service_package_id" required>
+                                            <option value="">Servis Paketi Seçiniz</option>
+                                            @foreach($servicePackages as $package)
+                                                <option value="{{ $package->id }}">{{ $package->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Servis Paket Ücreti*</label>
+                                        <select class="form-select" name="service_package_price" required>
+                                            <option value="">Servis Paketi Ücretini Seçiniz</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Paket Başlangıç Tarihi*</label>
+                                        <input type="date" class="form-control" name="start_date" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Paket Bitiş Tarihi*</label>
+                                        <input type="date" class="form-control" name="end_date" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Poliçe Süresi(Gün)*</label>
+                                        <input type="number" class="form-control" name="policy_duration" readonly>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Müşteri Bilgileri -->
-                        <div class="card mb-4">
-                            <div class="card-header">2. Müşteri Bilgileri</div>
-                            <div class="card-body">
-                                <div class="form-check mb-3">
-                                    <input type="checkbox" class="form-check-input" id="is_individual" name="is_individual" value="1" checked>
-                                    <label class="form-check-label">Bireysel Müşteri</label>
-                                </div>
-
-                                <div id="individual-form">
-                                    <div class="form-group">
-                                        <label>Ad</label>
-                                        <input type="text" name="first_name" class="form-control @error('first_name') is-invalid @enderror">
-                                        @error('first_name')
-                                            <span class="invalid-feedback">{{ $message }}</span>
-                                        @enderror
+                        <!-- 2. Müşteri Bilgileri -->
+                        <div class="mb-4">
+                            <h5>2. Müşteri Bilgileri</h5>
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="customer_type" id="bireysel" value="individual" checked>
+                                        <label class="form-check-label" for="bireysel">Bireysel Müşteri</label>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Soyad</label>
-                                        <input type="text" name="last_name" class="form-control @error('last_name') is-invalid @enderror">
-                                        @error('last_name')
-                                            <span class="invalid-feedback">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group">
-                                        <label>TC Kimlik No</label>
-                                        <input type="text" name="identity_number" class="form-control @error('identity_number') is-invalid @enderror">
-                                        @error('identity_number')
-                                            <span class="invalid-feedback">{{ $message }}</span>
-                                        @enderror
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="customer_type" id="kurumsal" value="corporate">
+                                        <label class="form-check-label" for="kurumsal">Kurumsal Müşteri</label>
                                     </div>
                                 </div>
-
-                                <div id="corporate-form" style="display: none;">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Şirket Adı</label>
-                                        <input type="text" name="company_name" class="form-control @error('company_name') is-invalid @enderror">
-                                        @error('company_name')
-                                            <span class="invalid-feedback">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Vergi No</label>
-                                        <input type="text" name="tax_number" class="form-control @error('tax_number') is-invalid @enderror">
-                                        @error('tax_number')
-                                            <span class="invalid-feedback">{{ $message }}</span>
-                                        @enderror
+                                        <label>TC Kimlik No*</label>
+                                        <input type="text" class="form-control" name="identity_number" required>
                                     </div>
                                 </div>
-
-                                <div class="form-group">
-                                    <label>Telefon</label>
-                                    <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror">
-                                    @error('phone')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Adı*</label>
+                                        <input type="text" class="form-control" name="name" required>
+                                    </div>
                                 </div>
-
-                                <div class="form-group">
-                                    <label>E-posta</label>
-                                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror">
-                                    @error('email')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>İl*</label>
+                                        <select class="form-select" name="city_id" required>
+                                            <option value="">İl Seçiniz</option>
+                                            @foreach($cities as $city)
+                                                <option value="{{ $city->id }}">{{ $city->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>İlçe*</label>
+                                        <select class="form-select" name="district_id" required>
+                                            <option value="">İlçe Seçiniz</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>Telefon*</label>
+                                        <input type="tel" class="form-control" name="phone" required>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Araç Bilgileri -->
-                        <div class="card mb-4">
-                            <div class="card-header">3. Araç Bilgileri</div>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label>Plaka Tipi</label>
-                                    <select name="plate_type" class="form-control @error('plate_type') is-invalid @enderror">
-                                        <option value="">Seçiniz</option>
-                                        @foreach($plateTypes as $type)
-                                            <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('plate_type')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                        <!-- 3. Araç Bilgileri -->
+                        <div class="mb-4">
+                            <h5>3. Araç Bilgileri</h5>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Araç Plaka Tipi*</label>
+                                        <select class="form-select" name="plate_type" required>
+                                            <option value="">Plaka Tipi Seçiniz</option>
+                                            <option value="normal">Normal</option>
+                                            <option value="special">Özel</option>
+                                        </select>
+                                    </div>
                                 </div>
-
-                                <div class="form-group">
-                                    <label>Plaka</label>
-                                    <input type="text" name="plate" class="form-control @error('plate') is-invalid @enderror">
-                                    @error('plate')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Araç Plakası*</label>
+                                        <input type="text" class="form-control" name="plate_number" required>
+                                    </div>
                                 </div>
-
-                                <div class="form-group">
-                                    <label>Marka</label>
-                                    <select name="vehicle_brand" class="form-control @error('vehicle_brand') is-invalid @enderror">
-                                        <option value="">Seçiniz</option>
-                                        @foreach($vehicleBrands as $brand)
-                                            <option value="{{ $brand->id }}">{{ $brand->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('vehicle_brand')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Araç Markası*</label>
+                                        <select class="form-select" name="brand_id" required>
+                                            <option value="">Araç Markası Seçiniz</option>
+                                            @foreach($vehicleBrands as $brand)
+                                                <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-
-                                <div class="form-group">
-                                    <label>Model</label>
-                                    <select name="vehicle_model" class="form-control @error('vehicle_model') is-invalid @enderror">
-                                        <option value="">Seçiniz</option>
-                                    </select>
-                                    @error('vehicle_model')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Araç Modeli*</label>
+                                        <select class="form-select" name="model_id" required>
+                                            <option value="">Araç Modeli Seçiniz</option>
+                                        </select>
+                                    </div>
                                 </div>
-
-                                <div class="form-group">
-                                    <label>Model Yılı</label>
-                                    <input type="number" name="vehicle_model_year" class="form-control @error('vehicle_model_year') is-invalid @enderror">
-                                    @error('vehicle_model_year')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Araç Model Yılı*</label>
+                                        <select class="form-select" name="model_year" required>
+                                            <option value="">Araç Model Yılı Seçiniz</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Kaydet ve Ödeme Sayfasına Geç</button>
+                        <!-- 4. Kaydet ve ödeme sayfasına geç -->
+                        <div class="mb-4">
+                            <h5>4. Kaydet ve ödeme sayfasına geç</h5>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" name="terms" id="terms" required>
+                                <label class="form-check-label" for="terms">
+                                    KVKK Metni'ni okudum ve onaylıyorum
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" name="agreement" id="agreement" required>
+                                <label class="form-check-label" for="agreement">
+                                    İstisnaları Satış Sözleşmesi'ni okudum ve onaylıyorum
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">Kaydet ve Ödeme Sayfasına Geç</button>
                         </div>
                     </form>
                 </div>
@@ -170,31 +197,48 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
-    // Bireysel/Kurumsal form değişimi
-    $('#is_individual').change(function() {
-        if($(this).is(':checked')) {
-            $('#individual-form').show();
-            $('#corporate-form').hide();
-        } else {
-            $('#individual-form').hide();
-            $('#corporate-form').show();
+    // İl seçildiğinde ilçeleri getir
+    $('select[name="city_id"]').on('change', function() {
+        var cityId = $(this).val();
+        if(cityId) {
+            $.get('/packages/districts/' + cityId, function(data) {
+                var districtSelect = $('select[name="district_id"]');
+                districtSelect.empty();
+                districtSelect.append('<option value="">İlçe Seçiniz</option>');
+                $.each(data, function(key, value) {
+                    districtSelect.append('<option value="' + value.id + '">' + value.name + '</option>');
+                });
+            });
         }
     });
 
-    // Marka seçimine göre model listesini güncelle
-    $('select[name="vehicle_brand"]').change(function() {
+    // Marka seçildiğinde modelleri getir
+    $('select[name="brand_id"]').on('change', function() {
         var brandId = $(this).val();
         if(brandId) {
-            $.get('/api/vehicle-models/' + brandId, function(data) {
-                var modelSelect = $('select[name="vehicle_model"]');
+            $.get('/packages/vehicle-models/' + brandId, function(data) {
+                var modelSelect = $('select[name="model_id"]');
                 modelSelect.empty();
-                modelSelect.append('<option value="">Seçiniz</option>');
+                modelSelect.append('<option value="">Araç Modeli Seçiniz</option>');
                 $.each(data, function(key, value) {
                     modelSelect.append('<option value="' + value.id + '">' + value.name + '</option>');
                 });
             });
         }
     });
+
+    // Tarih seçildiğinde poliçe süresini hesapla
+    $('input[name="start_date"], input[name="end_date"]').on('change', function() {
+        var startDate = new Date($('input[name="start_date"]').val());
+        var endDate = new Date($('input[name="end_date"]').val());
+        
+        if(startDate && endDate) {
+            var diffTime = Math.abs(endDate - startDate);
+            var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            $('input[name="policy_duration"]').val(diffDays);
+        }
+    });
 });
 </script>
 @endpush
+@endsection

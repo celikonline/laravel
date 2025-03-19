@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PackageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,10 +19,17 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('packages', PackageController::class);
-    Route::get('/api/vehicle-models/{brandId}', [VehicleController::class, 'getModelsByBrand']);
+    // Paket işlemleri
+    Route::get('/packages', [PackageController::class, 'index'])->name('packages.index');
+    Route::get('/packages/create', [PackageController::class, 'create'])->name('packages.create');
+    Route::post('/packages', [PackageController::class, 'store'])->name('packages.store');
+    Route::get('/packages/{id}/payment', [PackageController::class, 'payment'])->name('packages.payment');
+    Route::post('/packages/{id}/payment', [PackageController::class, 'processPayment'])->name('packages.process-payment');
+    
+    // AJAX istekleri
+    Route::get('/packages/vehicle-models/{brand_id}', [PackageController::class, 'getVehicleModels']);
+    Route::get('/packages/districts/{city_id}', [PackageController::class, 'getDistricts']);
 });
-
 
 Auth::routes();
 

@@ -11,21 +11,26 @@ class ServicePackage extends Model
         'name',
         'description',
         'price',
-        'duration_days',
+        'duration',
         'is_active',
-        'is_deleted'
     ];
 
     protected $casts = [
-        'price' => 'float',
-        'duration_days' => 'integer',
+        'price' => 'decimal:2',
+        'duration' => 'integer',
         'is_active' => 'boolean',
-        'is_deleted' => 'boolean'
     ];
 
     // Packages that belong to this service package
     public function packages()
     {
         return $this->hasMany(Package::class);
+    }
+
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'service_package_services')
+            ->withPivot('quantity')
+            ->withTimestamps();
     }
 } 
