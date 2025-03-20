@@ -12,6 +12,9 @@ class Vehicle extends Model
     protected $fillable = [
         'customer_id',
         'plate_number',
+        'plate_city',
+        'plate_letters',
+        'plate_numbers',
         'plate_type',
         'brand_id',
         'model_id',
@@ -37,6 +40,11 @@ class Vehicle extends Model
     public function model()
     {
         return $this->belongsTo(VehicleModel::class);
+    }
+
+    public function plateType()
+    {
+        return $this->belongsTo(PlateType::class, 'plate_type');
     }
 
     public function packages()

@@ -75,7 +75,7 @@ class PackageController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"service_package_id","start_date","end_date","customer_type","identity_number","first_name","last_name","phone","city_id","district_id","plate_type","plate_number","brand_id","model_id","model_year","terms","agreement"},
+     *             required={"service_package_id","start_date","end_date","customer_type","identity_number","first_name","last_name","phone","city_id","district_id","plate_type","plate_city","plate_letters","plate_numbers","brand_id","model_id","model_year","terms","agreement"},
      *             @OA\Property(property="service_package_id", type="integer", description="Hizmet paketi ID"),
      *             @OA\Property(property="start_date", type="string", format="date", description="Başlangıç tarihi"),
      *             @OA\Property(property="end_date", type="string", format="date", description="Bitiş tarihi"),
@@ -87,7 +87,9 @@ class PackageController extends Controller
      *             @OA\Property(property="city_id", type="integer", description="İl ID"),
      *             @OA\Property(property="district_id", type="integer", description="İlçe ID"),
      *             @OA\Property(property="plate_type", type="string", description="Plaka tipi (Normal/Özel)"),
-     *             @OA\Property(property="plate_number", type="string", description="Plaka numarası"),
+     *             @OA\Property(property="plate_city", type="string", description="Plaka şehir kodu"),
+     *             @OA\Property(property="plate_letters", type="string", description="Plaka harfler"),
+     *             @OA\Property(property="plate_numbers", type="string", description="Plaka sayılar"),
      *             @OA\Property(property="brand_id", type="integer", description="Araç markası ID"),
      *             @OA\Property(property="model_id", type="integer", description="Araç modeli ID"),
      *             @OA\Property(property="model_year", type="integer", description="Araç model yılı"),
@@ -119,7 +121,9 @@ class PackageController extends Controller
             'city_id' => 'required|exists:cities,id',
             'district_id' => 'required|exists:districts,id',
             'plate_type' => 'required|exists:plate_types,id',
-            'plate_number' => 'required|string|unique:vehicles,plate_number',
+            'plate_city' => 'required|digits:2',
+            'plate_letters' => 'required|regex:/^[A-Z]{1,3}$/',
+            'plate_numbers' => 'required|digits_between:1,4',
             'brand_id' => 'required|exists:vehicle_brands,id',
             'model_id' => 'required|exists:vehicle_models,id',
             'model_year' => 'required|integer',
@@ -129,6 +133,9 @@ class PackageController extends Controller
 
         try {
             DB::beginTransaction();
+
+            // Plaka numarasını birleştir
+            $plateNumber = $request->plate_city . ' ' . $request->plate_letters . ' ' . $request->plate_numbers;
 
             // Müşteri oluştur
             $customer = Customer::create([
@@ -144,7 +151,10 @@ class PackageController extends Controller
             // Araç oluştur
             $vehicle = Vehicle::create([
                 'customer_id' => $customer->id,
-                'plate_number' => $request->plate_number,
+                'plate_number' => $plateNumber,
+                'plate_city' => $request->plate_city,
+                'plate_letters' => $request->plate_letters,
+                'plate_numbers' => $request->plate_numbers,
                 'plate_type' => $request->plate_type,
                 'brand_id' => $request->brand_id,
                 'model_id' => $request->model_id,

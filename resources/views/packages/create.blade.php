@@ -141,7 +141,12 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Araç Plakası*</label>
-                                        <input type="text" class="form-control" name="plate_number" required>
+                                        <div class="d-flex gap-2">
+                                            <input type="text" class="form-control" name="plate_city" placeholder="İl" maxlength="2" style="width: 70px;" required>
+                                            <input type="text" class="form-control" name="plate_letters" placeholder="Harf" maxlength="3" style="width: 90px;" required>
+                                            <input type="text" class="form-control" name="plate_numbers" placeholder="Sayı" maxlength="4" style="width: 90px;" required>
+                                            <input type="hidden" name="plate_number">
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -170,6 +175,12 @@
                                         <label>Araç Model Yılı*</label>
                                         <select class="form-select" name="model_year" required>
                                             <option value="">Araç Model Yılı Seçiniz</option>
+                                            @php
+                                                $currentYear = date('Y');
+                                                for($year = $currentYear; $year >= $currentYear - 30; $year--) {
+                                                    echo "<option value='{$year}'>{$year}</option>";
+                                                }
+                                            @endphp
                                         </select>
                                     </div>
                                 </div>
@@ -276,18 +287,70 @@ $(document).ready(function() {
         }
     });
 
-    // Marka seçildiğinde modelleri getir
+    // Marka seçildiğinde modelleri getir ve model yılını sıfırla
     $('select[name="brand_id"]').on('change', function() {
         var brandId = $(this).val();
+        
+        // Model seçimini sıfırla
+        var modelSelect = $('select[name="model_id"]');
+        modelSelect.empty();
+        modelSelect.append('<option value="">Araç Modeli Seçiniz</option>');
+        
+        // Model yılı seçimini sıfırla
+        $('select[name="model_year"]').val('');
+        
         if(brandId) {
+            // Modelleri getir
             $.get('/packages/vehicle-models/' + brandId, function(data) {
-                var modelSelect = $('select[name="model_id"]');
-                modelSelect.empty();
-                modelSelect.append('<option value="">Araç Modeli Seçiniz</option>');
                 $.each(data, function(key, value) {
                     modelSelect.append('<option value="' + value.id + '">' + value.name + '</option>');
                 });
             });
+        }
+    });
+
+    // Model seçildiğinde model yılını sıfırla
+    $('select[name="model_id"]').on('change', function() {
+        $('select[name="model_year"]').val('');
+    });
+
+    // Plaka formatını düzenle
+    function formatPlate() {
+        var city = $('input[name="plate_city"]').val().toUpperCase();
+        var letters = $('input[name="plate_letters"]').val().toUpperCase();
+        var numbers = $('input[name="plate_numbers"]').val();
+        
+        // Sadece sayıları kabul et
+        city = city.replace(/[^0-9]/g, '');
+        // Sadece harfleri kabul et
+        letters = letters.replace(/[^A-Z]/g, '');
+        // Sadece sayıları kabul et
+        numbers = numbers.replace(/[^0-9]/g, '');
+
+        $('input[name="plate_city"]').val(city);
+        $('input[name="plate_letters"]').val(letters);
+        $('input[name="plate_numbers"]').val(numbers);
+
+        // Birleştirilmiş plaka
+        var fullPlate = city + ' ' + letters + ' ' + numbers;
+        $('input[name="plate_number"]').val(fullPlate.trim());
+    }
+
+    // Her input değiştiğinde formatı güncelle
+    $('input[name="plate_city"], input[name="plate_letters"], input[name="plate_numbers"]').on('input', formatPlate);
+
+    // Form gönderilmeden önce son bir kez format kontrolü yap
+    $('form').on('submit', function(e) {
+        formatPlate();
+        
+        var city = $('input[name="plate_city"]').val();
+        var letters = $('input[name="plate_letters"]').val();
+        var numbers = $('input[name="plate_numbers"]').val();
+
+        if (city.length < 2 || letters.length < 1 || numbers.length < 1) {
+            e.preventDefault();
+            alert('Lütfen geçerli bir plaka numarası giriniz.');
+            return false;
         }
     });
 });
