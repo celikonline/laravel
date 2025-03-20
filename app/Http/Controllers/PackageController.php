@@ -73,13 +73,14 @@ class PackageController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"service_package_id","start_date","end_date","customer_type","identity_number","name","phone","city_id","district_id","plate_type","plate_number","brand_id","model_id","model_year","terms","agreement"},
+     *             required={"service_package_id","start_date","end_date","customer_type","identity_number","first_name","last_name","phone","city_id","district_id","plate_type","plate_number","brand_id","model_id","model_year","terms","agreement"},
      *             @OA\Property(property="service_package_id", type="integer", description="Hizmet paketi ID"),
      *             @OA\Property(property="start_date", type="string", format="date", description="Başlangıç tarihi"),
      *             @OA\Property(property="end_date", type="string", format="date", description="Bitiş tarihi"),
      *             @OA\Property(property="customer_type", type="string", description="Müşteri tipi (Bireysel/Kurumsal)"),
      *             @OA\Property(property="identity_number", type="string", description="TC Kimlik No"),
-     *             @OA\Property(property="name", type="string", description="Ad"),
+     *             @OA\Property(property="first_name", type="string", description="Ad"),
+     *             @OA\Property(property="last_name", type="string", description="Soyad"),
      *             @OA\Property(property="phone", type="string", description="Telefon"),
      *             @OA\Property(property="city_id", type="integer", description="İl ID"),
      *             @OA\Property(property="district_id", type="integer", description="İlçe ID"),
@@ -110,7 +111,8 @@ class PackageController extends Controller
             'end_date' => 'required|date|after:start_date',
             'customer_type' => 'required|in:individual,corporate',
             'identity_number' => 'required|string',
-            'name' => 'required|string',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
             'phone' => 'required|string',
             'city_id' => 'required|exists:cities,id',
             'district_id' => 'required|exists:districts,id',
@@ -128,7 +130,8 @@ class PackageController extends Controller
 
             // Müşteri oluştur
             $customer = Customer::create([
-                'name' => $request->name,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
                 'identity_number' => $request->identity_number,
                 'phone' => $request->phone,
                 'type' => $request->customer_type,
