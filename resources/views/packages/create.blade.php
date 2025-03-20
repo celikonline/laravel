@@ -38,13 +38,13 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Paket Bitiş Tarihi*</label>
-                                        <input type="date" class="form-control" name="end_date" readonly required>
+                                        <input type="date" class="form-control bg-light" name="end_date" readonly required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Poliçe Süresi(Gün)*</label>
-                                        <input type="number" class="form-control" name="policy_duration" readonly>
+                                        <input type="number" class="form-control bg-light" name="policy_duration" readonly>
                                     </div>
                                 </div>
                             </div>
