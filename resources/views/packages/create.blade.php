@@ -22,16 +22,8 @@
                                         <select class="form-select" name="service_package_id" required>
                                             <option value="">Servis Paketi Seçiniz</option>
                                             @foreach($servicePackages as $package)
-                                                <option value="{{ $package->id }}">{{ $package->name }}</option>
+                                                <option value="{{ $package->id }}">{{ $package->name }} - {{ $package->price }} TL</option>
                                             @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Servis Paket Ücreti*</label>
-                                        <select class="form-select" name="service_package_price" required>
-                                            <option value="">Servis Paketi Ücretini Seçiniz</option>
                                         </select>
                                     </div>
                                 </div>
