@@ -22,7 +22,7 @@
                                         <select class="form-select" name="service_package_id" required>
                                             <option value="">Servis Paketi Seçiniz</option>
                                             @foreach($servicePackages as $package)
-                                                <option value="{{ $package->id }}">{{ $package->name }} - {{ $package->price }} TL</option>
+                                                <option value="{{ $package->id }}" data-duration="{{ $package->duration_days }}">{{ $package->name }} - {{ $package->price }} TL</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -32,13 +32,13 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Paket Başlangıç Tarihi*</label>
-                                        <input type="date" class="form-control" name="start_date" required>
+                                        <input type="date" class="form-control" name="start_date" required value="{{ date('Y-m-d') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Paket Bitiş Tarihi*</label>
-                                        <input type="date" class="form-control" name="end_date" required>
+                                        <input type="date" class="form-control" name="end_date" readonly required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -189,6 +189,43 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
+    // Bugünün tarihini başlangıç tarihine set et
+    var today = new Date().toISOString().split('T')[0];
+    $('input[name="start_date"]').val(today);
+
+    // Servis paketi seçildiğinde süreyi ve bitiş tarihini ayarla
+    $('select[name="service_package_id"]').on('change', function() {
+        var selectedOption = $(this).find('option:selected');
+        var durationDays = selectedOption.data('duration');
+        var startDate = new Date($('input[name="start_date"]').val());
+        
+        if(durationDays && startDate) {
+            // Poliçe süresini set et
+            $('input[name="policy_duration"]').val(durationDays);
+            
+            // Bitiş tarihini hesapla
+            var endDate = new Date(startDate);
+            endDate.setDate(endDate.getDate() + durationDays);
+            var formattedEndDate = endDate.toISOString().split('T')[0];
+            $('input[name="end_date"]').val(formattedEndDate);
+        }
+    });
+
+    // Başlangıç tarihi değiştiğinde bitiş tarihini güncelle
+    $('input[name="start_date"]').on('change', function() {
+        var selectedOption = $('select[name="service_package_id"]').find('option:selected');
+        var durationDays = selectedOption.data('duration');
+        var startDate = new Date($(this).val());
+        
+        if(durationDays && startDate) {
+            // Bitiş tarihini hesapla
+            var endDate = new Date(startDate);
+            endDate.setDate(endDate.getDate() + durationDays);
+            var formattedEndDate = endDate.toISOString().split('T')[0];
+            $('input[name="end_date"]').val(formattedEndDate);
+        }
+    });
+
     // İl seçildiğinde ilçeleri getir
     $('select[name="city_id"]').on('change', function() {
         var cityId = $(this).val();
@@ -216,18 +253,6 @@ $(document).ready(function() {
                     modelSelect.append('<option value="' + value.id + '">' + value.name + '</option>');
                 });
             });
-        }
-    });
-
-    // Tarih seçildiğinde poliçe süresini hesapla
-    $('input[name="start_date"], input[name="end_date"]').on('change', function() {
-        var startDate = new Date($('input[name="start_date"]').val());
-        var endDate = new Date($('input[name="end_date"]').val());
-        
-        if(startDate && endDate) {
-            var diffTime = Math.abs(endDate - startDate);
-            var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            $('input[name="policy_duration"]').val(diffDays);
         }
     });
 });
