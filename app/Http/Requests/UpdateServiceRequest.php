@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateDistrictRequest extends FormRequest
+class UpdateServiceRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,8 +14,8 @@ class CreateDistrictRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'city_id' => 'required|exists:cities,id',
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:services,name,' . $this->route('service'),
+            'description' => 'nullable|string',
             'is_active' => 'boolean',
         ];
     }

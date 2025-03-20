@@ -1,3 +1,5 @@
+<?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -17,31 +19,31 @@ class CitiesController extends Controller
 
     public function index(): JsonResponse
     {
-        $cities = $this->cityService->getAllCities();
+        $cities = $this->cityService->all();
         return response()->json($cities);
     }
 
     public function store(CreateCityRequest $request): JsonResponse
     {
-        $city = $this->cityService->createCity($request->validated());
-        return response()->json($city);
+        $city = $this->cityService->create($request->validated());
+        return response()->json($city, 201);
     }
 
     public function show(int $id): JsonResponse
     {
-        $city = $this->cityService->getCityById($id);
+        $city = $this->cityService->find($id);
         return response()->json($city);
     }
 
-    public function update(int $id, UpdateCityRequest $request): JsonResponse
+    public function update(UpdateCityRequest $request, int $id): JsonResponse
     {
-        $city = $this->cityService->updateCity($id, $request->validated());
+        $city = $this->cityService->update($id, $request->validated());
         return response()->json($city);
     }
 
     public function destroy(int $id): JsonResponse
     {
-        $this->cityService->deleteCity($id);
+        $this->cityService->delete($id);
         return response()->json(null, 204);
     }
 

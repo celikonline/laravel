@@ -1,3 +1,5 @@
+<?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -17,37 +19,37 @@ class DistrictsController extends Controller
 
     public function index(): JsonResponse
     {
-        $districts = $this->districtService->getAllDistricts();
+        $districts = $this->districtService->all();
         return response()->json($districts);
     }
 
     public function store(CreateDistrictRequest $request): JsonResponse
     {
-        $district = $this->districtService->createDistrict($request->validated());
-        return response()->json($district);
+        $district = $this->districtService->create($request->validated());
+        return response()->json($district, 201);
     }
 
     public function show(int $id): JsonResponse
     {
-        $district = $this->districtService->getDistrictById($id);
+        $district = $this->districtService->find($id);
         return response()->json($district);
     }
 
-    public function update(int $id, UpdateDistrictRequest $request): JsonResponse
+    public function update(UpdateDistrictRequest $request, int $id): JsonResponse
     {
-        $district = $this->districtService->updateDistrict($id, $request->validated());
+        $district = $this->districtService->update($id, $request->validated());
         return response()->json($district);
     }
 
     public function destroy(int $id): JsonResponse
     {
-        $this->districtService->deleteDistrict($id);
+        $this->districtService->delete($id);
         return response()->json(null, 204);
     }
 
     public function getByCityId(int $cityId): JsonResponse
     {
-        $districts = $this->districtService->getDistrictsByCityId($cityId);
+        $districts = $this->districtService->findByCityId($cityId);
         return response()->json($districts);
     }
 

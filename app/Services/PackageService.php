@@ -1,4 +1,5 @@
-// app/Services/PackageService.php
+<?php
+
 namespace App\Services;
 
 use App\Repositories\PackageRepository;
@@ -14,7 +15,7 @@ class PackageService
         $this->packageRepository = $packageRepository;
     }
 
-    public function getAllPackages(int $pageNumber, int $pageSize)
+    public function getAllPaginated(int $pageNumber = 1, int $pageSize = 10)
     {
         return $this->packageRepository->getAllPaginated($pageNumber, $pageSize);
     }
@@ -55,13 +56,18 @@ class PackageService
         }
     }
 
-    public function getPackagesByCustomerId(int $customerId)
+    public function findByCustomerId(int $customerId)
     {
         return $this->packageRepository->findByCustomerId($customerId);
     }
 
-    public function getPackagesByVehicleId(int $vehicleId)
+    public function findByVehicleId(int $vehicleId)
     {
         return $this->packageRepository->findByVehicleId($vehicleId);
+    }
+
+    public function findWithRelations(int $id)
+    {
+        return $this->packageRepository->findWithRelations($id);
     }
 }

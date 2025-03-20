@@ -1,23 +1,27 @@
+<?php
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateServicePackageRequest extends FormRequest
 {
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
-            'name' => 'string|max:255',
+            'name' => 'required|string|max:255|unique:service_packages,name,' . $this->route('service_package'),
             'description' => 'nullable|string',
-            'price' => 'numeric|min:0',
-            'duration_days' => 'integer|min:1',
+            'price' => 'required|numeric|min:0',
+            'duration' => 'required|integer|min:1',
+            'services' => 'required|array',
+            'services.*.id' => 'required|exists:services,id',
+            'services.*.quantity' => 'required|integer|min:1',
             'is_active' => 'boolean',
-            'is_deleted' => 'boolean'
         ];
     }
 } 

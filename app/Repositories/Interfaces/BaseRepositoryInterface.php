@@ -1,3 +1,6 @@
+
+<?php
+
 // app/Repositories/Interfaces/BaseRepositoryInterface.php
 namespace App\Repositories\Interfaces;
 

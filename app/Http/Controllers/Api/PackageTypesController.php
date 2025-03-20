@@ -1,3 +1,5 @@
+<?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -15,7 +17,7 @@ class PackageTypesController extends Controller
 
     public function index(): JsonResponse
     {
-        $packageTypes = $this->packageTypeService->getAllPackageTypes();
+        $packageTypes = $this->packageTypeService->all();
         return response()->json($packageTypes);
     }
 } 

@@ -1,3 +1,5 @@
+<?php
+
 // app/Http/Requests/PackageRequest.php
 namespace App\Http\Requests;
 

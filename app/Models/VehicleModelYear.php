@@ -1,3 +1,5 @@
+<?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -8,23 +10,20 @@ class VehicleModelYear extends Model
     use HasFactory;
 
     protected $fillable = [
-        'vehicle_model_id',
+        'model_id',
         'year',
-        'is_active',
-        'is_deleted'
+        'is_active'
     ];
 
     protected $casts = [
-        'vehicle_model_id' => 'integer',
         'year' => 'integer',
-        'is_active' => 'boolean',
-        'is_deleted' => 'boolean'
+        'is_active' => 'boolean'
     ];
 
     // Model this year belongs to
-    public function vehicleModel()
+    public function model()
     {
-        return $this->belongsTo(VehicleModel::class);
+        return $this->belongsTo(VehicleModel::class, 'model_id');
     }
 
     // Packages using this model year

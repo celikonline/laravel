@@ -1,3 +1,5 @@
+<?php
+
 namespace App\Services;
 
 use App\Repositories\PackageTypeRepository;
@@ -11,7 +13,7 @@ class PackageTypeService
         $this->packageTypeRepository = $packageTypeRepository;
     }
 
-    public function getAllPackageTypes()
+    public function all()
     {
         return $this->packageTypeRepository->all();
     }

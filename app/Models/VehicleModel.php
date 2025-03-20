@@ -1,3 +1,5 @@
+<?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -8,34 +10,27 @@ class VehicleModel extends Model
     use HasFactory;
 
     protected $fillable = [
-        'vehicle_brand_id',
+        'brand_id',
         'name',
-        'code',
-        'is_active',
-        'is_deleted'
+        'is_active'
     ];
 
     protected $casts = [
-        'vehicle_brand_id' => 'integer',
-        'is_active' => 'boolean',
-        'is_deleted' => 'boolean'
+        'is_active' => 'boolean'
     ];
 
-    // Brand this model belongs to
-    public function vehicleBrand()
+    public function brand()
     {
         return $this->belongsTo(VehicleBrand::class);
     }
 
-    // Packages using this model
-    public function packages()
+    public function years()
     {
-        return $this->hasMany(Package::class);
+        return $this->hasMany(VehicleModelYear::class, 'model_id');
     }
 
-    // Vehicle model years for this model
-    public function modelYears()
+    public function vehicles()
     {
-        return $this->hasMany(VehicleModelYear::class);
+        return $this->hasMany(Vehicle::class, 'model_id');
     }
 } 

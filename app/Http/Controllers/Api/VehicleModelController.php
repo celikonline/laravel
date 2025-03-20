@@ -1,53 +1,55 @@
+<?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateVehicleModelRequest;
 use App\Http\Requests\UpdateVehicleModelRequest;
-use App\Repositories\VehicleModelRepository;
+use App\Services\VehicleModelService;
 use Illuminate\Http\JsonResponse;
 
 class VehicleModelController extends Controller
 {
-    protected $vehicleModelRepository;
+    protected $vehicleModelService;
 
-    public function __construct(VehicleModelRepository $vehicleModelRepository)
+    public function __construct(VehicleModelService $vehicleModelService)
     {
-        $this->vehicleModelRepository = $vehicleModelRepository;
+        $this->vehicleModelService = $vehicleModelService;
     }
 
     public function index(): JsonResponse
     {
-        $models = $this->vehicleModelRepository->getAllActive();
+        $models = $this->vehicleModelService->all();
         return response()->json($models);
     }
 
     public function store(CreateVehicleModelRequest $request): JsonResponse
     {
-        $model = $this->vehicleModelRepository->create($request->validated());
+        $model = $this->vehicleModelService->create($request->validated());
         return response()->json($model, 201);
     }
 
     public function show(int $id): JsonResponse
     {
-        $model = $this->vehicleModelRepository->findById($id);
+        $model = $this->vehicleModelService->findWithYears($id);
         return response()->json($model);
     }
 
     public function update(UpdateVehicleModelRequest $request, int $id): JsonResponse
     {
-        $model = $this->vehicleModelRepository->update($id, $request->validated());
+        $model = $this->vehicleModelService->update($id, $request->validated());
         return response()->json($model);
     }
 
     public function destroy(int $id): JsonResponse
     {
-        $this->vehicleModelRepository->delete($id);
+        $this->vehicleModelService->delete($id);
         return response()->json(null, 204);
     }
 
     public function getByBrandId(int $brandId): JsonResponse
     {
-        $models = $this->vehicleModelRepository->findByBrandId($brandId);
+        $models = $this->vehicleModelService->findByBrandId($brandId);
         return response()->json($models);
     }
 

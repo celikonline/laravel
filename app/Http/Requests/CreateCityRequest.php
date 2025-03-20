@@ -1,20 +1,21 @@
+<?php
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateCityRequest extends FormRequest
 {
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|max:10|unique:cities',
-            'is_active' => 'boolean'
+            'name' => 'required|string|max:255|unique:cities',
+            'is_active' => 'boolean',
         ];
     }
 } 
