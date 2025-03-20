@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Models\Customer;
 use App\Models\District;
 use App\Models\Package;
+use App\Models\PlateType;
 use App\Models\ServicePackage;
 use App\Models\Vehicle;
 use App\Models\VehicleBrand;
@@ -61,8 +62,9 @@ class PackageController extends Controller
         $servicePackages = ServicePackage::where('is_active', true)->get();
         $cities = City::where('is_active', true)->get();
         $vehicleBrands = VehicleBrand::where('is_active', true)->get();
+        $plateTypes = PlateType::where('is_active', true)->get();
 
-        return view('packages.create', compact('servicePackages', 'cities', 'vehicleBrands'));
+        return view('packages.create', compact('servicePackages', 'cities', 'vehicleBrands', 'plateTypes'));
     }
 
     /**
@@ -116,7 +118,7 @@ class PackageController extends Controller
             'phone' => 'required|string',
             'city_id' => 'required|exists:cities,id',
             'district_id' => 'required|exists:districts,id',
-            'plate_type' => 'required|in:normal,special',
+            'plate_type' => 'required|exists:plate_types,id',
             'plate_number' => 'required|string|unique:vehicles,plate_number',
             'brand_id' => 'required|exists:vehicle_brands,id',
             'model_id' => 'required|exists:vehicle_models,id',

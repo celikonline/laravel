@@ -2,6 +2,11 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+.bg-custom-gray {
+    background-color: #f0f0f0 !important;
+}
+</style>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -38,13 +43,13 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Paket Bitiş Tarihi*</label>
-                                        <input type="date" class="form-control bg-light" name="end_date" readonly required>
+                                        <input type="date" class="form-control bg-custom-gray" name="end_date" readonly required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Poliçe Süresi(Gün)*</label>
-                                        <input type="number" class="form-control bg-light" name="policy_duration" readonly>
+                                        <input type="number" class="form-control bg-custom-gray" name="policy_duration" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -68,20 +73,19 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>TC Kimlik No*</label>
+                                        <label id="identity_label">TC Kimlik No*</label>
                                         <input type="text" class="form-control" name="identity_number" required>
                                     </div>
                                 </div>
-                               
                             </div>
-                            <div class="row mt-3">
+                            <div class="row mt-3" id="name_row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Adı*</label>
+                                        <label id="first_name_label">Adı*</label>
                                         <input type="text" class="form-control" name="first_name" required>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6" id="last_name_container">
                                     <div class="form-group">
                                         <label>Soyadı*</label>
                                         <input type="text" class="form-control" name="last_name" required>
@@ -128,8 +132,9 @@
                                         <label>Araç Plaka Tipi*</label>
                                         <select class="form-select" name="plate_type" required>
                                             <option value="">Plaka Tipi Seçiniz</option>
-                                            <option value="normal">Normal</option>
-                                            <option value="special">Özel</option>
+                                            @foreach($plateTypes as $plateType)
+                                                <option value="{{ $plateType->id }}">{{ $plateType->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -198,6 +203,27 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
+    // Müşteri tipi değiştiğinde form alanlarını güncelle
+    $('input[name="customer_type"]').on('change', function() {
+        var customerType = $(this).val();
+        
+        if(customerType === 'corporate') {
+            // Kurumsal müşteri seçildiğinde
+            $('#identity_label').text('Vergi Kimlik No*');
+            $('#first_name_label').text('Şirket Adı*');
+            $('#last_name_container').hide();
+            $('input[name="last_name"]').prop('required', false);
+            $('.col-md-6:first', '#name_row').removeClass('col-md-6').addClass('col-md-12');
+        } else {
+            // Bireysel müşteri seçildiğinde
+            $('#identity_label').text('TC Kimlik No*');
+            $('#first_name_label').text('Adı*');
+            $('#last_name_container').show();
+            $('input[name="last_name"]').prop('required', true);
+            $('.col-md-12', '#name_row').removeClass('col-md-12').addClass('col-md-6');
+        }
+    });
+
     // Bugünün tarihini başlangıç tarihine set et
     var today = new Date().toISOString().split('T')[0];
     $('input[name="start_date"]').val(today);
