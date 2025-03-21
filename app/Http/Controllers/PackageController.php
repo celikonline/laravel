@@ -40,9 +40,9 @@ class PackageController extends Controller
     public function index()
     {
         $packages = Package::with(['customer', 'servicePackage'])
-            ->orderBy('created_at', 'desc')
+            ->orderBy('updated_at', 'desc')
             ->paginate(10);
-
+        
         return view('packages.index', compact('packages'));
     }
 
@@ -562,4 +562,27 @@ class PackageController extends Controller
         $interval = $start->diff($end);
         return $interval->days;
     }
+
+    public function generateContractPdf(Package $package)
+{
+    // PDF oluşturma işlemleri burada yapılacak
+    // Örnek olarak:
+    $pdf = PDF::loadView('pdfs.contract', compact('package'));
+    return $pdf->download('hizmet-sozlesmesi-' . $package->contract_number . '.pdf');
+}
+
+public function generateReceiptPdf(Package $package)
+{
+    // PDF oluşturma işlemleri burada yapılacak
+    // Örnek olarak:
+    $pdf = PDF::loadView('pdfs.receipt', compact('package'));
+    return $pdf->download('makbuz-' . $package->contract_number . '.pdf');
+}
+
+// app/Models/Package.php
+
+public function getFormattedPlateAttribute()
+{
+    return $this->plate_city . ' ' . $this->plate_letters . ' ' . $this->plate_numbers;
+}
 }
