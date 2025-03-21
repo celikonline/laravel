@@ -11,7 +11,6 @@ class Package extends Model
 
     protected $fillable = [
         'customer_id',
-        'vehicle_id',
         'service_package_id',
         'contract_number',
         'start_date',
@@ -23,6 +22,15 @@ class Package extends Model
         'payment_date',
         'duration',
         'is_active',
+        // Araç bilgileri
+        'plate_number',
+        'plate_city',
+        'plate_letters',
+        'plate_numbers',
+        'plate_type',
+        'brand_id',
+        'model_id',
+        'model_year',
     ];
 
     protected $casts = [
@@ -34,6 +42,7 @@ class Package extends Model
         'commission_rate' => 'decimal:2',
         'duration' => 'integer',
         'is_active' => 'boolean',
+        'model_year' => 'integer',
     ];
 
     public function customer()
@@ -41,13 +50,23 @@ class Package extends Model
         return $this->belongsTo(Customer::class);
     }
 
-    public function vehicle()
-    {
-        return $this->belongsTo(Vehicle::class);
-    }
-
     public function servicePackage()
     {
         return $this->belongsTo(ServicePackage::class);
+    }
+
+    public function vehicleBrand()
+    {
+        return $this->belongsTo(VehicleBrand::class, 'brand_id');
+    }
+
+    public function vehicleModel()
+    {
+        return $this->belongsTo(VehicleModel::class, 'model_id');
+    }
+
+    public function plateType()
+    {
+        return $this->belongsTo(PlateType::class, 'plate_type');
     }
 } 

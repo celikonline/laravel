@@ -40,9 +40,9 @@
                                             {{ $package->status === 'active' ? 'Aktif' : 'Pasif' }}
                                         </span>
                                     </td>
-                                    <td>{{ $package->customer->name }}</td>
-                                    <td>{{ $package->vehicle->plate_number }}</td>
-                                    <td>{{ $package->servicePackage->name }}</td>
+                                    <td>{{ $package->first_name }}</td>
+                                    <td>{{ $package->Plate }}</td>
+                                    <td>{{ $package->package_name }}</td>
                                     <td>{{ number_format($package->price, 2) }} ₺</td>
                                     <td>{{ number_format($package->commission, 2) }} ₺</td>
                                     <td>{{ $package->commission_rate }}%</td>

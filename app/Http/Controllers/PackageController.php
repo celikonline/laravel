@@ -39,7 +39,7 @@ class PackageController extends Controller
      */
     public function index()
     {
-        $packages = Package::with(['customer', 'vehicle', 'servicePackage'])
+        $packages = Package::with(['customer', 'servicePackage'])
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
@@ -117,7 +117,7 @@ class PackageController extends Controller
             'identity_number' => 'required|string',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'phone' => 'required|string',
+            'phone_number' => 'required|string',
             'city_id' => 'required|exists:cities,id',
             'district_id' => 'required|exists:districts,id',
             'plate_type' => 'required|exists:plate_types,id',
@@ -137,20 +137,44 @@ class PackageController extends Controller
             // Plaka numarasını birleştir
             $plateNumber = $request->plate_city . ' ' . $request->plate_letters . ' ' . $request->plate_numbers;
 
-            // Müşteri oluştur
-            $customer = Customer::create([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'identity_number' => $request->identity_number,
-                'phone' => $request->phone,
-                'type' => $request->customer_type,
-                'city_id' => $request->city_id,
-                'district_id' => $request->district_id,
-            ]);
+            // Müşteri kontrolü - Varsa güncelle, yoksa oluştur
+            $customer = Customer::where('identity_number', $request->identity_number)->first();
 
-            // Araç oluştur
-            $vehicle = Vehicle::create([
+            if ($customer) {
+                // Mevcut müşteriyi güncelle
+                $customer->update([
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->customer_type === 'individual' ? $request->last_name : null,
+                    'phone_number' => $request->phone_number,
+                    'customer_type' => $request->customer_type,
+                    'city_id' => $request->city_id,
+                    'district_id' => $request->district_id,
+                ]);
+            } else {
+                // Yeni müşteri oluştur
+                $customer = Customer::create([
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->customer_type === 'individual' ? $request->last_name : null,
+                    'identity_number' => $request->identity_number,
+                    'phone_number' => $request->phone_number,
+                    'customer_type' => $request->customer_type,
+                    'city_id' => $request->city_id,
+                    'district_id' => $request->district_id,
+                ]);
+            }
+
+            // Paket oluştur
+            $servicePackage = ServicePackage::findOrFail($request->service_package_id);
+            $package = Package::create([
                 'customer_id' => $customer->id,
+                'service_package_id' => $servicePackage->id,
+                'start_date' => $request->start_date,
+                'end_date' => $request->end_date,
+                'price' => $servicePackage->price,
+                'status' => 'pending_payment',
+                'contract_number' => $this->generateContractNumber(),
+                'duration' => $this->calculateDuration($request->start_date, $request->end_date),
+                // Araç bilgilerini doğrudan pakete ekle
                 'plate_number' => $plateNumber,
                 'plate_city' => $request->plate_city,
                 'plate_letters' => $request->plate_letters,
@@ -159,20 +183,6 @@ class PackageController extends Controller
                 'brand_id' => $request->brand_id,
                 'model_id' => $request->model_id,
                 'model_year' => $request->model_year,
-            ]);
-
-            // Paket oluştur
-            $servicePackage = ServicePackage::findOrFail($request->service_package_id);
-            $package = Package::create([
-                'customer_id' => $customer->id,
-                'vehicle_id' => $vehicle->id,
-                'service_package_id' => $servicePackage->id,
-                'start_date' => $request->start_date,
-                'end_date' => $request->end_date,
-                'price' => $servicePackage->price,
-                'status' => 'pending_payment',
-                'contract_number' => $this->generateContractNumber(),
-                'duration' => $this->calculateDuration($request->start_date, $request->end_date),
             ]);
 
             DB::commit();
@@ -278,7 +288,7 @@ class PackageController extends Controller
      */
     public function payment($id)
     {
-        $package = Package::with(['customer', 'vehicle', 'servicePackage'])
+        $package = Package::with(['customer', 'servicePackage'])
             ->findOrFail($id);
 
         return view('packages.payment', compact('package'));
@@ -334,6 +344,198 @@ class PackageController extends Controller
 
         return redirect()->route('packages.index')
             ->with('success', 'Ödeme başarıyla tamamlandı ve paket aktifleştirildi.');
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/packages/{id}/edit",
+     *     summary="Paket düzenleme formunu gösterir",
+     *     tags={"Paketler"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Paket ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Başarılı"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Paket bulunamadı"
+     *     )
+     * )
+     */
+    public function edit($id)
+    {
+        $package = Package::with(['customer', 'servicePackage', 'vehicleBrand', 'vehicleModel', 'plateType'])
+            ->findOrFail($id);
+            
+        $servicePackages = ServicePackage::where('is_active', true)->get();
+        $cities = City::where('is_active', true)->get();
+        $districts = District::where('city_id', $package->customer->city_id)->where('is_active', true)->get();
+        $vehicleBrands = VehicleBrand::where('is_active', true)->get();
+        $vehicleModels = VehicleModel::where('brand_id', $package->brand_id)->where('is_active', true)->get();
+        $plateTypes = PlateType::where('is_active', true)->get();
+
+        return view('packages.edit', compact(
+            'package', 
+            'servicePackages', 
+            'cities', 
+            'districts',
+            'vehicleBrands', 
+            'vehicleModels',
+            'plateTypes'
+        ));
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/packages/{id}",
+     *     summary="Paketi günceller",
+     *     tags={"Paketler"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Paket ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/PackageRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=302,
+     *         description="Başarılı - Paket listesine yönlendirilir"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validasyon hatası"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Paket bulunamadı"
+     *     )
+     * )
+     */
+    public function update(Request $request, $id)
+    {
+        \Log::info('Package update started', ['id' => $id, 'request' => $request->all()]);
+        
+        try {
+            $package = Package::findOrFail($id);
+            
+            $validatedData = $request->validate([
+                'service_package_id' => 'required|exists:service_packages,id',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date|after:start_date',
+                'customer_type' => 'required|in:individual,corporate',
+                'identity_number' => 'required|string',
+                'first_name' => 'required|string',
+                'last_name' => $request->customer_type === 'individual' ? 'required|string' : 'nullable',
+                'phone_number' => 'required|string',
+                'city_id' => 'required|exists:cities,id',
+                'district_id' => 'required|exists:districts,id',
+                'plate_type' => 'required|exists:plate_types,id',
+                'plate_city' => 'required|digits:2',
+                'plate_letters' => 'required|regex:/^[A-Z]{1,3}$/',
+                'plate_numbers' => 'required|digits_between:1,4',
+                'brand_id' => 'required|exists:vehicle_brands,id',
+                'model_id' => 'required|exists:vehicle_models,id',
+                'model_year' => 'required|integer|min:1900|max:'.(date('Y')+1),
+            ]);
+
+            \Log::info('Validation passed', ['validatedData' => $validatedData]);
+
+            DB::beginTransaction();
+
+            // Plaka numarasını birleştir
+            $plateNumber = $request->plate_city . ' ' . $request->plate_letters . ' ' . $request->plate_numbers;
+
+            // Müşteri kontrolü - Farklı bir identity_number girilmiş mi?
+            if ($package->customer->identity_number !== $request->identity_number) {
+                // Yeni girilen identity_number'a sahip başka bir müşteri var mı?
+                $existingCustomer = Customer::where('identity_number', $request->identity_number)
+                    ->where('id', '!=', $package->customer_id)
+                    ->first();
+
+                if ($existingCustomer) {
+                    // Varolan müşteriyi kullan ve güncelle
+                    $existingCustomer->update([
+                        'first_name' => $request->first_name,
+                        'last_name' => $request->customer_type === 'individual' ? $request->last_name : null,
+                        'phone_number' => $request->phone_number,
+                        'customer_type' => $request->customer_type,
+                        'city_id' => $request->city_id,
+                        'district_id' => $request->district_id,
+                    ]);
+                    
+                    // Paketin customer_id'sini güncelle
+                    $package->customer_id = $existingCustomer->id;
+                    $package->save();
+                } else {
+                    // Mevcut müşteriyi güncelle
+                    $package->customer->update([
+                        'first_name' => $request->first_name,
+                        'last_name' => $request->customer_type === 'individual' ? $request->last_name : null,
+                        'identity_number' => $request->identity_number,
+                        'phone_number' => $request->phone_number,
+                        'customer_type' => $request->customer_type,
+                        'city_id' => $request->city_id,
+                        'district_id' => $request->district_id,
+                    ]);
+                }
+            } else {
+                // Identity number değişmemiş, normal güncelleme yap
+                $package->customer->update([
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->customer_type === 'individual' ? $request->last_name : null,
+                    'phone_number' => $request->phone_number,
+                    'customer_type' => $request->customer_type,
+                    'city_id' => $request->city_id,
+                    'district_id' => $request->district_id,
+                ]);
+            }
+
+            // Paket bilgilerini güncelle
+            $servicePackage = ServicePackage::findOrFail($request->service_package_id);
+            $package->update([
+                'service_package_id' => $servicePackage->id,
+                'start_date' => $request->start_date,
+                'end_date' => $request->end_date,
+                'price' => $servicePackage->price,
+                'duration' => $this->calculateDuration($request->start_date, $request->end_date),
+                // Araç bilgilerini güncelle
+                'plate_number' => $plateNumber,
+                'plate_city' => $request->plate_city,
+                'plate_letters' => $request->plate_letters,
+                'plate_numbers' => $request->plate_numbers,
+                'plate_type' => $request->plate_type,
+                'brand_id' => $request->brand_id,
+                'model_id' => $request->model_id,
+                'model_year' => $request->model_year,
+            ]);
+
+            \Log::info('Package updated', ['package' => $package]);
+
+            DB::commit();
+
+            return redirect()->route('packages.index')
+                ->with('success', 'Paket başarıyla güncellendi.');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validation error', ['errors' => $e->errors()]);
+            return back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Update error', ['error' => $e->getMessage()]);
+            DB::rollback();
+            return back()
+                ->with('error', 'Paket güncellenirken bir hata oluştu: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     private function generateContractNumber()

@@ -22,7 +22,7 @@
                             </tr>
                             <tr>
                                 <th>Araç:</th>
-                                <td>{{ $package->vehicle->plate_number }}</td>
+                                <td>{{ $package->plate_number }}</td>
                             </tr>
                             <tr>
                                 <th>Paket:</th>

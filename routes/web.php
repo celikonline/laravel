@@ -23,6 +23,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/packages', [PackageController::class, 'index'])->name('packages.index');
     Route::get('/packages/create', [PackageController::class, 'create'])->name('packages.create');
     Route::post('/packages', [PackageController::class, 'store'])->name('packages.store');
+    Route::get('/packages/{id}/edit', [PackageController::class, 'edit'])->name('packages.edit');
+    Route::put('/packages/{id}', [PackageController::class, 'update'])->name('packages.update');
     Route::get('/packages/{id}/payment', [PackageController::class, 'payment'])->name('packages.payment');
     Route::post('/packages/{id}/payment', [PackageController::class, 'processPayment'])->name('packages.process-payment');
     
