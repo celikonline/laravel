@@ -14,6 +14,8 @@ use App\Models\VehicleModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PDF;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PackagesExport;
 
 /**
  * @OA\Info(
@@ -642,5 +644,83 @@ class PackageController extends Controller
         };
 
         return response()->stream($callback, 200, $headers);
+    }
+
+    public function exportExcel()
+    {
+        $packages = Package::with(['customer', 'servicePackage'])->get();
+        
+        $fileName = 'paketler_' . date('Y-m-d_H-i-s') . '.xls';
+        
+        $headers = [
+            'Content-Type' => 'application/vnd.ms-excel',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+        ];
+        
+        $columns = [
+            'Poliçe No',
+            'Müşteri',
+            'Plaka',
+            'Servis Paketi',
+            'Ücret',
+            'Komisyon',
+            'Komisyon Oranı',
+            'Başlangıç',
+            'Bitiş',
+            'Süre',
+            'Durum'
+        ];
+
+        $callback = function() use ($packages, $columns) {
+            $file = fopen('php://output', 'w');
+            // UTF-8 BOM for Excel
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            
+            // Headers
+            fputcsv($file, $columns, "\t");
+            
+            // Data rows
+            foreach ($packages as $package) {
+                fputcsv($file, [
+                    $package->contract_number,
+                    $package->customer->name,
+                    $package->plate_city . ' ' . $package->plate_letters . ' ' . $package->plate_numbers,
+                    $package->servicePackage->name,
+                    number_format($package->price, 2, ',', '.') . ' ₺',
+                    number_format($package->commission, 2, ',', '.') . ' ₺',
+                    '%' . number_format($package->commission_rate, 2, ',', '.'),
+                    $package->start_date->format('d.m.Y'),
+                    $package->end_date->format('d.m.Y'),
+                    $package->duration,
+                    $package->is_active ? 'Aktif' : 'Pasif'
+                ], "\t");
+            }
+            
+            fclose($file);
+        };
+        
+        return response()->stream($callback, 200, $headers);
+    }
+
+    public function exportPdf()
+    {
+        $packages = Package::with(['customer', 'servicePackage'])->get();
+        
+        $pdf = PDF::loadView('exports.packages-pdf', [
+            'packages' => $packages,
+            'date' => date('d.m.Y H:i')
+        ]);
+        
+        return $pdf->download('paketler_' . date('Y-m-d_H-i-s') . '.pdf');
+    }
+
+    public function contractPreview(Package $package)
+    {
+        return view('packages.contract-preview', compact('package'));
+    }
+
+    public function receiptPreview(Package $package)
+    {
+        return view('packages.receipt-preview', compact('package'));
     }
 }

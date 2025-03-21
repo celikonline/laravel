@@ -35,8 +35,11 @@ Route::middleware(['auth'])->group(function () {
     // routes/web.php
 Route::get('/packages/{package}/contract/pdf', [PackageController::class, 'generateContractPdf'])->name('packages.contract.pdf');
 Route::get('/packages/{package}/receipt/pdf', [PackageController::class, 'generateReceiptPdf'])->name('packages.receipt.pdf');
-
 Route::get('/packages/export/csv', [PackageController::class, 'exportCsv'])->name('packages.export.csv');
+Route::get('/packages/export/excel', [PackageController::class, 'exportExcel'])->name('packages.export.excel');
+Route::get('/packages/export/pdf', [PackageController::class, 'exportPdf'])->name('packages.export.pdf');
+Route::get('/packages/{package}/contract-preview', [PackageController::class, 'contractPreview'])->name('packages.contract-preview');
+Route::get('/packages/{package}/receipt-preview', [PackageController::class, 'receiptPreview'])->name('packages.receipt-preview');
 });
 
 Auth::routes();

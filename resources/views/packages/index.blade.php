@@ -14,8 +14,12 @@
                 <a href="{{ route('packages.export.csv') }}" class="btn btn-outline-secondary">
                     <i class="fas fa-file-csv"></i> CSV
                 </a>
-                <button class="btn btn-outline-secondary">PDF</button>
-                <button class="btn btn-outline-secondary">Excel</button>
+                <a href="{{ route('packages.export.excel') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-file-excel"></i> Excel
+                </a>
+                <a href="{{ route('packages.export.pdf') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-file-pdf"></i> PDF
+                </a>
             </div>
         </div>
     </div>
@@ -44,16 +48,18 @@
                     <tr>
                         <td>
                             <div class="d-flex gap-1">
-                                <a href="{{ route('packages.contract.pdf', $package->id) }}" 
-                                   class="btn btn-sm btn-outline-primary" 
-                                   title="Hizmet Sözleşmesi">
-                                    <i class="fas fa-file-contract"></i>
-                                </a>
-                                <a href="{{ route('packages.receipt.pdf', $package->id) }}" 
-                                   class="btn btn-sm btn-outline-success" 
-                                   title="Makbuz">
-                                    <i class="fas fa-receipt"></i>
-                                </a>
+                                <button type="button"
+                                   class="btn btn-sm btn-outline-warning btn-contract" 
+                                   title="Hizmet Sözleşmesi"
+                                   data-contract-id="{{ $package->id }}">
+                                    <i class="fas fa-file-pdf"></i>
+                                </button>
+                                <button type="button"
+                                   class="btn btn-sm btn-outline-danger btn-receipt" 
+                                   title="Makbuz"
+                                   data-receipt-id="{{ $package->id }}">
+                                    <i class="fas fa-file-pdf"></i>
+                                </button>
                             </div>
                         </td>
                         <td>
@@ -84,6 +90,58 @@
                     Toplam {{ $packages->total() }} kayıttan {{ $packages->firstItem() }} - {{ $packages->lastItem() }} arası gösteriliyor
                 </div>
                 {{ $packages->links() }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hizmet Sözleşmesi Modal -->
+<div class="modal fade" id="contractModal" tabindex="-1" aria-labelledby="contractModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="contractModalLabel">Hizmet Sözleşmesi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body" id="contractModalBody">
+                <!-- Sözleşme içeriği AJAX ile yüklenecek -->
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Yükleniyor...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <a href="" class="btn btn-warning" id="downloadContractBtn">
+                    <i class="fas fa-file-pdf"></i> PDF İndir
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Makbuz Modal -->
+<div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="receiptModalLabel">Makbuz</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body" id="receiptModalBody">
+                <!-- Makbuz içeriği AJAX ile yüklenecek -->
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Yükleniyor...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <a href="" class="btn btn-danger" id="downloadReceiptBtn">
+                    <i class="fas fa-file-pdf"></i> PDF İndir
+                </a>
             </div>
         </div>
     </div>
@@ -139,8 +197,8 @@
     padding: 0.25rem 0.5rem;
 }
 
-.btn-outline-primary:hover, 
-.btn-outline-success:hover {
+.btn-outline-warning:hover, 
+.btn-outline-danger:hover {
     color: #fff;
 }
 
@@ -170,5 +228,65 @@
     letter-spacing: 1px;
     text-transform: uppercase;
 }
+
+/* Modal styles */
+.modal-lg {
+    max-width: 800px;
+}
+
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
 </style>
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+    // Contract modal handling
+    $('.btn-contract').click(function() {
+        var contractId = $(this).data('contract-id');
+        var modal = $('#contractModal');
+        
+        // Show loading spinner
+        modal.find('.modal-body').html('<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Yükleniyor...</span></div></div>');
+        
+        // Update download button href
+        $('#downloadContractBtn').attr('href', '/packages/' + contractId + '/contract/pdf');
+        
+        // Show modal
+        modal.modal('show');
+        
+        // Load contract preview
+        $.get('/packages/' + contractId + '/contract-preview', function(response) {
+            modal.find('.modal-body').html(response);
+        }).fail(function() {
+            modal.find('.modal-body').html('<div class="alert alert-danger">Sözleşme yüklenirken bir hata oluştu.</div>');
+        });
+    });
+
+    // Receipt modal handling
+    $('.btn-receipt').click(function() {
+        var receiptId = $(this).data('receipt-id');
+        var modal = $('#receiptModal');
+        
+        // Show loading spinner
+        modal.find('.modal-body').html('<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Yükleniyor...</span></div></div>');
+        
+        // Update download button href
+        $('#downloadReceiptBtn').attr('href', '/packages/' + receiptId + '/receipt/pdf');
+        
+        // Show modal
+        modal.modal('show');
+        
+        // Load receipt preview
+        $.get('/packages/' + receiptId + '/receipt-preview', function(response) {
+            modal.find('.modal-body').html(response);
+        }).fail(function() {
+            modal.find('.modal-body').html('<div class="alert alert-danger">Makbuz yüklenirken bir hata oluştu.</div>');
+        });
+    });
+});
+</script>
+@endpush
 @endsection
