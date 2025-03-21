@@ -13,6 +13,7 @@ use App\Models\VehicleBrand;
 use App\Models\VehicleModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 /**
  * @OA\Info(
@@ -564,25 +565,82 @@ class PackageController extends Controller
     }
 
     public function generateContractPdf(Package $package)
-{
-    // PDF oluşturma işlemleri burada yapılacak
-    // Örnek olarak:
-    $pdf = PDF::loadView('pdfs.contract', compact('package'));
-    return $pdf->download('hizmet-sozlesmesi-' . $package->contract_number . '.pdf');
-}
+    {
+        // PDF oluşturma işlemleri burada yapılacak
+        // Örnek olarak:
+        $pdf = PDF::loadView('pdfs.contract', compact('package'));
+        return $pdf->download('hizmet-sozlesmesi-' . $package->contract_number . '.pdf');
+    }
 
-public function generateReceiptPdf(Package $package)
-{
-    // PDF oluşturma işlemleri burada yapılacak
-    // Örnek olarak:
-    $pdf = PDF::loadView('pdfs.receipt', compact('package'));
-    return $pdf->download('makbuz-' . $package->contract_number . '.pdf');
-}
+    public function generateReceiptPdf(Package $package)
+    {
+        // PDF oluşturma işlemleri burada yapılacak
+        // Örnek olarak:
+        $pdf = PDF::loadView('pdfs.receipt', compact('package'));
+        return $pdf->download('makbuz-' . $package->contract_number . '.pdf');
+    }
 
-// app/Models/Package.php
+    // app/Models/Package.php
 
-public function getFormattedPlateAttribute()
-{
-    return $this->plate_city . ' ' . $this->plate_letters . ' ' . $this->plate_numbers;
-}
+    public function getFormattedPlateAttribute()
+    {
+        return $this->plate_city . ' ' . $this->plate_letters . ' ' . $this->plate_numbers;
+    }
+
+    public function exportCsv()
+    {
+        $fileName = 'paketler_' . date('Y-m-d_H-i-s') . '.csv';
+        
+        $packages = Package::with(['customer', 'servicePackage'])->get();
+        
+        $headers = [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        ];
+        
+        $columns = [
+            'Poliçe No',
+            'Müşteri',
+            'Plaka',
+            'Servis Paketi',
+            'Ücret',
+            'Komisyon',
+            'Komisyon Oranı',
+            'Başlangıç',
+            'Bitiş',
+            'Süre',
+            'Durum'
+        ];
+
+        $callback = function() use($packages, $columns) {
+            $file = fopen('php://output', 'w');
+            // UTF-8 BOM for Excel
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            
+            fputcsv($file, $columns);
+
+            foreach ($packages as $package) {
+                fputcsv($file, [
+                    $package->contract_number,
+                    $package->customer->name,
+                    $package->plate_city . ' ' . $package->plate_letters . ' ' . $package->plate_numbers,
+                    $package->servicePackage->name,
+                    number_format($package->price, 2, ',', '.') . ' ₺',
+                    number_format($package->commission, 2, ',', '.') . ' ₺',
+                    '%' . number_format($package->commission_rate, 2, ',', '.'),
+                    $package->start_date->format('d.m.Y'),
+                    $package->end_date->format('d.m.Y'),
+                    $package->duration,
+                    $package->is_active ? 'Aktif' : 'Pasif'
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
 }

@@ -11,7 +11,9 @@
                 <a href="{{ route('packages.create') }}" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Yeni
                 </a>
-                <button class="btn btn-outline-secondary">CSV</button>
+                <a href="{{ route('packages.export.csv') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-file-csv"></i> CSV
+                </a>
                 <button class="btn btn-outline-secondary">PDF</button>
                 <button class="btn btn-outline-secondary">Excel</button>
             </div>

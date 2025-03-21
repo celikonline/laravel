@@ -35,6 +35,8 @@ Route::middleware(['auth'])->group(function () {
     // routes/web.php
 Route::get('/packages/{package}/contract/pdf', [PackageController::class, 'generateContractPdf'])->name('packages.contract.pdf');
 Route::get('/packages/{package}/receipt/pdf', [PackageController::class, 'generateReceiptPdf'])->name('packages.receipt.pdf');
+
+Route::get('/packages/export/csv', [PackageController::class, 'exportCsv'])->name('packages.export.csv');
 });
 
 Auth::routes();
