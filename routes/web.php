@@ -53,6 +53,14 @@ Route::get('/packages/{package}/receipt-preview', [PackageController::class, 're
 Route::get('/packages/download-agreement', [PackageController::class, 'downloadAgreementPdf'])->name('packages.download-agreement');
 Route::get('/packages/download-kvkk', [PackageController::class, 'downloadKvkkPdf'])->name('packages.download-kvkk');
 Route::get('/packages/all', [PackageController::class, 'allPackages'])->name('packages.all');
+
+    // Raporlama
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/', [App\Http\Controllers\ReportController::class, 'index'])->name('index');
+        Route::get('/revenue', [App\Http\Controllers\ReportController::class, 'revenue'])->name('revenue');
+        Route::get('/packages', [App\Http\Controllers\ReportController::class, 'packages'])->name('packages');
+        Route::get('/customers', [App\Http\Controllers\ReportController::class, 'customers'])->name('customers');
+    });
 });
 
 Auth::routes();

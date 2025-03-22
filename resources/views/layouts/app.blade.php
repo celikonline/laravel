@@ -17,16 +17,53 @@
     <!-- Scripts and Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
     <!-- Styles -->
     <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --primary-color: #2563eb;
+            --card-bg: #ffffff;
+            --navbar-bg: #ffffff;
+            --table-header-bg: #f3f4f6;
+            --hover-bg: #f3f4f6;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --border-color: #404040;
+            --primary-color: #3b82f6;
+            --card-bg: #2d2d2d;
+            --navbar-bg: #2d2d2d;
+            --table-header-bg: #404040;
+            --hover-bg: #404040;
+        }
+
+        body {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
         /* Navbar Styles */
         .navbar {
+            background-color: var(--navbar-bg) !important;
             padding: 1rem 0;
             transition: all 0.3s ease;
         }
@@ -34,10 +71,11 @@
         .navbar-brand {
             font-size: 1.5rem;
             font-weight: 600;
-            color: #2563eb !important;
+            color: var(--primary-color) !important;
         }
 
         .nav-link {
+            color: var(--text-primary) !important;
             position: relative;
             padding: 0.5rem 1rem !important;
             margin: 0 0.2rem;
@@ -46,13 +84,13 @@
         }
 
         .nav-link:hover {
-            background-color: #f3f4f6;
-            color: #2563eb !important;
+            background-color: var(--hover-bg);
+            color: var(--primary-color) !important;
             transform: translateY(-1px);
         }
 
         .nav-link.active {
-            background-color: #2563eb;
+            background-color: var(--primary-color);
             color: white !important;
         }
 
@@ -99,6 +137,7 @@
 
         /* Card Styles */
         .card {
+            background-color: var(--card-bg);
             border: none;
             border-radius: 1rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -123,12 +162,14 @@
 
         /* Table Styles */
         .table {
+            color: var(--text-primary);
             border-radius: 1rem;
             overflow: hidden;
         }
 
         .table thead th {
-            background-color: #f3f4f6;
+            background-color: var(--table-header-bg);
+            color: var(--text-primary);
             border-bottom: none;
             padding: 1rem;
         }
@@ -136,6 +177,7 @@
         .table tbody td {
             padding: 1rem;
             vertical-align: middle;
+            border-color: var(--border-color);
         }
 
         /* Badge Styles */
@@ -166,6 +208,32 @@
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
         }
+
+        /* Footer Styles */
+        footer {
+            background-color: var(--navbar-bg) !important;
+        }
+
+        footer .text-muted {
+            color: var(--text-secondary) !important;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .theme-toggle i {
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
     </style>
     @stack('styles')
 </head>
@@ -187,6 +255,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('dashboard') }}">
                                 <i class="fas fa-chart-line"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('reports.index') }}">
+                                <i class="fas fa-chart-bar"></i> Raporlar
                             </a>
                         </li>
                         <li class="nav-item">
@@ -233,21 +306,31 @@
                             @endif
                         @else
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    <i class="fas fa-user-circle"></i> {{ Auth::user()->name }}
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user-circle me-1"></i>
+                                    <span>{{ Auth::user()->name }}</span>
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        <i class="fas fa-sign-out-alt"></i> {{ __('Logout') }}
-                                    </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                   <!--<li>
+                                        <a class="dropdown-item theme-toggle d-flex align-items-center" href="#" onclick="toggleTheme(); return false;">
+                                            <i class="fas fa-moon me-2"></i>
+                                            <span>Tema Değiştir</span>
+                                        </a>
+                                    </li>!-->
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}"
+                                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            <i class="fas fa-sign-out-alt me-2"></i>
+                                            <span>{{ __('Logout') }}</span>
+                                        </a>
+                                    </li>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
-                                </div>
+                                </ul>
                             </li>
                         @endguest
                     </ul>
@@ -301,5 +384,44 @@
     </footer>
 
     @stack('scripts')
+
+    <!-- Bootstrap Bundle JS (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Tema değiştirme fonksiyonu
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.querySelector('.theme-toggle i');
+            
+            // Mevcut temayı kontrol et
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            
+            // Temayı değiştir
+            if (isDark) {
+                html.removeAttribute('data-theme');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Sayfa yüklendiğinde kaydedilmiş temayı uygula
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.querySelector('.theme-toggle i');
+            
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        });
+    </script>
 </body>
 </html>
