@@ -24,6 +24,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return redirect()->route('dashboard');
     });
+    Route::get('/home', function () {
+        return redirect()->route('dashboard');
+    })->name('home');
 
     // Paket işlemleri
     Route::get('/packages', [PackageController::class, 'index'])->name('packages.index');
@@ -53,5 +56,3 @@ Route::get('/packages/all', [PackageController::class, 'allPackages'])->name('pa
 });
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

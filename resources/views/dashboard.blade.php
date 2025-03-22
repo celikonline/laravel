@@ -2,9 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2 class="mb-4">Dashboard</h2>
-
-    <!-- İstatistik Kartları -->
+       <!-- İstatistik Kartları -->
     <div class="row mb-4">
         <div class="col-md-3">
             <div class="card bg-primary text-white">
