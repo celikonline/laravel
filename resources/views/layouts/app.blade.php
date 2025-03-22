@@ -311,26 +311,23 @@
                                     <span>{{ Auth::user()->name }}</span>
                                 </a>
 
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                   <!--<li>
-                                        <a class="dropdown-item theme-toggle d-flex align-items-center" href="#" onclick="toggleTheme(); return false;">
-                                            <i class="fas fa-moon me-2"></i>
-                                            <span>Tema Değiştir</span>
-                                        </a>
-                                    </li>!-->
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}"
-                                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                            <i class="fas fa-sign-out-alt me-2"></i>
-                                            <span>{{ __('Logout') }}</span>
-                                        </a>
-                                    </li>
-
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                                        <i class="fas fa-user-edit"></i> Profil
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('audit.index') }}">
+                                        <i class="fas fa-history"></i> Sistem Kayıtları
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        <i class="fas fa-sign-out-alt"></i> {{ __('Çıkış Yap') }}
+                                    </a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
-                                </ul>
+                                </div>
                             </li>
                         @endguest
                     </ul>

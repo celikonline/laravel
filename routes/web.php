@@ -65,6 +65,11 @@ Route::get('/packages/all', [PackageController::class, 'allPackages'])->name('pa
     // Audit Log Routes
     Route::get('/audit-logs', [App\Http\Controllers\AuditLogController::class, 'index'])->name('audit.index');
     Route::get('/audit-logs/{log}', [App\Http\Controllers\AuditLogController::class, 'show'])->name('audit.show');
+
+    // Profile Routes
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 Auth::routes();
