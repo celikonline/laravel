@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\VehicleBrandController;
+use App\Http\Controllers\VehicleModelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,6 +80,11 @@ Route::get('/packages/all', [PackageController::class, 'allPackages'])->name('pa
     Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
     Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
     Route::get('/notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('notifications.unreadCount');
+
+    // Vehicle Settings Routes
+    Route::resource('vehicle-brands', VehicleBrandController::class);
+    Route::resource('vehicle-models', VehicleModelController::class);
+    Route::get('vehicle-models/by-brand/{brand}', [VehicleModelController::class, 'getModelsByBrand'])->name('vehicle-models.by-brand');
 });
 
 Auth::routes();

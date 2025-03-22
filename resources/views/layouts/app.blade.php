@@ -391,6 +391,14 @@
                                         <i class="fas fa-history"></i> Sistem Kayıtları
                                     </a>
                                     <div class="dropdown-divider"></div>
+                                    <h6 class="dropdown-header">Ayarlar</h6>
+                                    <a class="dropdown-item" href="{{ route('vehicle-brands.index') }}">
+                                        <i class="fas fa-car"></i> Araç Markaları
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('vehicle-models.index') }}">
+                                        <i class="fas fa-car-side"></i> Araç Modelleri
+                                    </a>
+                                    <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
