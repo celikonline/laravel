@@ -66,7 +66,7 @@
                             <div class="status-indicator {{ $package->is_active ? 'active' : 'inactive' }}"></div>
                         </td>
                         <td>{{ $package->contract_number }}</td>
-                        <td>{{ $package->customer->name }}</td>
+                        <td>{{ $package->customer_name }}</td>
                         <td>
                             <div class="plate-container">
                                 <span class="plate-text">{{ $package->plate_city }} {{ $package->plate_letters }} {{ $package->plate_numbers }}</span>
@@ -113,9 +113,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-                <a href="" class="btn btn-warning" id="downloadContractBtn">
-                    <i class="fas fa-file-pdf"></i> PDF İndir
-                </a>
+               
             </div>
         </div>
     </div>
@@ -139,9 +137,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-                <a href="" class="btn btn-danger" id="downloadReceiptBtn">
-                    <i class="fas fa-file-pdf"></i> PDF İndir
-                </a>
+                
             </div>
         </div>
     </div>

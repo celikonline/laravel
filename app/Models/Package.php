@@ -31,6 +31,7 @@ class Package extends Model
         'brand_id',
         'model_id',
         'model_year',
+        'phone_number',
     ];
 
     protected $casts = [
@@ -68,5 +69,18 @@ class Package extends Model
     public function plateType()
     {
         return $this->belongsTo(PlateType::class, 'plate_type');
+    }
+
+    public function getCustomerNameAttribute()
+    {
+        if (!$this->customer) {
+            return '-';
+        }
+
+        if ($this->customer->customer_type === 'corporate') {
+            return $this->customer->first_name; // Şirket adı first_name alanında
+        }
+
+        return $this->customer->first_name . ' ' . $this->customer->last_name;
     }
 } 

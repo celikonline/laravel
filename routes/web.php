@@ -34,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
 
     // routes/web.php
 Route::get('/packages/{package}/contract/pdf', [PackageController::class, 'generateContractPdf'])->name('packages.contract.pdf');
-Route::get('/packages/{package}/receipt/pdf', [PackageController::class, 'generateReceiptPdf'])->name('packages.receipt.pdf');
+Route::get('/packages/{package}/receipt-pdf', [PackageController::class, 'downloadReceiptPdf'])->name('packages.receipt.pdf');
 Route::get('/packages/export/csv', [PackageController::class, 'exportCsv'])->name('packages.export.csv');
 Route::get('/packages/export/excel', [PackageController::class, 'exportExcel'])->name('packages.export.excel');
 Route::get('/packages/export/pdf', [PackageController::class, 'exportPdf'])->name('packages.export.pdf');

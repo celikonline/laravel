@@ -520,6 +520,8 @@ class PackageController extends Controller
                 'brand_id' => $request->brand_id,
                 'model_id' => $request->model_id,
                 'model_year' => $request->model_year,
+                'phone_number' => $request->phone_number,
+                
             ]);
 
             \Log::info('Package updated', ['package' => $package]);
@@ -578,6 +580,12 @@ class PackageController extends Controller
     {
         // PDF oluşturma işlemleri burada yapılacak
         // Örnek olarak:
+        $pdf = PDF::loadView('pdfs.receipt', compact('package'));
+        return $pdf->download('makbuz-' . $package->contract_number . '.pdf');
+    }
+
+    public function downloadReceiptPdf(Package $package)
+    {
         $pdf = PDF::loadView('pdfs.receipt', compact('package'));
         return $pdf->download('makbuz-' . $package->contract_number . '.pdf');
     }
