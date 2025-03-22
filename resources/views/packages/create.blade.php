@@ -49,12 +49,17 @@
                                         <select class="form-select" name="service_package_id" required>
                                             <option value="">Servis Paketi Seçiniz</option>
                                             @foreach($servicePackages as $package)
-                                                <option value="{{ $package->id }}" data-duration="{{ $package->duration_days }}">{{ $package->name }} - {{ $package->price }} TL</option>
+                                                <option value="{{ $package->id }}" 
+                                                    data-duration="{{ $package->duration_days }}"
+                                                    data-description="{{ $package->description }}">
+                                                    {{ $package->name }} - {{ $package->price }} TL
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
                             </div>
+                           
                             <div class="row mt-3">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -72,6 +77,13 @@
                                     <div class="form-group">
                                         <label>Poliçe Süresi(Gün)*</label>
                                         <input type="number" class="form-control bg-custom-gray" name="policy_duration" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="package-description alert alert-info d-none">
+                                        <!-- Paket açıklaması buraya gelecek -->
                                     </div>
                                 </div>
                             </div>
@@ -329,36 +341,54 @@ $(document).ready(function() {
         }
     });
 
-    // Servis paketi seçildiğinde süreyi ve bitiş tarihini ayarla
+    // Servis paketi seçildiğinde
     $('select[name="service_package_id"]').on('change', function() {
         var selectedOption = $(this).find('option:selected');
-        var durationDays = selectedOption.data('duration');
-        var startDate = new Date($('input[name="start_date"]').val());
+        var description = selectedOption.data('description');
+        var duration = selectedOption.data('duration');
+        var packageDescription = $('.package-description');
         
-        if(durationDays && startDate) {
-            // Poliçe süresini set et
-            $('input[name="policy_duration"]').val(durationDays);
-            
-            // Bitiş tarihini hesapla
-            var endDate = new Date(startDate);
-            endDate.setDate(endDate.getDate() + durationDays);
-            var formattedEndDate = endDate.toISOString().split('T')[0];
-            $('input[name="end_date"]').val(formattedEndDate);
+        // Açıklama varsa göster, yoksa gizle
+        if(description) {
+            packageDescription.html(description).removeClass('d-none');
+        } else {
+            packageDescription.addClass('d-none');
+        }
+
+        // Süre varsa bitiş tarihini hesapla
+        if(duration) {
+            var startDate = $('input[name="start_date"]').val();
+            if(startDate) {
+                var endDate = new Date(startDate);
+                endDate.setDate(endDate.getDate() + parseInt(duration));
+                
+                // Bitiş tarihini formata çevir (YYYY-MM-DD)
+                var formattedEndDate = endDate.toISOString().split('T')[0];
+                
+                $('input[name="end_date"]').val(formattedEndDate);
+                $('input[name="policy_duration"]').val(duration);
+            }
+        } else {
+            $('input[name="end_date"]').val('');
+            $('input[name="policy_duration"]').val('');
         }
     });
 
-    // Başlangıç tarihi değiştiğinde bitiş tarihini güncelle
+    // Başlangıç tarihi değiştiğinde
     $('input[name="start_date"]').on('change', function() {
         var selectedOption = $('select[name="service_package_id"]').find('option:selected');
-        var durationDays = selectedOption.data('duration');
-        var startDate = new Date($(this).val());
+        var duration = selectedOption.data('duration');
         
-        if(durationDays && startDate) {
-            // Bitiş tarihini hesapla
+        if(duration) {
+            var startDate = $(this).val();
             var endDate = new Date(startDate);
-            endDate.setDate(endDate.getDate() + durationDays);
+            endDate.setDate(endDate.getDate() + parseInt(duration));
+            
+            // Bitiş tarihini formata çevir (YYYY-MM-DD)
             var formattedEndDate = endDate.toISOString().split('T')[0];
+            
             $('input[name="end_date"]').val(formattedEndDate);
+            $('input[name="policy_duration"]').val(duration);
         }
     });
 
