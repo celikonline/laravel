@@ -19,6 +19,12 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', function () {
+        return redirect()->route('dashboard');
+    });
+
     // Paket işlemleri
     Route::get('/packages', [PackageController::class, 'index'])->name('packages.index');
     Route::get('/packages/create', [PackageController::class, 'create'])->name('packages.create');
@@ -43,6 +49,7 @@ Route::get('/packages/{package}/contract-preview', [PackageController::class, 'c
 Route::get('/packages/{package}/receipt-preview', [PackageController::class, 'receiptPreview'])->name('packages.receipt-preview');
 Route::get('/packages/download-agreement', [PackageController::class, 'downloadAgreementPdf'])->name('packages.download-agreement');
 Route::get('/packages/download-kvkk', [PackageController::class, 'downloadKvkkPdf'])->name('packages.download-kvkk');
+Route::get('/packages/all', [PackageController::class, 'allPackages'])->name('packages.all');
 });
 
 Auth::routes();

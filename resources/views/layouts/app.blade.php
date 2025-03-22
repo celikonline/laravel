@@ -70,6 +70,14 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('dashboard') }}">
+                                <i class="fas fa-chart-line"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('packages.all') }}">Tüm Paketler</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('packages.index') }}">Paket Listesi</a>
                         </li>
                         <li class="nav-item">
