@@ -229,19 +229,128 @@
                             <div class="form-check mb-3">
                                 <input class="form-check-input" type="checkbox" name="terms" id="terms" required>
                                 <label class="form-check-label" for="terms">
-                                    KVKK Metni'ni okudum ve onaylıyorum
+                                    <a href="#" class="text-decoration-none" id="openKvkkModal">KVKK Metni'ni okudum ve onaylıyorum </a>
                                 </label>
                             </div>
                             <div class="form-check mb-3">
                                 <input class="form-check-input" type="checkbox" name="agreement" id="agreement" required>
                                 <label class="form-check-label" for="agreement">
-                                    İstisnaları Satış Sözleşmesi'ni okudum ve onaylıyorum
+                                    <a href="#" class="text-decoration-none" id="openAgreementModal">Mesafeli Satış Sözleşmesi'ni okudum, onaylıyorum</a>
                                 </label>
                             </div>
                             <button type="submit" class="btn btn-success w-100">Kaydet ve Ödeme Sayfasına Geç</button>
                         </div>
                     </form>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- KVKK Modal -->
+<div class="modal fade" id="kvkkModal" tabindex="-1" aria-labelledby="kvkkModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="kvkkModalLabel">Kişisel Verilerin Korunması Kanunu Aydınlatma Metni</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>1. Veri Sorumlusu</strong></p>
+                <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, kişisel verileriniz; veri sorumlusu olarak [Şirket Adı] tarafından aşağıda açıklanan kapsamda işlenebilecektir.</p>
+
+                <p><strong>2. Kişisel Verilerin İşlenme Amacı</strong></p>
+                <p>Toplanan kişisel verileriniz;</p>
+                <ul>
+                    <li>Hizmet paketlerimizden faydalanmanız için gerekli işlemlerin yürütülmesi,</li>
+                    <li>Sizinle iletişime geçilmesi ve hizmet süreçlerinin yürütülmesi,</li>
+                    <li>Yasal yükümlülüklerimizin yerine getirilmesi,</li>
+                    <li>Hizmet kalitemizin iyileştirilmesi ve müşteri memnuniyetinin sağlanması</li>
+                </ul>
+                <p>amaçlarıyla KVKK'nın 5. ve 6. maddelerinde belirtilen kişisel veri işleme şartları ve amaçları dahilinde işlenecektir.</p>
+
+                <p><strong>3. Kişisel Verilerin Aktarılması</strong></p>
+                <p>Kişisel verileriniz, yukarıda belirtilen amaçların gerçekleştirilmesi ile sınırlı olmak üzere;</p>
+                <ul>
+                    <li>İş ortaklarımıza,</li>
+                    <li>Hukuken yetkili kamu kurum ve kuruluşlarına,</li>
+                    <li>Hukuken yetkili özel hukuk kişilerine</li>
+                </ul>
+                <p>aktarılabilecektir.</p>
+
+                <p><strong>4. Kişisel Veri Toplamanın Yöntemi ve Hukuki Sebebi</strong></p>
+                <p>Kişisel verileriniz, elektronik ortamda web sitemiz üzerinden veya fiziksel ortamda toplanmaktadır. Bu veriler, KVKK'nın 5. ve 6. maddelerinde belirtilen hukuki sebeplere dayanarak işlenmektedir.</p>
+
+                <p><strong>5. KVKK'nın 11. Maddesi Uyarınca Sahip Olduğunuz Haklar</strong></p>
+                <p>KVKK'nın 11. maddesi uyarınca herkes, veri sorumlusuna başvurarak kendisiyle ilgili;</p>
+                <ul>
+                    <li>Kişisel veri işlenip işlenmediğini öğrenme,</li>
+                    <li>Kişisel verileri işlenmişse buna ilişkin bilgi talep etme,</li>
+                    <li>Kişisel verilerin işlenme amacını ve bunların amacına uygun kullanılıp kullanılmadığını öğrenme,</li>
+                    <li>Yurt içinde veya yurt dışında kişisel verilerin aktarıldığı üçüncü kişileri bilme</li>
+                </ul>
+                <p>haklarına sahiptir.</p>
+            </div>
+            <div class="modal-footer">
+                <a href="{{ route('packages.download-kvkk') }}" class="btn btn-info" target="_blank">
+                    <i class="fas fa-file-pdf"></i> PDF İndir
+                </a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" id="acceptKvkk">Okudum ve Onaylıyorum</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- İstisnaları Satış Sözleşmesi Modal -->
+<div class="modal fade" id="agreementModal" tabindex="-1" aria-labelledby="agreementModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="agreementModalLabel">İkame Araç Paketi Sözleşmesi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body">
+                <h6>1. TARAFLAR</h6>
+                <p>İşbu İkame Araç Paketi Sözleşmesi ("Sözleşme"), bir tarafta [Şirket Adı] ("Hizmet Sağlayıcı") ile diğer tarafta müşteri ("Müşteri") arasında aşağıdaki şartlarda imzalanmıştır.</p>
+
+                <h6>2. SÖZLEŞMENİN KONUSU</h6>
+                <p>İşbu sözleşme, Müşteri'nin aracının kaza, arıza veya bakım durumlarında, belirlenmiş şartlar dahilinde ikame araç hizmetinden faydalanmasına ilişkin hüküm ve koşulları düzenlemektedir.</p>
+
+                <h6>3. HİZMET KAPSAMI</h6>
+                <p>3.1. İkame araç hizmeti, seçilen paket süresince geçerlidir.</p>
+                <p>3.2. Hizmet kapsamında sunulacak ikame araç:</p>
+                <ul>
+                    <li>Ekonomik sınıf binek araç</li>
+                    <li>Tam sigortalı</li>
+                    <li>Yakıt hariç tüm masraflar dahil</li>
+                </ul>
+
+                <h6>4. HİZMET ŞARTLARI</h6>
+                <p>4.1. İkame araç talepleri 24 saat önceden bildirilmelidir.</p>
+                <p>4.2. Hizmet süresi maksimum 15 gündür.</p>
+                <p>4.3. Yakıt masrafları müşteriye aittir.</p>
+
+                <h6>5. İSTİSNALAR</h6>
+                <p>Aşağıdaki durumlar hizmet kapsamı dışındadır:</p>
+                <ul>
+                    <li>Sürücü hatası kaynaklı hasarlar</li>
+                    <li>Yasadışı kullanımdan kaynaklanan hasarlar</li>
+                    <li>Doğal afetler</li>
+                    <li>Savaş, terör vb. olağanüstü durumlar</li>
+                </ul>
+
+                <h6>6. GENEL HÜKÜMLER</h6>
+                <p>6.1. Bu sözleşme paket süresince geçerlidir.</p>
+                <p>6.2. Hizmet Sağlayıcı, hizmet şartlarını değiştirme hakkını saklı tutar.</p>
+                <p>6.3. Anlaşmazlık durumunda [Şehir] Mahkemeleri yetkilidir.</p>
+            </div>
+            <div class="modal-footer">
+                <a href="{{ route('packages.download-agreement') }}" class="btn btn-info" target="_blank">
+                    <i class="fas fa-file-pdf"></i> PDF İndir
+                </a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" id="acceptAgreement">Okudum ve Onaylıyorum</button>
             </div>
         </div>
     </div>
@@ -549,6 +658,56 @@ $(document).ready(function() {
     @if(session('error'))
         alert("{{ session('error') }}");
     @endif
+
+    // KVKK Modal işlemleri
+    var kvkkModal = new bootstrap.Modal(document.getElementById('kvkkModal'));
+    
+    // KVKK linkine tıklandığında
+    $('#openKvkkModal').on('click', function(e) {
+        e.preventDefault();
+        kvkkModal.show();
+    });
+    
+    // Modal içindeki "Okudum ve Onaylıyorum" butonuna tıklandığında
+    $('#acceptKvkk').on('click', function() {
+        $('#terms').prop('checked', true);
+        kvkkModal.hide();
+    });
+    
+    // Checkbox'a direkt tıklandığında
+    $('#terms').on('click', function(e) {
+        if(!$(this).prop('checked')) {
+            return true; // Checkbox'ın işareti kaldırılıyorsa normal davran
+        }
+        
+        e.preventDefault(); // Checkbox'ı işaretlemeyi engelle
+        kvkkModal.show(); // Modalı göster
+    });
+
+    // İstisnaları Satış Sözleşmesi Modal işlemleri
+    var agreementModal = new bootstrap.Modal(document.getElementById('agreementModal'));
+    
+    // Sözleşme linkine tıklandığında
+    $('#openAgreementModal').on('click', function(e) {
+        e.preventDefault();
+        agreementModal.show();
+    });
+    
+    // Modal içindeki "Okudum ve Onaylıyorum" butonuna tıklandığında
+    $('#acceptAgreement').on('click', function() {
+        $('#agreement').prop('checked', true);
+        agreementModal.hide();
+    });
+    
+    // Checkbox'a direkt tıklandığında
+    $('#agreement').on('click', function(e) {
+        if(!$(this).prop('checked')) {
+            return true; // Checkbox'ın işareti kaldırılıyorsa normal davran
+        }
+        
+        e.preventDefault(); // Checkbox'ı işaretlemeyi engelle
+        agreementModal.show(); // Modalı göster
+    });
 });
 </script>
 @endpush

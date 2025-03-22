@@ -723,4 +723,16 @@ class PackageController extends Controller
     {
         return view('packages.receipt-preview', compact('package'));
     }
+
+    public function downloadAgreementPdf()
+    {
+        $pdf = PDF::loadView('packages.agreement-pdf');
+        return $pdf->download('ikame-arac-paketi-sozlesmesi.pdf');
+    }
+
+    public function downloadKvkkPdf()
+    {
+        $pdf = PDF::loadView('packages.kvkk-pdf');
+        return $pdf->download('kvkk-aydinlatma-metni.pdf');
+    }
 }

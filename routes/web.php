@@ -40,6 +40,8 @@ Route::get('/packages/export/excel', [PackageController::class, 'exportExcel'])-
 Route::get('/packages/export/pdf', [PackageController::class, 'exportPdf'])->name('packages.export.pdf');
 Route::get('/packages/{package}/contract-preview', [PackageController::class, 'contractPreview'])->name('packages.contract-preview');
 Route::get('/packages/{package}/receipt-preview', [PackageController::class, 'receiptPreview'])->name('packages.receipt-preview');
+Route::get('/packages/download-agreement', [PackageController::class, 'downloadAgreementPdf'])->name('packages.download-agreement');
+Route::get('/packages/download-kvkk', [PackageController::class, 'downloadKvkkPdf'])->name('packages.download-kvkk');
 });
 
 Auth::routes();
