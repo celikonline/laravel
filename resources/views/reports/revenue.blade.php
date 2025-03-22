@@ -17,8 +17,19 @@
             <a href="#" class="btn btn-outline-danger" onclick="exportToPDF()">
                 <i class="fas fa-file-pdf"></i> PDF
             </a>
+            <a href="{{ route('reports.revenue', ['send_email' => true] + request()->all()) }}" 
+               class="btn btn-outline-info">
+                <i class="fas fa-envelope"></i> E-posta Gönder
+            </a>
         </div>
     </div>
+
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
     <!-- Filtreler -->
     <div class="card mb-4">

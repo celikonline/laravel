@@ -8,6 +8,8 @@ use App\Models\ServicePackage;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ReportMail;
 
 class ReportController extends Controller
 {
@@ -94,10 +96,21 @@ class ReportController extends Controller
             ->where('status', 'active')
             ->sum('price');
 
+        // E-posta gönderme isteği varsa
+        if ($request->has('send_email')) {
+            $reportData = [
+                'revenue' => $revenue,
+                'totalRevenue' => $totalRevenue
+            ];
+            
+            Mail::to($request->user()->email)->send(new ReportMail('gelir', $reportData, $startDate, $endDate));
+            return redirect()->back()->with('success', 'Gelir raporu e-posta olarak gönderildi.');
+        }
+
         return view('reports.revenue', compact('revenue', 'totalRevenue', 'startDate', 'endDate'));
     }
 
-    public function packages()
+    public function packages(Request $request)
     {
         // Paket durumu dağılımı
         $statusDistribution = Package::select('status', DB::raw('count(*) as total'))
@@ -119,6 +132,18 @@ class ReportController extends Controller
             ->orderBy('month')
             ->get();
 
+        // E-posta gönderme isteği varsa
+        if ($request->has('send_email')) {
+            $reportData = [
+                'statusDistribution' => $statusDistribution,
+                'packageDistribution' => $packageDistribution,
+                'packageTrend' => $packageTrend
+            ];
+            
+            Mail::to($request->user()->email)->send(new ReportMail('paketler', $reportData));
+            return redirect()->back()->with('success', 'Paket raporu e-posta olarak gönderildi.');
+        }
+
         return view('reports.packages', compact(
             'statusDistribution',
             'packageDistribution',
@@ -126,7 +151,7 @@ class ReportController extends Controller
         ));
     }
 
-    public function customers()
+    public function customers(Request $request)
     {
         // En çok hizmet alan müşteriler
         $topCustomers = Customer::withCount('packages')
@@ -144,6 +169,17 @@ class ReportController extends Controller
             ->groupBy('month')
             ->orderBy('month')
             ->get();
+
+        // E-posta gönderme isteği varsa
+        if ($request->has('send_email')) {
+            $reportData = [
+                'topCustomers' => $topCustomers,
+                'registrationTrend' => $registrationTrend
+            ];
+            
+            Mail::to($request->user()->email)->send(new ReportMail('müşteriler', $reportData));
+            return redirect()->back()->with('success', 'Müşteri raporu e-posta olarak gönderildi.');
+        }
 
         return view('reports.customers', compact('topCustomers', 'registrationTrend'));
     }
