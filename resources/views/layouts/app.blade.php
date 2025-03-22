@@ -25,32 +25,146 @@
 
     <!-- Styles -->
     <style>
-        .sidebar {
-            min-height: 100vh;
-            box-shadow: 0 0 10px rgba(0,0,0,.1);
-            background: #343a40;
+        /* Navbar Styles */
+        .navbar {
+            padding: 1rem 0;
+            transition: all 0.3s ease;
         }
-        .sidebar .nav-link {
-            color: rgba(255,255,255,.8);
-            padding: 1rem;
+        
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2563eb !important;
         }
-        .sidebar .nav-link:hover {
-            color: #fff;
-            background: rgba(255,255,255,.1);
+
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem !important;
+            margin: 0 0.2rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
         }
-        .sidebar .nav-link.active {
-            background: rgba(255,255,255,.2);
+
+        .nav-link:hover {
+            background-color: #f3f4f6;
+            color: #2563eb !important;
+            transform: translateY(-1px);
         }
-        .sidebar .nav-link i {
-            margin-right: 10px;
+
+        .nav-link.active {
+            background-color: #2563eb;
+            color: white !important;
         }
+
+        .nav-link i {
+            margin-right: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover i {
+            transform: scale(1.1);
+        }
+
+        /* Dropdown Styles */
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .dropdown-item {
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f3f4f6;
+            color: #2563eb;
+            transform: translateX(5px);
+        }
+
+        .dropdown-item i {
+            margin-right: 0.5rem;
+            width: 1.25rem;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
         .main-content {
             min-height: 100vh;
             background: #f8f9fa;
+            padding: 2rem 0;
         }
-        .top-navbar {
-            background: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+
+        /* Card Styles */
+        .card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Table Styles */
+        .table {
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .table thead th {
+            background-color: #f3f4f6;
+            border-bottom: none;
+            padding: 1rem;
+        }
+
+        .table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+
+        /* Badge Styles */
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-weight: 500;
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
     </style>
     @stack('styles')
@@ -147,6 +261,44 @@
             </div>
         </main>
     </div>
+
+    <!-- Footer -->
+    <footer class="bg-white shadow-sm mt-5">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5 class="text-primary mb-3">VASist</h5>
+                    <p class="text-muted">Araç servis asistanınız olarak size en iyi hizmeti sunmak için buradayız.</p>
+                    <div class="social-links">
+                        <a href="#" class="text-muted me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-muted me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-muted me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-muted"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5 class="text-primary mb-3">Hızlı Linkler</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{{ route('dashboard') }}" class="text-muted text-decoration-none">Dashboard</a></li>
+                        <li class="mb-2"><a href="{{ route('packages.all') }}" class="text-muted text-decoration-none">Tüm Paketler</a></li>
+                        <li class="mb-2"><a href="{{ route('packages.create') }}" class="text-muted text-decoration-none">Yeni Paket</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="text-primary mb-3">İletişim</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2 text-muted"><i class="fas fa-map-marker-alt me-2"></i> İstanbul, Türkiye</li>
+                        <li class="mb-2 text-muted"><i class="fas fa-phone me-2"></i> +90 (xxx) xxx xx xx</li>
+                        <li class="mb-2 text-muted"><i class="fas fa-envelope me-2"></i> info@vasist.com</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center text-muted">
+                <small>&copy; {{ date('Y') }} VASist. Tüm hakları saklıdır.</small>
+            </div>
+        </div>
+    </footer>
 
     @stack('scripts')
 </body>
