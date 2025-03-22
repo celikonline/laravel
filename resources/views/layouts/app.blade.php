@@ -70,7 +70,13 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('packages.index') }}">Paketler</a>
+                            <a class="nav-link" href="{{ route('packages.index') }}">Paket Listesi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('packages.proposals') }}">Teklif Paket Listesi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('packages.create') }}">Yeni Paket</a>
                         </li>
                     </ul>
 

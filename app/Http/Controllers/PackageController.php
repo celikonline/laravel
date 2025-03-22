@@ -743,4 +743,14 @@ class PackageController extends Controller
         $pdf = PDF::loadView('packages.kvkk-pdf');
         return $pdf->download('kvkk-aydinlatma-metni.pdf');
     }
+
+    public function proposals()
+    {
+        $packages = Package::with(['customer', 'servicePackage'])
+            ->where('status', 'pending_payment')
+            ->orderBy('updated_at', 'desc')
+            ->paginate(10);
+        
+        return view('packages.proposals', compact('packages'));
+    }
 }

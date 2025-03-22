@@ -27,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/packages/{id}', [PackageController::class, 'update'])->name('packages.update');
     Route::get('/packages/{id}/payment', [PackageController::class, 'payment'])->name('packages.payment');
     Route::post('/packages/{id}/payment', [PackageController::class, 'processPayment'])->name('packages.process-payment');
+    Route::get('/packages/proposals', [PackageController::class, 'proposals'])->name('packages.proposals');
     
     // AJAX istekleri
     Route::get('/packages/vehicle-models/{brand_id}', [PackageController::class, 'getVehicleModels']);
