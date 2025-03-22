@@ -305,6 +305,78 @@
                                 </li>
                             @endif
                         @else
+                            <!-- Notifications Dropdown -->
+                            <li class="nav-item dropdown me-3">
+                                <a id="notificationsDropdown" class="nav-link dropdown-toggle position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-bell"></i>
+                                    <x-notification-badge :count="auth()->user()->notifications()->where('is_read', false)->count()" />
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-end notifications-dropdown" aria-labelledby="notificationsDropdown" style="width: 300px; max-height: 400px; overflow-y: auto;">
+                                    <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+                                        <h6 class="mb-0">Bildirimler</h6>
+                                        @if(auth()->user()->notifications()->where('is_read', false)->exists())
+                                            <form action="{{ route('notifications.markAllAsRead') }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-link btn-sm p-0 text-decoration-none">
+                                                    Tümünü Okundu İşaretle
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+
+                                    <div class="notifications-list">
+                                        @forelse(auth()->user()->notifications()->latest()->take(5)->get() as $notification)
+                                            <div class="dropdown-item {{ $notification->is_read ? '' : 'bg-light' }} border-bottom">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-link btn-sm p-0 text-decoration-none" type="button" data-bs-toggle="dropdown">
+                                                            <i class="fas fa-ellipsis-v"></i>
+                                                        </button>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            @if(!$notification->is_read)
+                                                                <form action="{{ route('notifications.markAsRead', $notification->id) }}" method="POST">
+                                                                    @csrf
+                                                                    <button type="submit" class="dropdown-item">
+                                                                        <i class="fas fa-check me-2"></i> Okundu İşaretle
+                                                                    </button>
+                                                                </form>
+                                                            @endif
+                                                            <form action="{{ route('notifications.destroy', $notification->id) }}" method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="dropdown-item text-danger">
+                                                                    <i class="fas fa-trash me-2"></i> Sil
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h6 class="mb-1">{{ $notification->title }}</h6>
+                                                <p class="mb-1 small">{{ Str::limit($notification->message, 100) }}</p>
+                                                @if($notification->link)
+                                                    <a href="{{ $notification->link }}" class="btn btn-link btn-sm p-0 text-decoration-none">
+                                                        Detayları Görüntüle <i class="fas fa-arrow-right ms-1"></i>
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        @empty
+                                            <div class="dropdown-item text-center text-muted py-3">
+                                                <i class="fas fa-bell-slash mb-2 d-block"></i>
+                                                Bildiriminiz bulunmamaktadır.
+                                            </div>
+                                        @endforelse
+
+                                        @if(auth()->user()->notifications()->count() > 5)
+                                            <a href="{{ route('notifications.index') }}" class="dropdown-item text-center py-2 text-primary">
+                                                Tüm Bildirimleri Görüntüle
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </li>
+
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-user-circle me-1"></i>

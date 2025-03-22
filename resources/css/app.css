@@ -78,3 +78,68 @@ body {
     max-height: 70vh;
     overflow-y: auto;
 }
+
+/* Notifications Styles */
+.notifications-dropdown {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.notifications-dropdown .dropdown-item {
+    white-space: normal;
+    padding: 0.75rem 1rem;
+}
+
+.notifications-dropdown .dropdown-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.notifications-dropdown .dropdown-item.bg-light {
+    background-color: rgba(0, 123, 255, 0.05) !important;
+}
+
+.notifications-dropdown .notifications-list {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.notifications-dropdown .notifications-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notifications-dropdown .notifications-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.notifications-dropdown .notifications-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.notifications-dropdown .notifications-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Badge position fix for notification icon */
+.nav-link .badge {
+    font-size: 0.65rem;
+    padding: 0.25em 0.4em;
+    transform: translate(25%, -25%) !important;
+}
+
+/* Notification icon pulse animation for unread notifications */
+@keyframes notification-pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.nav-link:has(.badge) .fas.fa-bell {
+    animation: notification-pulse 2s infinite;
+    color: #dc3545;
+}
