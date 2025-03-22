@@ -151,7 +151,8 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label>Telefon*</label>
-                                        <input type="tel" class="form-control" name="phone_number" required>
+                                        <input type="tel" class="form-control" name="phone_number" maxlength="10" pattern="[1-9][0-9]{9}" required>
+                                        <div class="form-text">Başında 0 olmadan 10 haneli telefon numarası giriniz. Örnek: 5321234567</div>
                                     </div>
                                 </div>
                             </div>
@@ -183,7 +184,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Araç Markası*</label>
                                         <select class="form-select" name="brand_id" required>
@@ -194,8 +198,6 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row mt-3">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Araç Modeli*</label>
@@ -447,6 +449,39 @@ $(document).ready(function() {
     // Her input değiştiğinde formatı güncelle
     $('input[name="plate_city"], input[name="plate_letters"], input[name="plate_numbers"]').on('input', formatPlate);
 
+    // Telefon numarası formatını düzenle
+    $('input[name="phone_number"]').on('input', function() {
+        let value = $(this).val().replace(/[^0-9]/g, '');
+        
+        // Başında 0 varsa kaldır
+        if(value.startsWith('0')) {
+            value = value.substring(1);
+        }
+        
+        // İlk rakam 0 olamaz
+        if(value.length > 0 && value[0] === '0') {
+            value = '';
+        }
+        
+        // Maksimum 10 karakter
+        value = value.substring(0, 10);
+        
+        $(this).val(value);
+        
+        // Validasyon
+        if(value.length > 0) {
+            if(value.length !== 10 || value[0] === '0') {
+                $(this).addClass('is-invalid');
+                if(!$(this).next('.invalid-feedback').length) {
+                    $(this).after('<div class="invalid-feedback">Geçerli bir telefon numarası giriniz (Başında 0 olmadan 10 haneli)</div>');
+                }
+            } else {
+                $(this).removeClass('is-invalid').addClass('is-valid');
+                $(this).next('.invalid-feedback').remove();
+            }
+        }
+    });
+
     // Form gönderilmeden önce son bir kez format kontrolü yap
     $('form').on('submit', function(e) {
         e.preventDefault(); // Önce form gönderimini durdur
@@ -470,6 +505,13 @@ $(document).ready(function() {
 
         if (city.length < 2 || letters.length < 1 || numbers.length < 1) {
             alert('Lütfen geçerli bir plaka numarası giriniz.');
+            return false;
+        }
+
+        // Telefon numarası kontrolü
+        var phoneNumber = $('input[name="phone_number"]').val();
+        if(phoneNumber.length !== 10 || phoneNumber[0] === '0') {
+            alert('Lütfen geçerli bir telefon numarası giriniz (Başında 0 olmadan 10 haneli)');
             return false;
         }
 
