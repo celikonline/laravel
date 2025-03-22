@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Package;
 use App\Models\Customer;
 use App\Models\ServicePackage;
+use App\Models\AuditLog;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,9 @@ class ReportController extends Controller
 {
     public function index()
     {
+        // Audit log kaydı
+        AuditLog::log('view', 'dashboard');
+
         // Son 12 ayın gelir grafiği
         $monthlyRevenue = Package::where('status', 'active')
             ->where('created_at', '>=', Carbon::now()->subMonths(12))
@@ -76,25 +80,92 @@ class ReportController extends Controller
             ? Carbon::parse($request->get('end_date'))
             : Carbon::now();
 
-        // Gelir detayları
-        $revenue = Package::whereBetween('created_at', [$startDate, $endDate])
-            ->where('status', 'active')
-            ->select(
+        // Audit log için filtreleri hazırla
+        $filters = array_filter($request->all());
+
+        // Gelir detayları query builder
+        $query = Package::query()
+            ->whereBetween('created_at', [$startDate, $endDate]);
+
+        // Durum filtresi
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        } else {
+            $query->where('status', 'active');
+        }
+
+        // Fiyat aralığı filtresi
+        if ($request->filled('min_price')) {
+            $query->where('price', '>=', $request->min_price);
+        }
+        if ($request->filled('max_price')) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        // Müşteri filtresi
+        if ($request->filled('customer_id')) {
+            $query->where('customer_id', $request->customer_id);
+        }
+
+        // Servis paketi filtresi
+        if ($request->filled('service_package_id')) {
+            $query->where('service_package_id', $request->service_package_id);
+        }
+
+        // Arama filtresi
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('contract_number', 'LIKE', "%{$searchTerm}%")
+                    ->orWhereHas('customer', function($q) use ($searchTerm) {
+                        $q->where('first_name', 'LIKE', "%{$searchTerm}%")
+                            ->orWhere('last_name', 'LIKE', "%{$searchTerm}%")
+                            ->orWhere('email', 'LIKE', "%{$searchTerm}%");
+                    })
+                    ->orWhereHas('servicePackage', function($q) use ($searchTerm) {
+                        $q->where('name', 'LIKE', "%{$searchTerm}%");
+                    });
+            });
+        }
+
+        // Sıralama
+        $sortField = $request->get('sort_by', 'created_at');
+        $sortDirection = $request->get('sort_direction', 'desc');
+        $allowedSortFields = ['created_at', 'price', 'contract_number'];
+        
+        if (in_array($sortField, $allowedSortFields)) {
+            $query->orderBy($sortField, $sortDirection);
+        }
+
+        // Verileri çek
+        $revenue = $query->select(
                 'id',
                 'contract_number',
                 'price',
                 'created_at',
                 'customer_id',
-                'service_package_id'
+                'service_package_id',
+                'status'
             )
-            ->with(['customer:id,first_name,last_name', 'servicePackage:id,name'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
+            ->with(['customer:id,first_name,last_name,email', 'servicePackage:id,name'])
+            ->paginate(15)
+            ->withQueryString();
 
         // Toplam gelir
-        $totalRevenue = Package::whereBetween('created_at', [$startDate, $endDate])
-            ->where('status', 'active')
-            ->sum('price');
+        $totalRevenue = $query->sum('price');
+
+        // Filtreler için gerekli veriler
+        $customers = Customer::select('id', 'first_name', 'last_name')
+            ->orderBy('first_name')
+            ->get();
+
+        $servicePackages = ServicePackage::select('id', 'name')
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        $statuses = Package::distinct()
+            ->pluck('status');
 
         // E-posta gönderme isteği varsa
         if ($request->has('send_email')) {
@@ -104,14 +175,38 @@ class ReportController extends Controller
             ];
             
             Mail::to($request->user()->email)->send(new ReportMail('gelir', $reportData, $startDate, $endDate));
+
+            // E-posta gönderimi için audit log
+            AuditLog::log('email', 'revenue', $filters);
+
             return redirect()->back()->with('success', 'Gelir raporu e-posta olarak gönderildi.');
         }
 
-        return view('reports.revenue', compact('revenue', 'totalRevenue', 'startDate', 'endDate'));
+        // Görüntüleme için audit log
+        AuditLog::log(
+            empty($filters) ? 'view' : 'filter',
+            'revenue',
+            $filters
+        );
+
+        return view('reports.revenue', compact(
+            'revenue', 
+            'totalRevenue', 
+            'startDate', 
+            'endDate',
+            'customers',
+            'servicePackages',
+            'statuses',
+            'sortField',
+            'sortDirection'
+        ));
     }
 
     public function packages(Request $request)
     {
+        // Audit log için filtreleri hazırla
+        $filters = array_filter($request->all());
+
         // Paket durumu dağılımı
         $statusDistribution = Package::select('status', DB::raw('count(*) as total'))
             ->groupBy('status')
@@ -141,8 +236,15 @@ class ReportController extends Controller
             ];
             
             Mail::to($request->user()->email)->send(new ReportMail('paketler', $reportData));
+
+            // E-posta gönderimi için audit log
+            AuditLog::log('email', 'packages', $filters);
+
             return redirect()->back()->with('success', 'Paket raporu e-posta olarak gönderildi.');
         }
+
+        // Görüntüleme için audit log
+        AuditLog::log('view', 'packages', $filters);
 
         return view('reports.packages', compact(
             'statusDistribution',
@@ -153,6 +255,9 @@ class ReportController extends Controller
 
     public function customers(Request $request)
     {
+        // Audit log için filtreleri hazırla
+        $filters = array_filter($request->all());
+
         // En çok hizmet alan müşteriler
         $topCustomers = Customer::withCount('packages')
             ->withSum('packages', 'price')
@@ -178,8 +283,15 @@ class ReportController extends Controller
             ];
             
             Mail::to($request->user()->email)->send(new ReportMail('müşteriler', $reportData));
+
+            // E-posta gönderimi için audit log
+            AuditLog::log('email', 'customers', $filters);
+
             return redirect()->back()->with('success', 'Müşteri raporu e-posta olarak gönderildi.');
         }
+
+        // Görüntüleme için audit log
+        AuditLog::log('view', 'customers', $filters);
 
         return view('reports.customers', compact('topCustomers', 'registrationTrend'));
     }

@@ -61,6 +61,10 @@ Route::get('/packages/all', [PackageController::class, 'allPackages'])->name('pa
         Route::get('/packages', [App\Http\Controllers\ReportController::class, 'packages'])->name('packages');
         Route::get('/customers', [App\Http\Controllers\ReportController::class, 'customers'])->name('customers');
     });
+
+    // Audit Log Routes
+    Route::get('/audit-logs', [App\Http\Controllers\AuditLogController::class, 'index'])->name('audit.index');
+    Route::get('/audit-logs/{log}', [App\Http\Controllers\AuditLogController::class, 'show'])->name('audit.show');
 });
 
 Auth::routes();

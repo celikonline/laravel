@@ -34,21 +34,88 @@
     <!-- Filtreler -->
     <div class="card mb-4">
         <div class="card-body">
-            <form method="GET" action="{{ route('reports.revenue') }}" class="row g-3">
-                <div class="col-md-4">
+            <form method="GET" action="{{ route('reports.revenue') }}" class="row g-3" id="filterForm">
+                <!-- Tarih Filtreleri -->
+                <div class="col-md-3">
                     <label for="start_date" class="form-label">Başlangıç Tarihi</label>
                     <input type="date" class="form-control" id="start_date" name="start_date" 
                            value="{{ request('start_date', $startDate->format('Y-m-d')) }}">
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="end_date" class="form-label">Bitiş Tarihi</label>
                     <input type="date" class="form-control" id="end_date" name="end_date" 
                            value="{{ request('end_date', $endDate->format('Y-m-d')) }}">
                 </div>
-                <div class="col-md-4 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-filter"></i> Filtrele
-                    </button>
+
+                <!-- Durum Filtresi -->
+                <div class="col-md-3">
+                    <label for="status" class="form-label">Durum</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value="">Tümü</option>
+                        @foreach($statuses as $status)
+                            <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>
+                                {{ ucfirst($status) }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Müşteri Filtresi -->
+                <div class="col-md-3">
+                    <label for="customer_id" class="form-label">Müşteri</label>
+                    <select class="form-select" id="customer_id" name="customer_id">
+                        <option value="">Tümü</option>
+                        @foreach($customers as $customer)
+                            <option value="{{ $customer->id }}" {{ request('customer_id') == $customer->id ? 'selected' : '' }}>
+                                {{ $customer->first_name }} {{ $customer->last_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Servis Paketi Filtresi -->
+                <div class="col-md-3">
+                    <label for="service_package_id" class="form-label">Servis Paketi</label>
+                    <select class="form-select" id="service_package_id" name="service_package_id">
+                        <option value="">Tümü</option>
+                        @foreach($servicePackages as $package)
+                            <option value="{{ $package->id }}" {{ request('service_package_id') == $package->id ? 'selected' : '' }}>
+                                {{ $package->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Fiyat Aralığı Filtreleri -->
+                <div class="col-md-3">
+                    <label for="min_price" class="form-label">Min. Tutar</label>
+                    <input type="number" class="form-control" id="min_price" name="min_price" 
+                           value="{{ request('min_price') }}" placeholder="0">
+                </div>
+                <div class="col-md-3">
+                    <label for="max_price" class="form-label">Max. Tutar</label>
+                    <input type="number" class="form-control" id="max_price" name="max_price" 
+                           value="{{ request('max_price') }}" placeholder="10000">
+                </div>
+
+                <!-- Arama -->
+                <div class="col-md-3">
+                    <label for="search" class="form-label">Arama</label>
+                    <input type="text" class="form-control" id="search" name="search" 
+                           value="{{ request('search') }}" 
+                           placeholder="Poliçe no, müşteri adı, telefon...">
+                </div>
+
+                <!-- Butonlar -->
+                <div class="col-md-3 d-flex align-items-end">
+                    <div class="btn-group w-100">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-filter"></i> Filtrele
+                        </button>
+                        <a href="{{ route('reports.revenue') }}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Temizle
+                        </a>
+                    </div>
                 </div>
             </form>
         </div>
@@ -103,21 +170,69 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>Poliçe No</th>
+                            <th>
+                                <a href="{{ route('reports.revenue', array_merge(request()->all(), [
+                                    'sort_by' => 'contract_number',
+                                    'sort_direction' => ($sortField === 'contract_number' && $sortDirection === 'asc') ? 'desc' : 'asc'
+                                ])) }}" class="text-decoration-none text-dark">
+                                    Poliçe No
+                                    @if($sortField === 'contract_number')
+                                        <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
+                                    @else
+                                        <i class="fas fa-sort"></i>
+                                    @endif
+                                </a>
+                            </th>
                             <th>Müşteri</th>
                             <th>Paket</th>
-                            <th>Tutar</th>
-                            <th>Tarih</th>
+                            <th>
+                                <a href="{{ route('reports.revenue', array_merge(request()->all(), [
+                                    'sort_by' => 'price',
+                                    'sort_direction' => ($sortField === 'price' && $sortDirection === 'asc') ? 'desc' : 'asc'
+                                ])) }}" class="text-decoration-none text-dark">
+                                    Tutar
+                                    @if($sortField === 'price')
+                                        <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
+                                    @else
+                                        <i class="fas fa-sort"></i>
+                                    @endif
+                                </a>
+                            </th>
+                            <th>
+                                <a href="{{ route('reports.revenue', array_merge(request()->all(), [
+                                    'sort_by' => 'created_at',
+                                    'sort_direction' => ($sortField === 'created_at' && $sortDirection === 'asc') ? 'desc' : 'asc'
+                                ])) }}" class="text-decoration-none text-dark">
+                                    Tarih
+                                    @if($sortField === 'created_at')
+                                        <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
+                                    @else
+                                        <i class="fas fa-sort"></i>
+                                    @endif
+                                </a>
+                            </th>
+                            <th>Durum</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($revenue as $package)
                             <tr>
                                 <td>{{ $package->contract_number }}</td>
-                                <td>{{ $package->customer->first_name }} {{ $package->customer->last_name }}</td>
+                                <td>
+                                    {{ $package->customer->first_name }} {{ $package->customer->last_name }}
+                                    <br>
+                                    <small class="text-muted">
+                                        {{ $package->customer->email }}
+                                    </small>
+                                </td>
                                 <td>{{ $package->servicePackage->name }}</td>
                                 <td>{{ number_format($package->price, 2, ',', '.') }} ₺</td>
                                 <td>{{ $package->created_at->format('d.m.Y H:i') }}</td>
+                                <td>
+                                    <span class="badge bg-{{ $package->status === 'active' ? 'success' : 'secondary' }}">
+                                        {{ ucfirst($package->status) }}
+                                    </span>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -134,18 +249,13 @@
 
 @push('scripts')
 <script>
-function exportToExcel() {
-    // Excel export işlemi için gerekli kodlar
-    alert('Excel export özelliği yakında eklenecek');
-}
+// Select2 için gerekli kodlar
+$(document).ready(function() {
+    $('#customer_id, #service_package_id').select2({
+        theme: 'bootstrap-5'
+    });
 
-function exportToPDF() {
-    // PDF export işlemi için gerekli kodlar
-    alert('PDF export özelliği yakında eklenecek');
-}
-
-// Tarih filtreleri için validasyon
-document.addEventListener('DOMContentLoaded', function() {
+    // Tarih filtreleri için validasyon
     const startDate = document.getElementById('start_date');
     const endDate = document.getElementById('end_date');
 
@@ -157,6 +267,14 @@ document.addEventListener('DOMContentLoaded', function() {
         startDate.max = this.value;
     });
 });
+
+function exportToExcel() {
+    alert('Excel export özelliği yakında eklenecek');
+}
+
+function exportToPDF() {
+    alert('PDF export özelliği yakında eklenecek');
+}
 </script>
 @endpush
 
