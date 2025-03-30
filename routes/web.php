@@ -5,7 +5,7 @@ use App\Http\Controllers\PackageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\VehicleBrandController;
 use App\Http\Controllers\VehicleModelController;
-
+use App\Http\Controllers\PaymentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,6 +31,13 @@ Route::middleware(['auth'])->group(function () {
         return redirect()->route('dashboard');
     })->name('home');
 
+
+    //Payment işlemleri
+    Route::get('/payment', [PaymentController::class, 'showForm']);
+    Route::post('/packages/{id}/process-payment', [PackageController::class, 'processPayment'])->name('packages.process-payment');
+    Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
+    Route::post('/payment/result', [PaymentController::class, 'paymentResult'])->name('payment.result');
+
     // Paket işlemleri
     Route::get('/packages', [PackageController::class, 'index'])->name('packages.index');
     Route::get('/packages/create', [PackageController::class, 'create'])->name('packages.create');
@@ -38,7 +45,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/packages/{id}/edit', [PackageController::class, 'edit'])->name('packages.edit');
     Route::put('/packages/{id}', [PackageController::class, 'update'])->name('packages.update');
     Route::get('/packages/{id}/payment', [PackageController::class, 'payment'])->name('packages.payment');
-    Route::post('/packages/{id}/payment', [PackageController::class, 'processPayment'])->name('packages.process-payment');
     Route::get('/packages/proposals', [PackageController::class, 'proposals'])->name('packages.proposals');
     
     // AJAX istekleri
@@ -53,7 +59,7 @@ Route::get('/packages/export/excel', [PackageController::class, 'exportExcel'])-
 Route::get('/packages/export/pdf', [PackageController::class, 'exportPdf'])->name('packages.export.pdf');
 Route::get('/packages/{package}/contract-preview', [PackageController::class, 'contractPreview'])->name('packages.contract-preview');
 Route::get('/packages/{package}/receipt-preview', [PackageController::class, 'receiptPreview'])->name('packages.receipt-preview');
-Route::get('/packages/download-agreement', [PackageController::class, 'downloadAgreementPdf'])->name('packages.download-agreement');
+Route::get('/packages/download-agreement', [PackageController::class, 'downloadTemplateAgreementPdf'])->name('packages.download-agreement');
 Route::get('/packages/download-kvkk', [PackageController::class, 'downloadKvkkPdf'])->name('packages.download-kvkk');
 Route::get('/packages/all', [PackageController::class, 'allPackages'])->name('packages.all');
 

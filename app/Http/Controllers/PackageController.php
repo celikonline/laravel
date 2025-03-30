@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\DB;
 use PDF;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PackagesExport;
+use App\Services\PosnetService;
+use Illuminate\Support\Facades\Log;
 
 /**
  * @OA\Info(
@@ -294,7 +296,14 @@ class PackageController extends Controller
         $package = Package::with(['customer', 'servicePackage'])
             ->findOrFail($id);
 
-        return view('packages.payment', compact('package'));
+        $orderId = 'PKG_' . $package->id . '_' . time();
+        $amount = $package->price;
+
+        return view('payment.form', [
+            'package' => $package,
+            'orderId' => $orderId,
+            'amount' => $amount
+        ]);
     }
 
     /**
@@ -337,16 +346,69 @@ class PackageController extends Controller
     public function processPayment(Request $request, $id)
     {
         $package = Package::findOrFail($id);
-
-        // Ödeme işlemi burada gerçekleştirilecek
-        // Örnek olarak direkt başarılı kabul ediyoruz
-        $package->update([
-            'status' => 'active',
-            'payment_date' => now(),
+        
+        $request->validate([
+            'card_owner' => 'required|string',
+            'card_number' => 'required|string|size:16',
+            'expiry_month' => 'required|string|size:2',
+            'expiry_year' => 'required|string|size:2',
+            'cvv' => 'required|string|size:3',
         ]);
 
-        return redirect()->route('packages.index')
-            ->with('success', 'Ödeme başarıyla tamamlandı ve paket aktifleştirildi.');
+        try {
+            $orderId = substr(hash('sha256', uniqid()),0,20);// 'PKG_' . $package->id . '_' . time();
+            $amount = $package->price * 100; // Convert to kuruş
+            $currency = 'TL';
+
+            // Get the PosnetService instance
+            $posnetService = app(PosnetService::class);
+
+            // Encrypt the data
+            $response = $posnetService->encryptData(
+                $orderId,
+                $amount,
+                $currency,
+                '00', // installment
+                $request->card_owner,
+                $request->card_number,
+                $request->expiry_year . $request->expiry_month,
+                $request->cvv
+            );
+
+            // Store payment data in session
+            session([
+                'payment_package_id' => $package->id,
+                'payment_order_id' => $orderId,
+                'payment_amount' => $amount
+            ]);
+
+            // Get 3D form data
+            $formData = [
+                'action_url' => config('posnet.threed_url'),
+                'inputs' => [
+                    'mid' => config('posnet.merchant_id'),
+                    'tid' => config('posnet.terminal_id'),
+                    'PosnetID' => config('posnet.posnet_id'),
+                    'posnetData' => $response->oosRequestDataResponse->data1,
+                    'posnetData2' => $response->oosRequestDataResponse->data2,
+                    'digest' => $response->oosRequestDataResponse->sign,
+                    'vftCode' => "",
+                    'merchantReturnURL' => route('payment.result'),
+                    'lang' => 'tr',
+                    'url' => config('posnet.merchant_url'),
+                ]
+            ];
+
+            Log::info('Form Data', ['form Data' => $formData]);
+
+            return view('payment.redirect', compact('formData'));
+
+        } catch (\Exception $e) {
+            \Log::error('Payment error', ['error' => $e->getMessage()]);
+            return back()
+                ->with('error', 'Ödeme işlemi başlatılırken bir hata oluştu: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     /**
@@ -732,7 +794,7 @@ class PackageController extends Controller
         return view('packages.receipt-preview', compact('package'));
     }
 
-    public function downloadAgreementPdf()
+    public function downloadTemplateAgreementPdf()
     {
         $pdf = PDF::loadView('packages.agreement-pdf');
         return $pdf->download('ikame-arac-paketi-sozlesmesi.pdf');
@@ -761,5 +823,46 @@ class PackageController extends Controller
             ->paginate(10);
         
         return view('packages.all', compact('packages'));
+    }
+
+    /**
+     * Generate service agreement for the package
+     */
+    public function previewAgreement(Package $package)
+    {
+        $html = view('packages.agreement-preview', [
+            'package' => $package,
+            'netAmount' => $package->price / 1.18, // KDV'siz tutar
+            'kdv' => $package->price - ($package->price / 1.18), // KDV tutarı
+            'formattedPlate' => $package->plate_city . ' ' . $package->plate_letters . ' ' . $package->plate_numbers,
+            'maskedIdentityNumber' => $this->maskIdentityNumber($package->customer->identity_number)
+        ])->render();
+
+        return $html;
+    }
+
+    /**
+     * Download service agreement as PDF
+     */
+    public function downloadAgreementPdf(Package $package)
+    {
+        $html = $this->previewAgreement($package);
+        
+        $pdf = PDF::loadHTML($html);
+        $pdf->setPaper('A4');
+        
+        return $pdf->download('hizmet-sozlesmesi-' . $package->contract_number . '.pdf');
+    }
+
+    /**
+     * Mask identity number for privacy
+     */
+    private function maskIdentityNumber($identityNumber)
+    {
+        if (strlen($identityNumber) != 11) {
+            return $identityNumber;
+        }
+        
+        return substr($identityNumber, 0, 3) . '******' . substr($identityNumber, -2);
     }
 }
