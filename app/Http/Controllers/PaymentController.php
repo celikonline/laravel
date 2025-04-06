@@ -216,8 +216,8 @@ class PaymentController extends Controller
                     session()->forget(['payment_package_id', 'payment_order_id', 'payment_amount']);
                     Log::info('Payment session data cleared');
 
-                    return redirect()->route('packages.index')
-                        ->with('success', 'Ödeme başarıyla tamamlandı ve paket aktifleştirildi.');
+                    session()->flash('success', 'Ödeme başarıyla tamamlandı ve paket aktifleştirildi.');
+                    return view('payment.result', ['status' => 'success']);
                 }
             }
 
@@ -226,16 +226,17 @@ class PaymentController extends Controller
                 'respText' => $response->respText ?? null
             ]);
 
-            return redirect()->route('packages.payment', $package->id)
-                ->with('error', 'Ödeme işlemi başarısız: ' . ($response->respText ?? 'Bilinmeyen hata'));
+            session()->flash('error', 'Ödeme işlemi başarısız: ' . ($response->respText ?? 'Bilinmeyen hata'));
+            return view('payment.result', ['status' => 'error']);
 
         } catch (\Exception $e) {
             Log::error('Payment result processing error', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            return redirect()->route('packages.index')
-                ->with('error', 'Ödeme sonucu işlenirken bir hata oluştu: ' . $e->getMessage());
+            
+            session()->flash('error', 'Ödeme sonucu işlenirken bir hata oluştu: ' . $e->getMessage());
+            return view('payment.result', ['status' => 'error']);
         }
     }
 }

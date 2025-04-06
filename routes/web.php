@@ -36,7 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/payment', [PaymentController::class, 'showForm']);
     Route::post('/packages/{id}/process-payment', [PackageController::class, 'processPayment'])->name('packages.process-payment');
     Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
-    Route::post('/payment/result', [PaymentController::class, 'paymentResult'])->name('payment.result');
+    Route::match(['get', 'post'], '/payment/result', [PaymentController::class, 'paymentResult'])->name('payment.result');
 
     // Paket işlemleri
     Route::get('/packages', [PackageController::class, 'index'])->name('packages.index');
