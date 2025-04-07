@@ -36,7 +36,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/payment', [PaymentController::class, 'showForm']);
     Route::post('/packages/{id}/process-payment', [PackageController::class, 'processPayment'])->name('packages.process-payment');
     Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
-    Route::match(['get', 'post'], '/payment/result', [PaymentController::class, 'paymentResult'])->name('payment.result');
+    
+   
+    Route::match(['get', 'post'], 'payment/result', [PaymentController::class, 'paymentResult'])
+        ->name('payment.result')
+        ->withoutMiddleware(['auth', \App\Http\Middleware\VerifyCsrfToken::class]);
 
     // Paket işlemleri
     Route::get('/packages', [PackageController::class, 'index'])->name('packages.index');
@@ -85,7 +89,7 @@ Route::get('/packages/all', [PackageController::class, 'allPackages'])->name('pa
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
     Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
     Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
-    Route::get('/notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('notifications.unreadCount');
+    //Route::get('/notifications/unread-count', [NotificationController::class, 'getUnreadCount'])->name('notifications.unreadCount');
 
     // Vehicle Settings Routes
     Route::resource('vehicle-brands', VehicleBrandController::class);

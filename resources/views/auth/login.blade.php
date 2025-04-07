@@ -212,22 +212,4 @@ body::after {
     }
 }
 </style>
-
-<script>
-// Parçacık animasyonu için JavaScript
-document.addEventListener('DOMContentLoaded', function() {
-    const particles = document.createElement('div');
-    particles.className = 'particles';
-    document.body.appendChild(particles);
-
-    for (let i = 0; i < 50; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + 'vw';
-        particle.style.animationDelay = Math.random() * 8 + 's';
-        particle.style.opacity = Math.random();
-        particles.appendChild(particle);
-    }
-});
-</script>
 @endsection

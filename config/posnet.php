@@ -21,4 +21,5 @@ return [
     
     // Currency
     'default_currency' => 'TL',
+    'enc_key' => env('POSNET_ENC_KEY', '10,10,10,10,10,10,10,10'),
 ];

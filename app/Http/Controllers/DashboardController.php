@@ -33,10 +33,10 @@ class DashboardController extends Controller
             ->orderBy('month')
             ->get();
             
-        // Son 10 paket
+        // Son 100 paket
         $recentPackages = Package::with(['customer', 'servicePackage'])
             ->orderBy('created_at', 'desc')
-            ->limit(10)
+            ->take(100)
             ->get();
 
         return view('dashboard', compact(

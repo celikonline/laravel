@@ -3,7 +3,7 @@ import 'bootstrap';
 
 // Bildirim sayısını güncelleme fonksiyonu
 function updateNotificationCount() {
-    fetch('/notifications/unread-count')
+    /*fetch('/notifications/unread-count')
         .then(response => response.json())
         .then(data => {
             const badge = document.querySelector('#notificationsDropdown .badge');
@@ -15,11 +15,11 @@ function updateNotificationCount() {
                     badge.style.display = 'none';
                 }
             }
-        });
+        });*/
 }
 
 // Her 30 saniyede bir bildirim sayısını güncelle
-setInterval(updateNotificationCount, 30000);
+//setInterval(updateNotificationCount, 30000);
 
 // Sayfa yüklendiğinde bildirim sayısını güncelle
 document.addEventListener('DOMContentLoaded', updateNotificationCount);

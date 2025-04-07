@@ -61,9 +61,9 @@
                 <div class="card-header">
                     <h5 class="card-title mb-0">Son İşlemler</h5>
                 </div>
-                <div class="card-body">
-                    <div class="list-group list-group-flush">
-                        @foreach($recentPackages as $package)
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush recent-activities">
+                        @foreach($recentPackages->take(100) as $package)
                             <div class="list-group-item">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h6 class="mb-1">{{ $package->customer->first_name }} {{ $package->customer->last_name }}</h6>
@@ -192,6 +192,27 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 .card i.fa-2x {
     z-index: 0;
+}
+.recent-activities {
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+.recent-activities::-webkit-scrollbar {
+    width: 6px;
+}
+.recent-activities::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+.recent-activities::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+.recent-activities::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+.recent-activities .list-group-item:hover {
+    background-color: #f8f9fa;
 }
 </style>
 @endsection 

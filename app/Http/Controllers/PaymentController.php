@@ -147,10 +147,21 @@ class PaymentController extends Controller
                 'request_data' => $request->all()
             ]);
 
+
+            
             // Get stored payment data
-            $packageId = session('payment_package_id');
-            $orderId = session('payment_order_id');
-            $amount = session('payment_amount');
+            //$packageId = session('payment_package_id');
+            //$orderId = session('payment_order_id');
+            // $amount = session('payment_amount');
+            $orderId = $request->Xid;
+
+            $package = Package::where('transaction_id', $orderId)
+            ->where('is_active', true)
+            ->first();
+
+            $packageId =  $package->id;
+            $amount    =  $package->price;
+           
 
             Log::info('Session payment data retrieved', [
                 'package_id' => $packageId,
@@ -189,10 +200,21 @@ class PaymentController extends Controller
 
             if ($response->approved == 1 && isset($response->oosResolveMerchantDataResponse)) {
                 // Finalize transaction
+                
                 Log::info('Starting transaction finalization');
+                $calculatedMac = $this->calculateMac(
+                    $orderId, 
+                    '50000',
+                    'TL', // currency
+                    config('posnet.merchant_id')
+                );
+                
+                
+                Log::info('Starting transaction finalization');
+
                 $finalResponse = $this->posnetService->finalizeTransaction(
                     $request->input('BankPacket'),
-                    $response->oosResolveMerchantDataResponse->mac
+                    $response->calculatedMac
                 );
 
                 Log::info('Transaction finalization response received', [
@@ -239,4 +261,42 @@ class PaymentController extends Controller
             return view('payment.result', ['status' => 'error']);
         }
     }
+
+    private function calculateMac($xid, $amount, $currency, $merchantNo)
+{
+
+   
+    // Hash fonksiyonu
+    $hashString = function($originalString) {
+        return base64_encode(hash('sha256', $originalString, true));
+    };
+
+    // Config'den değerleri al
+    $encKey = config('posnet.enc_key'); // "10,10,10,10,10,10,10,10"
+    $terminalId = config('posnet.terminal_id'); // "67C31344"
+
+    // Birinci hash'i hesapla
+    $firstHash = $hashString($encKey . ";" . $terminalId);
+
+    // MAC değerini hesapla
+    $mac = $hashString($xid . ";" . $amount . ";" . $currency . ";" . $merchantNo . ";" . $firstHash);
+
+    // Hesaplama detaylarını logla
+    Log::info('MAC Hesaplama Detayları', [
+        'input_values' => [
+            'xid' => $xid,
+            'amount' => $amount,
+            'currency' => $currency,
+            'merchantNo' => $merchantNo,
+            'encKey' => $encKey,
+            'terminalId' => $terminalId
+        ],
+        'calculated_values' => [
+            'firstHash' => $firstHash,
+            'finalMac' => $mac
+        ]
+    ]);
+
+    return $mac;
+}
 }

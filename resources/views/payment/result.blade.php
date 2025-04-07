@@ -8,15 +8,21 @@
                 <div class="card-header">Ödeme Sonucu</div>
 
                 <div class="card-body text-center">
-                    @if(session('success'))
+                    @if($status === 'success')
                         <div class="alert alert-success">
-                            {{ session('success') }}
+                            <i class="fas fa-check-circle fa-3x mb-3"></i>
+                            <h4>Ödeme Başarılı</h4>
+                            <p>{{ $message }}</p>
+                            @if(isset($package))
+                                <p>Paket No: {{ $package->contract_number }}</p>
+                                <p>Tutar: {{ number_format($package->price, 2) }} TL</p>
+                            @endif
                         </div>
-                    @endif
-
-                    @if(session('error'))
+                    @else
                         <div class="alert alert-danger">
-                            {{ session('error') }}
+                            <i class="fas fa-times-circle fa-3x mb-3"></i>
+                            <h4>Ödeme Başarısız</h4>
+                            <p>{{ $message }}</p>
                         </div>
                     @endif
 

@@ -188,6 +188,7 @@ class PackageController extends Controller
                 'brand_id' => $request->brand_id,
                 'model_id' => $request->model_id,
                 'model_year' => $request->model_year,
+                'transaction_id' => substr(hash('sha256', uniqid()),0,20),
             ]);
 
             DB::commit();
@@ -296,7 +297,7 @@ class PackageController extends Controller
         $package = Package::with(['customer', 'servicePackage'])
             ->findOrFail($id);
 
-        $orderId = 'PKG_' . $package->id . '_' . time();
+        $orderId =$package->transaction_id;  //'PKG_' . $package->id . '_' . time();
         $amount = $package->price;
 
         return view('payment.form', [
@@ -356,7 +357,7 @@ class PackageController extends Controller
         ]);
 
         try {
-            $orderId = substr(hash('sha256', uniqid()),0,20);// 'PKG_' . $package->id . '_' . time();
+            $orderId =$package->transaction_id; // substr(hash('sha256', uniqid()),0,20);// 'PKG_' . $package->id . '_' . time();
             $amount = $package->price * 100; // Convert to kuruş
             $currency = 'TL';
 
