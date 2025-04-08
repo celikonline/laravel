@@ -160,7 +160,7 @@ class PaymentController extends Controller
             ->first();
 
             $packageId =  $package->id;
-            $amount    =  $package->price;
+            $amount    =  intval($package->price * 100); // Convert to kuruş as integer
            
 
             Log::info('Session payment data retrieved', [
@@ -204,7 +204,7 @@ class PaymentController extends Controller
                 Log::info('Starting transaction finalization');
                 $calculatedMac = $this->calculateMac(
                     $orderId, 
-                    '50000',
+                    $amount,
                     'TL', // currency
                     config('posnet.merchant_id')
                 );
@@ -226,12 +226,12 @@ class PaymentController extends Controller
                     $package->update([
                         'status' => 'active',
                         'payment_date' => now(),
-                        'transaction_id' => $finalResponse->hostlogkey ?? null
+                        'transaction_result' => $finalResponse->hostlogkey ?? null
                     ]);
                     Log::info('Package status updated after successful payment', [
                         'package_id' => $package->id,
                         'status' => 'active',
-                        'transaction_id' => $finalResponse->hostlogkey ?? null
+                        'transaction_result' => $finalResponse->hostlogkey ?? null
                     ]);
 
                     // Clear payment session data
@@ -239,7 +239,11 @@ class PaymentController extends Controller
                     Log::info('Payment session data cleared');
 
                     session()->flash('success', 'Ödeme başarıyla tamamlandı ve paket aktifleştirildi.');
-                    return view('payment.result', ['status' => 'success']);
+                    return view('payment.result', [
+                        'status' => 'success',
+                        'message' => 'Ödeme başarıyla tamamlandı ve paket aktifleştirildi.',
+                        'package' => $package
+                    ]);
                 }
             }
 
@@ -249,7 +253,10 @@ class PaymentController extends Controller
             ]);
 
             session()->flash('error', 'Ödeme işlemi başarısız: ' . ($response->respText ?? 'Bilinmeyen hata'));
-            return view('payment.result', ['status' => 'error']);
+            return view('payment.result', [
+                'status' => 'error',
+                'message' => 'Ödeme işlemi başarısız: ' . ($response->respText ?? 'Bilinmeyen hata')
+            ]);
 
         } catch (\Exception $e) {
             Log::error('Payment result processing error', [
@@ -258,7 +265,10 @@ class PaymentController extends Controller
             ]);
             
             session()->flash('error', 'Ödeme sonucu işlenirken bir hata oluştu: ' . $e->getMessage());
-            return view('payment.result', ['status' => 'error']);
+            return view('payment.result', [
+                'status' => 'error',
+                'message' => 'Ödeme sonucu işlenirken bir hata oluştu: ' . $e->getMessage()
+            ]);
         }
     }
 

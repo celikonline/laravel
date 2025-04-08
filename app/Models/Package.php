@@ -32,6 +32,7 @@ class Package extends Model
         'model_id',
         'model_year',
         'phone_number',
+        'transaction_id',
     ];
 
     protected $casts = [

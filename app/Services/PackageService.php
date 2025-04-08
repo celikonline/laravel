@@ -26,7 +26,9 @@ class PackageService
             DB::beginTransaction();
 
             // Paket numarası oluştur
-            $data['package_number'] = 'PKG-' . date('Ymd') . '-' . rand(1000, 9999);
+            $data['package_number'] = 'PKG-' . date('YmdHis') .substr(hash('sha256', uniqid()),0,20);
+            $data['transaction_id'] ='PKG-' . date('YmdHis') .substr(hash('sha256', uniqid()),0,20);
+
             
             // KDV hesapla
             $data['kdv'] = $data['amount'] * 0.18;

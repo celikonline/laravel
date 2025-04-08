@@ -19,7 +19,7 @@
 
                         <!-- Toplam tutar bilgisi -->
                         <div class="mb-4 text-center">
-                            <h4>Toplam Tutar: {{ number_format($amount, 2) }} TL</h4>
+                            <h4>Toplam Tutar: {{ number_format($amount / 100, 2) }} TL</h4>
                         </div>
 
                         <div class="mb-3">
@@ -34,7 +34,7 @@
                         <div class="mb-3">
                             <label for="card_number" class="form-label">{{ __('Kart Numarası') }}</label>
                             <input type="text" class="form-control @error('card_number') is-invalid @enderror" 
-                                id="card_number" name="card_number" value="4506349043174632" 
+                                id="card_number" name="card_number" value="5400619340701616" 
                                 required maxlength="16" pattern="\d{16}">
                             @error('card_number')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -45,7 +45,7 @@
                             <div class="col-md-4">
                                 <label for="expiry_month" class="form-label">{{ __('Son Kullanma Ay') }}</label>
                                 <input type="text" class="form-control @error('expiry_month') is-invalid @enderror" 
-                                    id="expiry_month" name="expiry_month" value="02" 
+                                    id="expiry_month" name="expiry_month" value="07" 
                                     required maxlength="2" pattern="\d{2}">
                                 @error('expiry_month')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -55,7 +55,7 @@
                             <div class="col-md-4">
                                 <label for="expiry_year" class="form-label">{{ __('Son Kullanma Yıl') }}</label>
                                 <input type="text" class="form-control @error('expiry_year') is-invalid @enderror" 
-                                    id="expiry_year" name="expiry_year" value="29" 
+                                    id="expiry_year" name="expiry_year" value="28" 
                                     required maxlength="2" pattern="\d{2}">
                                 @error('expiry_year')
                                     <div class="invalid-feedback">{{ $message }}</div>

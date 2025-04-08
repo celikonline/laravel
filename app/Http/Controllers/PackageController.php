@@ -188,7 +188,7 @@ class PackageController extends Controller
                 'brand_id' => $request->brand_id,
                 'model_id' => $request->model_id,
                 'model_year' => $request->model_year,
-                'transaction_id' => substr(hash('sha256', uniqid()),0,20),
+                'transaction_id' => $this->generateContractNumber()
             ]);
 
             DB::commit();
@@ -297,8 +297,8 @@ class PackageController extends Controller
         $package = Package::with(['customer', 'servicePackage'])
             ->findOrFail($id);
 
-        $orderId =$package->transaction_id;  //'PKG_' . $package->id . '_' . time();
-        $amount = $package->price;
+        $orderId = $package->transaction_id;  //'PKG_' . $package->id . '_' . time();
+        $amount = intval($package->price * 100); // Convert to kuruş as integer
 
         return view('payment.form', [
             'package' => $package,
@@ -357,8 +357,8 @@ class PackageController extends Controller
         ]);
 
         try {
-            $orderId =$package->transaction_id; // substr(hash('sha256', uniqid()),0,20);// 'PKG_' . $package->id . '_' . time();
-            $amount = $package->price * 100; // Convert to kuruş
+            $orderId = $package->transaction_id;
+            $amount = intval($package->price * 100); // Convert to kuruş as integer
             $currency = 'TL';
 
             // Get the PosnetService instance
@@ -865,5 +865,20 @@ class PackageController extends Controller
         }
         
         return substr($identityNumber, 0, 3) . '******' . substr($identityNumber, -2);
+    }
+
+    public function paymentContent($id)
+    {
+        $package = Package::with(['customer', 'servicePackage'])
+            ->findOrFail($id);
+
+        $orderId = $package->transaction_id;
+        $amount = intval($package->price * 100); // Convert to kuruş as integer
+
+        return view('packages.payment-content', [
+            'package' => $package,
+            'orderId' => $orderId,
+            'amount' => $amount
+        ]);
     }
 }

@@ -267,12 +267,6 @@
                                 <i class="fas fa-box"></i> Tüm Paketler
                             </a>
                         </li>
-                        @endauth
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('packages.index') }}">
-                                <i class="fas fa-list"></i> Paket Listesi
-                            </a>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('packages.proposals') }}">
                                 <i class="fas fa-file-alt"></i> Teklif Paket Listesi
@@ -283,6 +277,9 @@
                                 <i class="fas fa-plus-circle"></i> Yeni Paket
                             </a>
                         </li>
+                        @endauth
+                       
+                       
                     </ul>
 
                     <!-- Right Side Of Navbar -->
