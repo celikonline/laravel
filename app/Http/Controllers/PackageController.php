@@ -797,7 +797,12 @@ class PackageController extends Controller
 
     public function receiptPreview(Package $package)
     {
-        return view('packages.receipt-preview', compact('package'));
+        $html = view('packages.receipt-preview', compact('package'))->render();
+        
+        $pdf = PDF::loadHTML($html);
+        $pdf->setPaper('A4');
+        
+        return $pdf->stream('makbuz-' . $package->contract_number . '.pdf');
     }
 
     public function downloadTemplateAgreementPdf()

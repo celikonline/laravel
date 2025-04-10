@@ -97,10 +97,10 @@
                                             </a>
                                         @endif
                                         <a href="{{ route('packages.contract-preview', $package->id) }}" class="btn btn-sm btn-outline-warning" target="_blank">
-                                            <i class="fas fa-file-pdf"></i>
+                                            <i class="fas fa-file-pdf"></i> Sözleşme
                                         </a>
                                         <a href="{{ route('packages.receipt-preview', $package->id) }}" class="btn btn-sm btn-outline-danger" target="_blank">
-                                            <i class="fas fa-file-pdf"></i>
+                                            <i class="fas fa-file-pdf"></i> Makbuz
                                         </a>
                                         <a href="{{ route('reports.packages.contract-preview') }}" class="btn btn-sm btn-outline-info" target="_blank">
                                             <i class="fas fa-file-contract"></i>
