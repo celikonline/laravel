@@ -1,12 +1,26 @@
+<!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <style>
+            @font-face {
+                font-family: 'DejaVu Sans';
+                font-style: normal;
+                font-weight: normal;
+                src: url('{{ public_path('fonts/DejaVuSans.ttf') }}') format('truetype');
+            }
+            @font-face {
+                font-family: 'DejaVu Sans';
+                font-style: normal;
+                font-weight: bold;
+                src: url('{{ public_path('fonts/DejaVuSans-Bold.ttf') }}') format('truetype');
+            }
             @page {
                 size: A4;
                 margin: 1.5cm;
             }
             body {
-                font-family: Arial, sans-serif;
+                font-family: 'DejaVu Sans', sans-serif;
                 font-size: 12px;
                 line-height: 1.4;
                 margin: 0;

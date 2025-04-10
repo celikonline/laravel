@@ -791,6 +791,7 @@ class PackageController extends Controller
         
         $pdf = PDF::loadHTML($html);
         $pdf->setPaper('A4');
+        $pdf->setWarnings(false);
         
         return $pdf->stream('hizmet-sozlesmesi-' . $package->contract_number . '.pdf');
     }
