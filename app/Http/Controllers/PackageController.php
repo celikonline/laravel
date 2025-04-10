@@ -680,8 +680,8 @@ class PackageController extends Controller
             'Plaka',
             'Servis Paketi',
             'Ücret',
-            'Komisyon',
-            'Komisyon Oranı',
+            /*'Komisyon',
+            'Komisyon Oranı',*/
             'Başlangıç',
             'Bitiş',
             'Süre',
@@ -702,8 +702,8 @@ class PackageController extends Controller
                     $package->plate_city . ' ' . $package->plate_letters . ' ' . $package->plate_numbers,
                     $package->servicePackage->name,
                     number_format($package->price, 2, ',', '.') . ' ₺',
-                    number_format($package->commission, 2, ',', '.') . ' ₺',
-                    '%' . number_format($package->commission_rate, 2, ',', '.'),
+                    /*number_format($package->commission, 2, ',', '.') . ' ₺',
+                    '%' . number_format($package->commission_rate, 2, ',', '.'),*/
                     $package->start_date->format('d.m.Y'),
                     $package->end_date->format('d.m.Y'),
                     $package->duration,

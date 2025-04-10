@@ -4,29 +4,16 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Tüm Paketler</h2>
-        <div class="btn-group">
-            <a href="{{ route('packages.index') }}" class="btn btn-outline-secondary">
-                <i class="fas fa-arrow-left"></i> Geri
+        <div class="btn-group" role="group">
+            <a href="{{ route('packages.export.excel') }}" class="btn btn-success">
+                <i class="fas fa-file-excel"></i> Excel
             </a>
-            <a href="{{ route('reports.packages.contract-preview') }}" class="btn btn-outline-info" target="_blank">
-                <i class="fas fa-file-contract"></i> Sözleşme Önizleme
+            <a href="{{ route('packages.export.pdf') }}" class="btn btn-danger">
+                <i class="fas fa-file-pdf"></i> PDF
             </a>
-        </div>
-    </div>
-
-    <div class="row mb-4">
-        <div class="col-auto">
-            <div class="btn-group" role="group">
-                <a href="{{ route('packages.export.excel') }}" class="btn btn-success">
-                    <i class="fas fa-file-excel"></i> Excel
-                </a>
-                <a href="{{ route('packages.export.pdf') }}" class="btn btn-danger">
-                    <i class="fas fa-file-pdf"></i> PDF
-                </a>
-                <a href="{{ route('packages.export.csv') }}" class="btn btn-info">
-                    <i class="fas fa-file-csv"></i> CSV
-                </a>
-            </div>
+            <a href="{{ route('packages.export.csv') }}" class="btn btn-info">
+                <i class="fas fa-file-csv"></i> CSV
+            </a>
         </div>
     </div>
 
@@ -91,20 +78,18 @@
                                         <a href="{{ route('packages.edit', $package->id) }}" class="btn btn-sm btn-primary">
                                             <i class="fas fa-edit"></i>
                                         </a>
+                                       
+                                        <a href="{{ route('packages.contract-preview', $package->id) }}" class="btn btn-sm btn-outline-warning active" target="_blank">
+                                            <i class="fas fa-file-pdf"></i> 
+                                        </a>
+                                        <a href="{{ route('packages.receipt-preview', $package->id) }}" class="btn btn-sm btn-outline-danger active" target="_blank">
+                                            <i class="fas fa-file-pdf"></i> 
+                                        </a>
                                         @if($package->status == 'pending_payment')
-                                            <a href="{{ route('packages.payment', $package->id) }}" class="btn btn-sm btn-success">
-                                                <i class="fas fa-credit-card"></i>
-                                            </a>
-                                        @endif
-                                        <a href="{{ route('packages.contract-preview', $package->id) }}" class="btn btn-sm btn-outline-warning" target="_blank">
-                                            <i class="fas fa-file-pdf"></i> 
+                                        <a href="{{ route('packages.payment', $package->id) }}" class="btn btn-sm btn-success">
+                                            <i class="fas fa-credit-card"></i>
                                         </a>
-                                        <a href="{{ route('packages.receipt-preview', $package->id) }}" class="btn btn-sm btn-outline-danger" target="_blank">
-                                            <i class="fas fa-file-pdf"></i> 
-                                        </a>
-                                        <a href="{{ route('reports.packages.contract-preview') }}" class="btn btn-sm btn-outline-info" target="_blank">
-                                            <i class="fas fa-file-contract"></i>
-                                        </a>
+                                    @endif
                                     </div>
                                 </td>
                             </tr>
