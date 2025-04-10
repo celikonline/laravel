@@ -2,10 +2,19 @@
 
 @section('content')
 <div class="container">
-    <div class="row mb-4">
-        <div class="col">
-            <h2>Tüm Paketler</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Tüm Paketler</h2>
+        <div class="btn-group">
+            <a href="{{ route('packages.index') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Geri
+            </a>
+            <a href="{{ route('reports.packages.contract-preview') }}" class="btn btn-outline-info" target="_blank">
+                <i class="fas fa-file-contract"></i> Sözleşme Önizleme
+            </a>
         </div>
+    </div>
+
+    <div class="row mb-4">
         <div class="col-auto">
             <div class="btn-group" role="group">
                 <a href="{{ route('packages.export.excel') }}" class="btn btn-success">
@@ -92,6 +101,9 @@
                                         </a>
                                         <a href="{{ route('packages.receipt-preview', $package->id) }}" class="btn btn-sm btn-outline-danger" target="_blank">
                                             <i class="fas fa-file-pdf"></i>
+                                        </a>
+                                        <a href="{{ route('reports.packages.contract-preview') }}" class="btn btn-sm btn-outline-info" target="_blank">
+                                            <i class="fas fa-file-contract"></i>
                                         </a>
                                     </div>
                                 </td>

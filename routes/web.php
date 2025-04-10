@@ -72,6 +72,7 @@ Route::get('/packages/all', [PackageController::class, 'allPackages'])->name('pa
         Route::get('/', [App\Http\Controllers\ReportController::class, 'index'])->name('index');
         Route::get('/revenue', [App\Http\Controllers\ReportController::class, 'revenue'])->name('revenue');
         Route::get('/packages', [App\Http\Controllers\ReportController::class, 'packages'])->name('packages');
+        Route::get('/packages/contract-preview', [App\Http\Controllers\ReportController::class, 'packagesContractPreview'])->name('packages.contract-preview');
         Route::get('/customers', [App\Http\Controllers\ReportController::class, 'customers'])->name('customers');
     });
 

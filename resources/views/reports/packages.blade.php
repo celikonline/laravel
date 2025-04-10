@@ -17,6 +17,9 @@
             <a href="#" class="btn btn-outline-danger" onclick="exportToPDF()">
                 <i class="fas fa-file-pdf"></i> PDF
             </a>
+            <a href="#" class="btn btn-outline-secondary" onclick="previewContractPDF()">
+                <i class="fas fa-file-contract"></i> Sözleşme Önizleme
+            </a>
             <a href="{{ route('reports.packages', ['send_email' => true]) }}" 
                class="btn btn-outline-info">
                 <i class="fas fa-envelope"></i> E-posta Gönder
@@ -236,6 +239,10 @@ function exportToExcel() {
 
 function exportToPDF() {
     alert('PDF export özelliği yakında eklenecek');
+}
+
+function previewContractPDF() {
+    window.open('{{ route("reports.packages.contract-preview") }}', '_blank');
 }
 </script>
 @endpush

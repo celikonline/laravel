@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ReportMail;
+use PDF;
 
 class ReportController extends Controller
 {
@@ -251,6 +252,26 @@ class ReportController extends Controller
             'packageDistribution',
             'packageTrend'
         ));
+    }
+
+    public function packagesContractPreview()
+    {
+        // Get all active packages
+        $packages = Package::with(['customer', 'servicePackage'])
+            ->where('status', 'active')
+            ->get();
+
+        // Generate contract preview HTML
+        $html = view('reports.packages-contract-preview', [
+            'packages' => $packages,
+            'date' => now()->format('d.m.Y')
+        ])->render();
+
+        // Generate PDF
+        $pdf = PDF::loadHTML($html);
+        $pdf->setPaper('A4');
+        
+        return $pdf->stream('paket-sozlesmeleri-' . now()->format('Y-m-d') . '.pdf');
     }
 
     public function customers(Request $request)
