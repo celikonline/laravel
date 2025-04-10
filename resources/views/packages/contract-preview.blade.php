@@ -148,20 +148,21 @@
                 <tr>
                       <th>Sözleşme Numarası</th>
                       <td> {{ $package->contract_number }}</td>
-                      <td colspan=3 >Aktif</td>
+                      <td colspan=3 >{{ $package->status }}</td>
                 </tr>                        
                 <tr>
                       <th width='40%'>Tanzim / Başlangıç/ Bitiş / Gün </th>
+                      <td>{{ $package->payment_date->format('d.m.Y') }}</td>
                       <td>{{ $package->start_date->format('d.m.Y') }}</td>
                       <td>{{ $package->end_date->format('d.m.Y') }}</td>
-                      <td>16.03.2026</td>
-                      <td>366</td>
+                      <td>{{ $package->duration }}</td>
+                      
                 </tr>
                   <tr>
                         <th width='30%'>Net Prim / KDV / Brüt Prim  </th>
                         <td>{{ number_format($package->price - $package->price*0.20, 2, ',', '.') }} TL</td>
                         <td>{{ number_format($package->price*0.20, 2, ',', '.') }} TL</td>
-                        <td>{{ number_format($package->price, 2, ',', '.') }} TL</td>
+                        <td colspan=2>{{ number_format($package->price, 2, ',', '.') }} TL</td>
                         
                   </tr>
             </table>
@@ -178,21 +179,21 @@
                 </tr>
                 <tr>
                     <th >Hizmet Alan:</th>
-                    <td>{{ $package->customer->name }}</td>
+                    <td>{{ $package->getCustomerNameAttribute() }}</td>
                 </tr>
 
               
                 <tr>
                     <th>TCN / VKN</th>
-                    <td>175******70</td>
+                    <td>{{ $package->customer->identity_number }}</td>
                 </tr>
                  <tr>
-                     <th>İlçe / İl: </th>
-                     <td>Aladağ /  {{ $package->plate_city }}</td>
+                     <th>İl: </th>
+                     <td>{{ $package->plate_city }}</td>
                  </tr>
                 <tr>
                     <th>Telefon / E-posta:</th>
-                    <td>05321234567 / ahmet.yilmaz@gmail.com</td>
+                    <td>{{ $package->customer->phone }} / {{ $package->customer->email }}</td>
                 </tr>
             </table>
 
@@ -200,15 +201,15 @@
             <table>
                  <tr>
                      <th width='30%'>Marka:</th>
-                     <td>Alfa Romeo</td>
+                     <td>{{ $package->vehicleBrand->name }}</td>
                  </tr>
                  <tr>
                      <th width='30%'>Model:</th>
-                     <td>146</td>
+                     <td>{{ $package->vehicleModel->name }}</td>
                  </tr>
                 <tr>
                     <th width='30%'>Plaka No / Model Yılı: </th>
-                    <td>  {{ $package->plate_letters }} {{ $package->plate_numbers }}</td>
+                    <td >  {{ $package->plate_letters }} {{ $package->plate_numbers }} / {{ $package->model_year }}</td>
                 </tr>
             </table>
 
