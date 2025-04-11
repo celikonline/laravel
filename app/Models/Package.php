@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Helpers\NumberToWords;
 
 class Package extends Model
 {
@@ -83,5 +84,20 @@ class Package extends Model
         }
 
         return $this->customer->first_name . ' ' . $this->customer->last_name;
+    }
+
+    public function getPriceInWordsAttribute()
+    {
+        $price = $this->price;
+        $whole = floor($price);
+        $fraction = round(($price - $whole) * 100);
+        
+        $result = NumberToWords::convert($whole) . ' Türk Lirası';
+        
+        if ($fraction > 0) {
+            $result .= ' ' . NumberToWords::convert($fraction) . ' Kuruş';
+        }
+        
+        return $result;
     }
 } 
