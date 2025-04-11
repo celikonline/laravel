@@ -5,32 +5,28 @@
 <div class="container">
     <div class="row mb-4">
         <div class="col">
-            <h2>Tüm Paketler</h2>
-        </div>
-        <div class="col-auto">
-            <div class="btn-group" role="group">
-                <a href="{{ route('packages.export-excel') }}" class="btn btn-success">
-                    <i class="fas fa-file-excel"></i> Excel
-                </a>
-                <a href="{{ route('packages.export-csv') }}"  class="btn btn-info">
-                    <i class="fas fa-file-csv"></i> CSV
-                </a>
-               
-                <a href="{{ route('packages.export-pdf') }}" class="btn btn-danger">
-                    <i class="fas fa-file-pdf"></i> PDF
-                </a>
-              
-
-               
-            </div>
-        </div>
-    </div>
-
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Tüm Paketler</h5>
+                        <div>
+                            <a href="{{ route('packages.export-csv') }}" class="btn btn-outline-secondary btn-sm me-2">
+                                <i class="fas fa-file-csv"></i> CSV
+                            </a>
+                            <a href="{{ route('packages.export-excel') }}" class="btn btn-outline-secondary btn-sm me-2">
+                                <i class="fas fa-file-excel"></i> Excel
+                            </a>
+                            <a href="{{ route('packages.export-pdf') }}" class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-hover">
-                            <thead class="table">
+                            <thead class="table-light">
                                 <tr>
                                     <th>Poliçe No</th>
                                     <th>Müşteri</th>
@@ -40,7 +36,7 @@
                                     <th>Başlangıç</th>
                                     <th>Bitiş</th>
                                     <th>Durum</th>
-                                    <th>İşlemler</th>
+                                    <th>İşlemler1</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -72,21 +68,20 @@
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="{{ route('packages.edit', $package->id) }}" class="btn btn-sm btn-primary">
+                                            <a href="{{ route('packages.edit', $package->id) }}" class="btn btn-sm btn-outline-primary" title="Düzenle">
                                                 <i class="fas fa-edit"></i>
                                             </a>
+                                            <a href="{{ route('packages.contract-preview', $package->id) }}" class="btn btn-sm btn-outline-info" title="Sözleşme" target="_blank">
+                                                <i class="fas fa-file-contract"></i>
+                                            </a>
+                                            <a href="{{ route('packages.receipt-preview', $package->id) }}" class="btn btn-sm btn-outline-secondary" title="Makbuz" target="_blank">
+                                                <i class="fas fa-receipt"></i>
+                                            </a>
                                             @if($package->status == 'pending_payment')
-                                            <a href="{{ route('packages.payment', $package->id) }}" class="btn btn-sm btn-success active">
+                                            <a href="{{ route('packages.payment', $package->id) }}" class="btn btn-sm btn-outline-success" title="Ödeme">
                                                 <i class="fas fa-credit-card"></i>
                                             </a>
                                         @endif
-                                            <a href="{{ route('packages.contract-preview', $package->id) }}"  class="btn btn-sm btn-outline-warning" target="_blank">
-                                                <i class="fas fa-file-contract"></i>
-                                            </a>
-                                            <a href="{{ route('packages.receipt-preview', $package->id) }}" class="btn btn-sm btn-outline-danger" target="_blank">
-                                                <i class="fas fa-receipt"></i>
-                                            </a>
-                                           
                                         </div>
                                     </td>
                                 </tr>
@@ -103,7 +98,10 @@
                     </div>
                 </div>
                 </div>
-           
+            </div>
+        </div>
+    </div>
+</div>
 
 <style>
 .plate-container {

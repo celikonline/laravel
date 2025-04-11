@@ -662,53 +662,43 @@ class PackageController extends Controller
 
     public function exportCsv()
     {
-        $fileName = 'paketler_' . date('Y-m-d_H-i-s') . '.csv';
-        
-        $packages = Package::with(['customer', 'servicePackage'])->get();
-        
-        $headers = [
-            "Content-type" => "text/csv",
+        $fileName = 'packages_' . date('Y-m-d') . '.csv';
+        $packages = Package::with(['customer', 'servicePackage', 'vehicleBrand', 'vehicleModel'])->get();
+
+        $headers = array(
+            "Content-type"        => "text/csv",
             "Content-Disposition" => "attachment; filename=$fileName",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0"
-        ];
-        
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
         $columns = [
-            'Poliçe No',
+            'Sözleşme No',
             'Müşteri',
             'Plaka',
             'Servis Paketi',
             'Ücret',
-            /*'Komisyon',
-            'Komisyon Oranı',*/
-            'Başlangıç',
-            'Bitiş',
-            'Süre',
+            'Başlangıç Tarihi',
+            'Bitiş Tarihi',
             'Durum'
         ];
 
         $callback = function() use($packages, $columns) {
             $file = fopen('php://output', 'w');
-            // UTF-8 BOM for Excel
-            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
-            
             fputcsv($file, $columns);
 
             foreach ($packages as $package) {
-                fputcsv($file, [
-                    $package->contract_number,
-                    $package->customer->name,
-                    $package->plate_city . ' ' . $package->plate_letters . ' ' . $package->plate_numbers,
-                    $package->servicePackage->name,
-                    number_format($package->price, 2, ',', '.') . ' ₺',
-                    /*number_format($package->commission, 2, ',', '.') . ' ₺',
-                    '%' . number_format($package->commission_rate, 2, ',', '.'),*/
-                    $package->start_date->format('d.m.Y'),
-                    $package->end_date->format('d.m.Y'),
-                    $package->duration,
-                    $package->is_active ? 'Aktif' : 'Pasif'
-                ]);
+                $row['Sözleşme No'] = $package->contract_number;
+                $row['Müşteri'] = $package->customer->name;
+                $row['Plaka'] = $package->plate_city . ' ' . $package->plate_letters . ' ' . $package->plate_numbers;
+                $row['Servis Paketi'] = $package->servicePackage->name;
+                $row['Ücret'] = number_format($package->price, 2, ',', '.') . ' ₺';
+                $row['Başlangıç Tarihi'] = $package->start_date->format('d.m.Y');
+                $row['Bitiş Tarihi'] = $package->end_date->format('d.m.Y');
+                $row['Durum'] = $package->is_active ? 'Aktif' : 'Pasif';
+
+                fputcsv($file, array_values($row));
             }
 
             fclose($file);
@@ -719,70 +709,69 @@ class PackageController extends Controller
 
     public function exportExcel()
     {
-        $packages = Package::with(['customer', 'servicePackage'])->get();
-        
-        $fileName = 'paketler_' . date('Y-m-d_H-i-s') . '.xls';
-        
-        $headers = [
-            'Content-Type' => 'application/vnd.ms-excel',
-            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
-        ];
-        
+        $fileName = 'packages_' . date('Y-m-d') . '.xlsx';
+        $packages = Package::with(['customer', 'servicePackage', 'vehicleBrand', 'vehicleModel'])->get();
+
+        $headers = array(
+            "Content-type"        => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
         $columns = [
-            'Poliçe No',
+            'Sözleşme No',
             'Müşteri',
             'Plaka',
             'Servis Paketi',
             'Ücret',
-            'Komisyon',
-            'Komisyon Oranı',
-            'Başlangıç',
-            'Bitiş',
-            'Süre',
+            'Başlangıç Tarihi',
+            'Bitiş Tarihi',
             'Durum'
         ];
 
-        $callback = function() use ($packages, $columns) {
+        $callback = function() use($packages, $columns) {
             $file = fopen('php://output', 'w');
             // UTF-8 BOM for Excel
             fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
             
-            // Headers
             fputcsv($file, $columns, "\t");
-            
-            // Data rows
+
             foreach ($packages as $package) {
-                fputcsv($file, [
-                    $package->contract_number,
-                    $package->customer->name,
-                    $package->plate_city . ' ' . $package->plate_letters . ' ' . $package->plate_numbers,
-                    $package->servicePackage->name,
-                    number_format($package->price, 2, ',', '.') . ' ₺',
-                    number_format($package->commission, 2, ',', '.') . ' ₺',
-                    '%' . number_format($package->commission_rate, 2, ',', '.'),
-                    $package->start_date->format('d.m.Y'),
-                    $package->end_date->format('d.m.Y'),
-                    $package->duration,
-                    $package->is_active ? 'Aktif' : 'Pasif'
-                ], "\t");
+                $row['Sözleşme No'] = $package->contract_number;
+                $row['Müşteri'] = $package->customer->name;
+                $row['Plaka'] = $package->plate_city . ' ' . $package->plate_letters . ' ' . $package->plate_numbers;
+                $row['Servis Paketi'] = $package->servicePackage->name;
+                $row['Ücret'] = number_format($package->price, 2, ',', '.') . ' ₺';
+                $row['Başlangıç Tarihi'] = $package->start_date->format('d.m.Y');
+                $row['Bitiş Tarihi'] = $package->end_date->format('d.m.Y');
+                $row['Durum'] = $package->is_active ? 'Aktif' : 'Pasif';
+
+                fputcsv($file, array_values($row), "\t");
             }
-            
+
             fclose($file);
         };
-        
+
         return response()->stream($callback, 200, $headers);
     }
 
     public function exportPdf()
     {
-        $packages = Package::with(['customer', 'servicePackage'])->get();
-        
-        $pdf = PDF::loadView('exports.packages-pdf', [
+        $packages = Package::with(['customer', 'servicePackage', 'vehicleBrand', 'vehicleModel'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $pdf = PDF::loadView('packages.export-pdf', [
             'packages' => $packages,
-            'date' => date('d.m.Y H:i')
+            'date' => now()->format('d.m.Y H:i')
         ]);
-        
-        return $pdf->download('paketler_' . date('Y-m-d_H-i-s') . '.pdf');
+
+        $pdf->setPaper('A4', 'landscape');
+        $pdf->setWarnings(false);
+
+        return $pdf->download('paketler_' . date('Y-m-d') . '.pdf');
     }
 
     public function contractPreview(Package $package)

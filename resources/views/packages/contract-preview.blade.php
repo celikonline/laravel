@@ -2,90 +2,101 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>Hizmet Sözleşmesi</title>
         <style>
             @font-face {
                 font-family: 'DejaVu Sans';
-                font-style: normal;
-                font-weight: normal;
                 src: url('{{ public_path('fonts/DejaVuSans.ttf') }}') format('truetype');
+                font-weight: normal;
             }
             @font-face {
                 font-family: 'DejaVu Sans';
-                font-style: normal;
-                font-weight: bold;
                 src: url('{{ public_path('fonts/DejaVuSans-Bold.ttf') }}') format('truetype');
-            }
-            @page {
-                size: A4;
-                margin: 1.5cm;
+                font-weight: bold;
             }
             body {
                 font-family: 'DejaVu Sans', sans-serif;
-                font-size: 12px;
                 line-height: 1.4;
                 margin: 0;
                 padding: 0;
+                color: #333;
+                font-size: 11px;
             }
             .container {
-                width: 100%;
                 max-width: 800px;
                 margin: 0 auto;
+                padding: 15px;
             }
             .header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
+                text-align: center;
+                padding: 15px 0;
+                border-bottom: 2px solid #0066cc;
             }
             .logo-container {
-                text-align: left;
+                margin-bottom: 15px;
             }
-            .logo {
-                width: 200px;
-                height: 60px;
+            .logo-container img {
+                max-width: 180px;
+                height: auto;
             }
-            .contact-info {
-                text-align: right;
+            .company-info {
+                font-weight: bold;
                 font-size: 12px;
+                color: #333;
+                margin-top: 10px;
             }
-            .phone-number {
-                font-weight: bold;
-                color: #0066cc;
-                font-size: 14px;
+            .company-info p {
+                margin: 3px 0;
+                line-height: 1.3;
             }
-            .document-title {
+            .contract-title {
                 text-align: center;
-                font-size: 16px;
+                font-size: 18px;
                 font-weight: bold;
-                margin: 15px 0;
+                margin: 20px 0;
+                color: #0066cc;
+                text-transform: uppercase;
             }
             table {
                 width: 100%;
                 border-collapse: collapse;
                 margin-bottom: 15px;
+                font-size: 11px;
             }
-            table, th, td {
-                border: 2px solid #000;
+            table th, table td {
+                border: 1px solid #ddd;
+                padding: 6px 8px;
                 text-align: left;
-                padding: 5px;
+            }
+            table th {
+                background-color: #f5f5f5;
+                font-weight: bold;
+                color: #333;
             }
             .section-title {
                 font-weight: bold;
-                font-size: 16px;
-                padding: 8px;
-                margin-top: 20px;
-                margin-bottom: 0;
+                margin: 20px 0 10px;
+                font-size: 14px;
+                color: #0066cc;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 3px;
+            }
+            .section-content {
+                text-align: justify;
+                margin-bottom: 15px;
             }
             .terms {
-                font-size: 10px;
-                text-align: justify;
-                margin-top: 20px;
+                margin-top: 25px;
             }
             .terms h3 {
-                font-size: 12px;
+                font-size: 14px;
                 font-weight: bold;
-                margin-top: 15px;
-                margin-bottom: 5px;
-                text-align: center;
+                color: #0066cc;
+                margin: 15px 0 8px;
+            }
+            .terms p {
+                margin-bottom: 8px;
+                text-align: justify;
             }
             .signature-section {
                 margin-top: 40px;
@@ -94,15 +105,20 @@
             }
             .signature-box {
                 width: 45%;
-                border-top: 1px solid #000;
-                padding-top: 5px;
                 text-align: center;
+                font-size: 12px;
+            }
+            .signature-line {
+                border-top: 1px solid #000;
+                width: 180px;
+                margin: 15px auto;
             }
             .footer {
-                margin-top: 30px;
+                margin-top: 40px;
                 text-align: center;
                 font-size: 10px;
-                border-top: 1px solid #ccc;
+                color: #666;
+                border-top: 1px solid #eee;
                 padding-top: 10px;
             }
             @media print {
@@ -113,121 +129,93 @@
     <body>
         <div class='container'>
             <div class='header'>
-                <div class='logo-container'>
-                    <svg class='logo' width='200' height='60' viewBox='0 0 200 60' xmlns='http://www.w3.org/2000/svg'>
-                      <!-- Background Shape -->
-                      <defs>
-                        <linearGradient id='logoGradient' x1='0%' y1='0%' x2='100%' y2='100%'>
-                          <stop offset='0%' style='stop-color:#0066cc;stop-opacity:1' />
-                          <stop offset='100%' style='stop-color:#0052a3;stop-opacity:1' />
-                        </linearGradient>
-                      </defs>
-                      
-                      <!-- V Letter Stylized -->
-                      <path d='M30 10 L45 45 L60 10' 
-                            stroke='url(#logoGradient)' 
-                            stroke-width='4' 
-                            fill='none' 
-                            stroke-linecap='round'/>
-                      
-                      <!-- Star Symbol (representing Vega star) -->
-                      <path d='M45 5 L47 2 L49 5 L52 3 L51 6 L54 7 L51 8 L52 11 L49 9 L47 12 L45 9 L42 11 L43 8 L40 7 L43 6 L42 3 Z' 
-                            fill='#0066cc'/>
-                      
-                      <!-- Text Elements -->
-                      <text x='70' y='30' 
-                            font-family='Arial, sans-serif' 
-                            font-size='24' 
-                            font-weight='bold' 
-                            fill='#0066cc'>VEGA</text>
-                      
-                      <text x='70' y='45' 
-                            font-family='Arial, sans-serif' 
-                            font-size='14' 
-                            fill='#333333'>ASSIST</text>
-                      
-                      <!-- Decorative Line -->
-                      <line x1='65' y1='33' x2='160' y2='33' 
-                            stroke='#0066cc' 
-                            stroke-width='0.5'/>
-                    </svg>
-                </div>
-                <div class='contact-info'>
-                    <p>Yol Yardım Hattı</p>
-                    <p class='phone-number'>0850 123 45 67</p>
-                </div>
+                <table>
+
+                    <tr>
+                        <th style="text-align: left;">
+                            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('images/logo.png'))) }}" alt="Vega Asist Logo">
+                        </th>
+                        <th style="text-align: center;"> 
+                            <p>Hizmet Sözleşmesi</p>
+                            <p>MÜŞTERİ İLETİŞİM HATTI : 0850 123 45 67                            </p>
+                            <p>www.vegaasist.com.tr</p>
+                        </th>
+                    </tr>
+                </table>
             </div>
-            <p class='section-title'>1. VEGA Paketi</p>
-            <table>
-                <tr>
-                      <th>Sözleşme Numarası</th>
-                      <td> {{ $package->contract_number }}</td>
-                      <td colspan=3 >{{ $package->status }}</td>
-                </tr>                        
-                <tr>
-                      <th width='40%'>Tanzim / Başlangıç/ Bitiş / Gün </th>
-                      <td>{{ $package->payment_date->format('d.m.Y') }}</td>
-                      <td>{{ $package->start_date->format('d.m.Y') }}</td>
-                      <td>{{ $package->end_date->format('d.m.Y') }}</td>
-                      <td>{{ $package->duration }}</td>
-                      
-                </tr>
-                  <tr>
-                        <th width='30%'>Net Prim / KDV / Brüt Prim  </th>
+
+
+            <div class='section'>
+                <h2 class='section-title'>1. VEGA Paketi</h2>
+                <table>
+                    <tr>
+                        <th width="30%">Sözleşme Numarası</th>
+                        <td>{{ $package->contract_number }}</td>
+                        <td colspan="3">{{ $package->status }}</td>
+                    </tr>
+                    <tr>
+                        <th>Tanzim / Başlangıç / Bitiş / Gün</th>
+                        <td>{{ $package->payment_date->format('d.m.Y') }}</td>
+                        <td>{{ $package->start_date->format('d.m.Y') }}</td>
+                        <td>{{ $package->end_date->format('d.m.Y') }}</td>
+                        <td>{{ $package->duration }}</td>
+                    </tr>
+                    <tr>
+                        <th>Net Prim / KDV / Brüt Prim</th>
                         <td>{{ number_format($package->price - $package->price*0.20, 2, ',', '.') }} TL</td>
                         <td>{{ number_format($package->price*0.20, 2, ',', '.') }} TL</td>
-                        <td colspan=2>{{ number_format($package->price, 2, ',', '.') }} TL</td>
-                        
-                  </tr>
-            </table>
+                        <td colspan="2">{{ number_format($package->price, 2, ',', '.') }} TL</td>
+                    </tr>
+                </table>
+            </div>
 
-            <p class='section-title'>2. Sözleşme Tarafları</p>
-            <table>
-                <tr>
-                    <th width='40%'>Hizmet Veren Şirket Unvanı:</th>
-                    <td> Vega Asist </td>
-                </tr>
-<tr>
-                    <th >Adresi:</th>
-                    <td> Mustafa Kemal Mahallesi Cumhuriyet bulvarı No:13/B SİNCAN/ANKARA </td>
-                </tr>
-                <tr>
-                    <th >Hizmet Alan:</th>
-                    <td>{{ $package->getCustomerNameAttribute() }}</td>
-                </tr>
+            <div class='section'>
+                <h2 class='section-title'>2. Sözleşme Tarafları</h2>
+                <table>
+                    <tr>
+                        <th width="30%">Hizmet Veren Şirket Unvanı:</th>
+                        <td>Vega Asist</td>
+                    </tr>
+                    <tr>
+                        <th>Adresi:</th>
+                        <td>Mustafa Kemal Mahallesi Cumhuriyet bulvarı No:13/B SİNCAN/ANKARA</td>
+                    </tr>
+                    <tr>
+                        <th>Hizmet Alan:</th>
+                        <td>{{ $package->getCustomerNameAttribute() }}</td>
+                    </tr>
+                    <tr>
+                        <th>TCN / VKN</th>
+                        <td>{{ $package->customer->identity_number }}</td>
+                    </tr>
+                    <tr>
+                        <th>İl:</th>
+                        <td>{{ $package->plate_city }}</td>
+                    </tr>
+                    <tr>
+                        <th>Telefon / E-posta:</th>
+                        <td>{{ $package->customer->phone }} / {{ $package->customer->email }}</td>
+                    </tr>
+                </table>
+            </div>
 
-              
-                <tr>
-                    <th>TCN / VKN</th>
-                    <td>{{ $package->customer->identity_number }}</td>
-                </tr>
-                 <tr>
-                     <th>İl: </th>
-                     <td>{{ $package->plate_city }}</td>
-                 </tr>
-                <tr>
-                    <th>Telefon / E-posta:</th>
-                    <td>{{ $package->customer->phone }} / {{ $package->customer->email }}</td>
-                </tr>
-            </table>
-
-            <p class='section-title'>3.Sözleşme Konusu Araç Bilgileri</p>
-            <table>
-                 <tr>
-                     <th width='30%'>Marka:</th>
-                     <td>{{ $package->vehicleBrand->name }}</td>
-                 </tr>
-                 <tr>
-                     <th width='30%'>Model:</th>
-                     <td>{{ $package->vehicleModel->name }}</td>
-                 </tr>
-                <tr>
-                    <th width='30%'>Plaka No / Model Yılı: </th>
-                    <td >  {{ $package->plate_letters }} {{ $package->plate_numbers }} / {{ $package->model_year }}</td>
-                </tr>
-            </table>
-
-           
+            <div class='section'>
+                <h2 class='section-title'>3. Sözleşme Konusu Araç Bilgileri</h2>
+                <table>
+                    <tr>
+                        <th width="30%">Marka:</th>
+                        <td>{{ $package->vehicleBrand->name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Model:</th>
+                        <td>{{ $package->vehicleModel->name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Plaka No / Model Yılı:</th>
+                        <td>{{ $package->plate_number }} / {{ $package->model_year }}</td>
+                    </tr>
+                </table>
+            </div>
 
             <div class='terms'>
                 <h3>VEGA ASİST YOL YARDIM KAPSAMI</h3>
@@ -278,23 +266,9 @@
                 davranışının tespit edilmesi durumunda sözleşme tek taraflı olarak feshedilebilir.</p>
             </div>
 
-            <div class='signature-section'>
-                <div class='signature-box'>
-                    <p>VEGA ASSIST</p>
-                    <p>Yetkili İmza</p>
-                </div>
-                <div class='signature-box'>
-                    <p>MÜŞTERİ</p>
-                    <p>Ad Soyad: Ahmet Yılmaz</p>
-                    <p>İmza</p>
-                </div>
-            </div>
-
             <div class='footer'>
-                <p>VEGA ASSIST</p>
-                <p>info@vegaasist.com.tr | https://vegaasist.com.tr</p>
                 <p class='no-print'>Bu belge elektronik ortamda oluşturulmuştur.</p>
             </div>
         </div>
     </body>
-    </html>
+</html>

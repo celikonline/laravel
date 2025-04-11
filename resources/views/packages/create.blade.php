@@ -228,13 +228,13 @@
                             <h5>4. Kaydet ve ödeme sayfasına geç</h5>
                             <div class="form-check mb-3">
                                 <input class="form-check-input" type="checkbox" name="terms" id="terms" required>
-                                <label class="form-check-label" for="terms">
+                                <label class="form-check-label" >
                                     <a href="#" class="text-decoration-none" id="openKvkkModal">KVKK Metni'ni okudum ve onaylıyorum </a>
                                 </label>
                             </div>
                             <div class="form-check mb-3">
                                 <input class="form-check-input" type="checkbox" name="agreement" id="agreement" required>
-                                <label class="form-check-label" for="agreement">
+                                <label class="form-check-label" >
                                     <a href="#" class="text-decoration-none" id="openAgreementModal">Mesafeli Satış Sözleşmesi'ni okudum, onaylıyorum</a>
                                 </label>
                             </div>
@@ -625,15 +625,15 @@ $(document).ready(function() {
         }
 
         // Sözleşme kontrolü
-        if (!$('#terms').is(':checked')) {
-            alert('Lütfen KVKK Metnini okuyup onaylayınız.');
-            return false;
-        }
+       // if (!$('#terms').is(':checked')) {
+       //     alert('Lütfen KVKK Metnini okuyup onaylayınız.');
+       //     return false;
+       // }
 
-        if (!$('#agreement').is(':checked')) {
-            alert('Lütfen İstisnaları Satış Sözleşmesini okuyup onaylayınız.');
-            return false;
-        }
+        //if (!$('#agreement').is(':checked')) {
+        //    alert('Lütfen İstisnaları Satış Sözleşmesini okuyup onaylayınız.');
+        //    return false;
+        //}
 
         // Tüm validasyonlar başarılı ise formu gönder
         console.log('Form gönderiliyor...');
@@ -658,7 +658,7 @@ $(document).ready(function() {
     @if(session('error'))
         alert("{{ session('error') }}");
     @endif
-
+/*
     // KVKK Modal işlemleri
     var kvkkModal = new bootstrap.Modal(document.getElementById('kvkkModal'));
     
@@ -707,7 +707,7 @@ $(document).ready(function() {
         
         e.preventDefault(); // Checkbox'ı işaretlemeyi engelle
         agreementModal.show(); // Modalı göster
-    });
+    });*/
 });
 </script>
 @endpush

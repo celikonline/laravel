@@ -4,23 +4,24 @@
 <div class="container">
     <div class="row mb-4">
         <div class="col">
+		  <div class="card shadow-sm">
             <h2>Teklif Paket Listesi</h2>
-        </div>
-        <div class="col-auto">
+       
+           <div class="card-header bg-white py-3">
             <div class="btn-group" role="group">
                 <a href="{{ route('packages.export.excel') }}?status=pending_payment" class="btn btn-success">
                     <i class="fas fa-file-excel"></i> Excel
                 </a>
-                <a href="{{ route('packages.export.csv') }}?status=pending_payment" class="btn btn-info">
-                    <i class="fas fa-file-csv"></i> CSV
-                </a>
                 <a href="{{ route('packages.export.pdf') }}?status=pending_payment" class="btn btn-danger">
                     <i class="fas fa-file-pdf"></i> PDF
                 </a>
-                
+                <a href="{{ route('packages.export.csv') }}?status=pending_payment" class="btn btn-info">
+                    <i class="fas fa-file-csv"></i> CSV
+                </a>
             </div>
         </div>
-    </div>
+		 </div>
+     </div>
 
     @if(session('success'))
         <div class="alert alert-success">
@@ -48,7 +49,7 @@
                             <th>Başlangıç</th>
                             <th>Bitiş</th>
                             <th>Durum</th>
-                            <th>İşlemler</th>
+                            <th>İşlemler2</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -101,6 +102,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <style>
