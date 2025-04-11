@@ -229,11 +229,16 @@ class PackageController extends Controller
      */
     public function getVehicleModels($brandId)
     {
-        $models = VehicleModel::where('brand_id', $brandId)
-            ->where('is_active', true)
-            ->get();
-
-        return response()->json($models);
+        try {
+            $models = VehicleModel::where('brand_id', $brandId)
+                ->where('is_active', true)
+                ->select('id', 'name')
+                ->get();
+            
+            return response()->json($models);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Araç modelleri alınamadı'], 500);
+        }
     }
 
     /**
@@ -263,11 +268,16 @@ class PackageController extends Controller
      */
     public function getDistricts($cityId)
     {
-        $districts = District::where('city_id', $cityId)
-            ->where('is_active', true)
-            ->get();
-
-        return response()->json($districts);
+        try {
+            $districts = District::where('city_id', $cityId)
+                ->where('is_active', true)
+                ->select('id', 'name')
+                ->get();
+            
+            return response()->json($districts);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'İlçeler alınamadı'], 500);
+        }
     }
 
     /**

@@ -507,14 +507,19 @@ $(document).ready(function() {
     $('select[name="city_id"]').on('change', function() {
         var cityId = $(this).val();
         if(cityId) {
-            $.get('/packages/districts/' + cityId, function(data) {
-                var districtSelect = $('select[name="district_id"]');
-                districtSelect.empty();
-                districtSelect.append('<option value="">İlçe Seçiniz</option>');
-                $.each(data, function(key, value) {
-                    districtSelect.append('<option value="' + value.id + '">' + value.name + '</option>');
+            $.get('/packages/districts/' + cityId)
+                .done(function(data) {
+                    var districtSelect = $('select[name="district_id"]');
+                    districtSelect.empty();
+                    districtSelect.append('<option value="">İlçe Seçiniz</option>');
+                    $.each(data, function(key, value) {
+                        districtSelect.append('<option value="' + value.id + '">' + value.name + '</option>');
+                    });
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    console.error('İlçeler alınamadı:', textStatus, errorThrown);
+                    alert('İlçeler alınamadı. Lütfen daha sonra tekrar deneyiniz.');
                 });
-            });
         }
     });
 
@@ -522,14 +527,19 @@ $(document).ready(function() {
     $('select[name="brand_id"]').on('change', function() {
         var brandId = $(this).val();
         if(brandId) {
-            $.get('/packages/vehicle-models/' + brandId, function(data) {
-                var modelSelect = $('select[name="model_id"]');
-                modelSelect.empty();
-                modelSelect.append('<option value="">Araç Modeli Seçiniz</option>');
-                $.each(data, function(key, value) {
-                    modelSelect.append('<option value="' + value.id + '">' + value.name + '</option>');
+            $.get('/packages/vehicle-models/' + brandId)
+                .done(function(data) {
+                    var modelSelect = $('select[name="model_id"]');
+                    modelSelect.empty();
+                    modelSelect.append('<option value="">Araç Modeli Seçiniz</option>');
+                    $.each(data, function(key, value) {
+                        modelSelect.append('<option value="' + value.id + '">' + value.name + '</option>');
+                    });
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    console.error('Araç modelleri alınamadı:', textStatus, errorThrown);
+                    alert('Araç modelleri alınamadı. Lütfen daha sonra tekrar deneyiniz.');
                 });
-            });
         }
     });
 

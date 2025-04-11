@@ -52,8 +52,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/packages/proposals', [PackageController::class, 'proposals'])->name('packages.proposals');
     
     // AJAX istekleri
-    Route::get('/packages/vehicle-models/{brand_id}', [PackageController::class, 'getVehicleModels']);
-    Route::get('/packages/districts/{city_id}', [PackageController::class, 'getDistricts']);
+    Route::get('/packages/vehicle-models/{brand_id}', [PackageController::class, 'getVehicleModels'])->name('packages.vehicle-models');
+    Route::get('/packages/districts/{city_id}', [PackageController::class, 'getDistricts'])->name('packages.districts');
 
     // routes/web.php
 Route::get('/packages/{package}/contract/pdf', [PackageController::class, 'generateContractPdf'])->name('packages.contract.pdf');
