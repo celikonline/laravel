@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\ServicePackageController;
 use App\Http\Controllers\Api\VehicleBrandController;
 use App\Http\Controllers\Api\VehicleModelController;
 use App\Http\Controllers\Api\VehicleModelYearController;
+use App\Http\Controllers\Api\CustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,7 +64,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/cities/code/{code}', [CityController::class, 'getCityByCode']);
 
     // Districts
-    Route::get('/districts/city/{cityId}', [DistrictController::class, 'getDistrictsByCity']);
+    Route::get('/districts/city/{cityId}', [\App\Http\Controllers\Api\DistrictController::class, 'getDistrictsByCity']);
 
     // Package Types
     Route::get('/package-types', [PackageTypeController::class, 'index']);
@@ -88,4 +89,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/packages/customer/{customerId}', [PackageController::class, 'getPackagesByCustomer']);
     Route::get('/packages/vehicle/{vehicleId}', [PackageController::class, 'getPackagesByVehicle']);
     Route::apiResource('packages', PackageController::class);
+
+    // New route
+    Route::get('/districts', [CustomerController::class, 'getDistricts']);
 });

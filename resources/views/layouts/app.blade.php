@@ -634,6 +634,9 @@
                             <a class="dropdown-item" href="{{ route('vehicle-models.index') }}">
                                 <i class="fas fa-car-side"></i> Araç Modelleri
                             </a>
+                            <a class="dropdown-item" href="{{ route('customers.index') }}">
+                                <i class="fas fa-users"></i> Müşteriler
+                            </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();

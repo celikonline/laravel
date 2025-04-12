@@ -13,12 +13,29 @@ class VehicleModelController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $models = VehicleModel::with('brand')
-            ->orderBy('name')
-            ->paginate(10);
-        return view('settings.vehicle-models.index', compact('models'));
+        $query = VehicleModel::with('brand');
+
+        // Marka filtresi
+        if ($request->has('brand_id') && $request->brand_id !== '') {
+            $query->where('brand_id', $request->brand_id);
+        }
+
+        // Model adı arama filtresi
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Durum filtresi
+        if ($request->has('status') && $request->status !== '') {
+            $query->where('is_active', $request->status);
+        }
+
+        $models = $query->orderBy('name')->paginate(10);
+        $brands = VehicleBrand::where('is_active', true)->orderBy('name')->pluck('name', 'id');
+        
+        return view('settings.vehicle-models.index', compact('models', 'brands'));
     }
 
     /**

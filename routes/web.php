@@ -6,6 +6,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\VehicleBrandController;
 use App\Http\Controllers\VehicleModelController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\CustomerController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -100,6 +101,9 @@ Route::get('/packages/export-pdf', [PackageController::class, 'exportPdf'])->nam
     Route::resource('vehicle-brands', VehicleBrandController::class);
     Route::resource('vehicle-models', VehicleModelController::class);
     Route::get('vehicle-models/by-brand/{brand}', [VehicleModelController::class, 'getModelsByBrand'])->name('vehicle-models.by-brand');
+
+    // Customer Routes
+    Route::resource('customers', CustomerController::class);
 });
 
 Auth::routes();
