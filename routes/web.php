@@ -104,6 +104,9 @@ Route::get('/packages/export-pdf', [PackageController::class, 'exportPdf'])->nam
 
     // Customer Routes
     Route::resource('customers', CustomerController::class);
+
+    // Müşteri bilgilerini TC Kimlik No ile getir
+    Route::get('/packages/customer/{identityNumber}', [PackageController::class, 'getCustomerByIdentityNumber']);
 });
 
 Auth::routes();

@@ -950,4 +950,39 @@ class PackageController extends Controller
             'amount' => $amount
         ]);
     }
+
+    public function getCustomerByIdentityNumber(Request $request, $identityNumber = null)
+    {
+        // Eğer identityNumber parametre olarak gelmişse onu kullan
+        // Yoksa request'ten al
+        $identityNumber = $identityNumber ?? $request->identity_number;
+
+        if (!$identityNumber) {
+            return response()->json([
+                'success' => false,
+                'message' => 'TC Kimlik No gerekli'
+            ], 400);
+        }
+
+        $customer = Customer::where('identity_number', $identityNumber)->first();
+
+        if (!$customer) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Müşteri bulunamadı'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'first_name' => $customer->first_name,
+                'last_name' => $customer->last_name,
+                'phone_number' => $customer->phone_number,
+                'city_id' => $customer->city_id,
+                'district_id' => $customer->district_id,
+                'customer_type' => $customer->customer_type
+            ]
+        ]);
+    }
 }

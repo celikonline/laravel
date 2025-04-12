@@ -452,6 +452,83 @@ $(document).ready(function() {
         }
     });
 
+    // TC Kimlik No alanı için input event listener
+    $('input[name="identity_number"]').on('input', function() {
+        // Sadece sayıları kabul et
+        let value = $(this).val().replace(/[^0-9]/g, '');
+        $(this).val(value);
+        
+        // 11 karakter olduğunda müşteri bilgilerini getir
+        if (value.length === 11) {
+            getCustomerDetails(value);
+        }
+    });
+
+    function getCustomerDetails(identityNumber) {
+        if (!identityNumber) return;
+
+        // TC Kimlik No formatını kontrol et
+        if (identityNumber.length !== 11) {
+            return;
+        }
+
+        fetch(`/packages/customer/${identityNumber}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                $('input[name="first_name"]').val(data.data.first_name || '');
+                $('input[name="last_name"]').val(data.data.last_name || '');
+                $('input[name="phone_number"]').val(data.data.phone_number || '');
+                $('select[name="city_id"]').val(data.data.city_id || '');
+                $('select[name="customer_type"]').val(data.data.customer_type || '');
+                
+                // İlçeleri yükle
+                if (data.data.city_id) {
+                    loadDistricts(data.data.city_id, data.data.district_id);
+                }
+            } else {
+                console.error('Müşteri bulunamadı:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Hata:', error);
+        });
+    }
+
+    function loadDistricts(cityId, selectedDistrictId = null) {
+        fetch(`/packages/districts/${cityId}`)
+            .then(response => response.json())
+            .then(data => {
+                const districtSelect = $('select[name="district_id"]');
+                districtSelect.empty();
+                districtSelect.append('<option value="">Seçiniz</option>');
+                
+                data.forEach(district => {
+                    const option = $('<option>')
+                        .val(district.id)
+                        .text(district.name);
+                    
+                    if (selectedDistrictId && district.id == selectedDistrictId) {
+                        option.prop('selected', true);
+                    }
+                    
+                    districtSelect.append(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
     // Servis paketi seçildiğinde
     $('select[name="service_package_id"]').on('change', function() {
         var selectedOption = $(this).find('option:selected');
@@ -668,7 +745,7 @@ $(document).ready(function() {
     @if(session('error'))
         alert("{{ session('error') }}");
     @endif
-/*
+
     // KVKK Modal işlemleri
     var kvkkModal = new bootstrap.Modal(document.getElementById('kvkkModal'));
     
@@ -717,7 +794,7 @@ $(document).ready(function() {
         
         e.preventDefault(); // Checkbox'ı işaretlemeyi engelle
         agreementModal.show(); // Modalı göster
-    });*/
+    });
 });
 </script>
 @endpush
