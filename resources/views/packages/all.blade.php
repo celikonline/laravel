@@ -1,8 +1,41 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container-fluid">
     <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Tüm Paketler</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Filtreleme Formu -->
+                    <form action="{{ route('packages.all') }}" method="GET" class="mb-4">
+                        <div class="row">
+                            <div class="col-md-2">
                                 <div class="form-group">
+                                    <label for="search">Arama</label>
+                                    <input type="text" class="form-control" id="search" name="search" value="{{ request('search') }}" placeholder="Sözleşme No, Müşteri, Plaka">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="status">Durum</label>
+                                    <select class="form-control" id="status" name="status">
+                                        <option value="">Tümü</option>
+                                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif</option>
+                                        <option value="pending_payment" {{ request('status') == 'pending_payment' ? 'selected' : '' }}>Ödeme Bekliyor</option>
+                                        <option value="expired" {{ request('status') == 'expired' ? 'selected' : '' }}>Süresi Dolmuş</option>
+                                        <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Pasif</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="service_package_id">Servis Paketi</label>
+                                    <select class="form-control" id="service_package_id" name="service_package_id">
+                                        <option value="">Tümü</option>
+                                        @foreach($servicePackages as $package)
                                             <option value="{{ $package->id }}" {{ request('service_package_id') == $package->id ? 'selected' : '' }}>
                                                 {{ $package->name }}
                                             </option>
@@ -25,13 +58,18 @@
                             <div class="col-md-1">
                                 <div class="form-group">
                                     <label>&nbsp;</label>
-                                    <button type="submit" class="btn btn-primary btn-block">Filtrele</button>
+                                    <div class="d-flex">
+                                        <button type="submit" class="btn btn-primary flex-grow-1">Filtrele</button>
+                                        <a href="{{ route('packages.all') }}" class="btn btn-secondary ms-2">Temizle</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </form>
 
                     <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
                                 <tr>
                                     <th>Poliçe No</th>
                                     <th>Müşteri</th>
@@ -45,7 +83,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                    <td>{{ $package->contract_number }}</td>
                                 @foreach($packages as $package)
                                     <tr>
                                         <td>{{ $package->contract_number }}</td>

@@ -267,11 +267,7 @@
                                 <i class="fas fa-box"></i> Tüm Paketler
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('packages.proposals') }}">
-                                <i class="fas fa-file-alt"></i> Teklif Paket Listesi
-                            </a>
-                        </li>
+                       
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('packages.create') }}">
                                 <i class="fas fa-plus-circle"></i> Yeni Paket
