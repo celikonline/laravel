@@ -11,17 +11,17 @@
                 <div class="card-body">
                     <!-- Filtreleme Formu -->
                     <form action="{{ route('packages.all') }}" method="GET" class="mb-4">
-                        <div class="row">
-                            <div class="col-md-2">
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6 col-lg-2">
                                 <div class="form-group">
-                                    <label for="search">Arama</label>
+                                    <label for="search" class="form-label">Arama</label>
                                     <input type="text" class="form-control" id="search" name="search" value="{{ request('search') }}" placeholder="Sözleşme No, Müşteri, Plaka">
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-md-6 col-lg-2">
                                 <div class="form-group">
-                                    <label for="status">Durum</label>
-                                    <select class="form-control" id="status" name="status" onchange="this.form.submit()">
+                                    <label for="status" class="form-label">Durum</label>
+                                    <select class="form-select" id="status" name="status" onchange="this.form.submit()">
                                         <option value="">Tümü</option>
                                         <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif</option>
                                         <option value="pending_payment" {{ request('status') == 'pending_payment' ? 'selected' : '' }}>Ödeme Bekliyor</option>
@@ -30,10 +30,10 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-md-6 col-lg-2">
                                 <div class="form-group">
-                                    <label for="service_package_id">Servis Paketi</label>
-                                    <select class="form-control" id="service_package_id" name="service_package_id">
+                                    <label for="service_package_id" class="form-label">Servis Paketi</label>
+                                    <select class="form-select" id="service_package_id" name="service_package_id">
                                         <option value="">Tümü</option>
                                         @foreach($servicePackages as $package)
                                             <option value="{{ $package->id }}" {{ request('service_package_id') == $package->id ? 'selected' : '' }}>
@@ -43,24 +43,24 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-md-6 col-lg-2">
                                 <div class="form-group">
-                                    <label for="start_date">Başlangıç Tarihi</label>
+                                    <label for="start_date" class="form-label">Başlangıç Tarihi</label>
                                     <input type="date" class="form-control" id="start_date" name="start_date" value="{{ request('start_date') }}">
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-md-6 col-lg-2">
                                 <div class="form-group">
-                                    <label for="end_date">Bitiş Tarihi</label>
+                                    <label for="end_date" class="form-label">Bitiş Tarihi</label>
                                     <input type="date" class="form-control" id="end_date" name="end_date" value="{{ request('end_date') }}">
                                 </div>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-12 col-md-6 col-lg-2">
                                 <div class="form-group">
-                                    <label>&nbsp;</label>
-                                    <div class="d-flex">
+                                    <label class="form-label d-block">&nbsp;</label>
+                                    <div class="d-flex gap-2">
                                         <button type="submit" class="btn btn-primary flex-grow-1">Filtrele</button>
-                                        <a href="{{ route('packages.all') }}" class="btn btn-secondary ms-2">Temizle</a>
+                                        <a href="{{ route('packages.all') }}" class="btn btn-secondary">Temizle</a>
                                     </div>
                                 </div>
                             </div>
@@ -71,34 +71,106 @@
                         <table class="table table-bordered table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>Poliçe No</th>
-                                    <th>Müşteri</th>
-                                    <th>Plaka</th>
-                                    <th>Servis Paketi</th>
-                                    <th>Ücret</th>
-                                    <th>Başlangıç</th>
-                                    <th>Bitiş</th>
-                                    <th>Durum</th>
-                                    <th>İşlemler</th>
+                                    <th class="text-nowrap">
+                                        <a href="{{ route('packages.all', array_merge(request()->query(), ['sort' => 'contract_number', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc'])) }}">
+                                            Poliçe No
+                                            @if(request('sort') == 'contract_number')
+                                                <i class="fas fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
+                                            @else
+                                                <i class="fas fa-sort"></i>
+                                            @endif
+                                        </a>
+                                    </th>
+                                    <th class="text-nowrap">
+                                        <a href="{{ route('packages.all', array_merge(request()->query(), ['sort' => 'customer_name', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc'])) }}">
+                                            Müşteri
+                                            @if(request('sort') == 'customer_name')
+                                                <i class="fas fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
+                                            @else
+                                                <i class="fas fa-sort"></i>
+                                            @endif
+                                        </a>
+                                    </th>
+                                    <th class="text-nowrap">
+                                        <a href="{{ route('packages.all', array_merge(request()->query(), ['sort' => 'plate', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc'])) }}">
+                                            Plaka
+                                            @if(request('sort') == 'plate')
+                                                <i class="fas fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
+                                            @else
+                                                <i class="fas fa-sort"></i>
+                                            @endif
+                                        </a>
+                                    </th>
+                                    <th class="text-nowrap">
+                                        <a href="{{ route('packages.all', array_merge(request()->query(), ['sort' => 'service_package_id', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc'])) }}">
+                                            Servis Paketi
+                                            @if(request('sort') == 'service_package_id')
+                                                <i class="fas fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
+                                            @else
+                                                <i class="fas fa-sort"></i>
+                                            @endif
+                                        </a>
+                                    </th>
+                                    <th class="text-nowrap">
+                                        <a href="{{ route('packages.all', array_merge(request()->query(), ['sort' => 'price', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc'])) }}">
+                                            Ücret
+                                            @if(request('sort') == 'price')
+                                                <i class="fas fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
+                                            @else
+                                                <i class="fas fa-sort"></i>
+                                            @endif
+                                        </a>
+                                    </th>
+                                    <th class="text-nowrap">
+                                        <a href="{{ route('packages.all', array_merge(request()->query(), ['sort' => 'start_date', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc'])) }}">
+                                            Başlangıç
+                                            @if(request('sort') == 'start_date')
+                                                <i class="fas fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
+                                            @else
+                                                <i class="fas fa-sort"></i>
+                                            @endif
+                                        </a>
+                                    </th>
+                                    <th class="text-nowrap">
+                                        <a href="{{ route('packages.all', array_merge(request()->query(), ['sort' => 'end_date', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc'])) }}">
+                                            Bitiş
+                                            @if(request('sort') == 'end_date')
+                                                <i class="fas fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
+                                            @else
+                                                <i class="fas fa-sort"></i>
+                                            @endif
+                                        </a>
+                                    </th>
+                                    <th class="text-nowrap">
+                                        <a href="{{ route('packages.all', array_merge(request()->query(), ['sort' => 'status', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc'])) }}">
+                                            Durum
+                                            @if(request('sort') == 'status')
+                                                <i class="fas fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
+                                            @else
+                                                <i class="fas fa-sort"></i>
+                                            @endif
+                                        </a>
+                                    </th>
+                                    <th class="text-nowrap">İşlemler</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($packages as $package)
                                     <tr>
-                                        <td>{{ $package->contract_number }}</td>
-                                        <td>{{ $package->customer->first_name }} {{ $package->customer->last_name }}</td>
-                                        <td>
+                                        <td class="text-nowrap">{{ $package->contract_number }}</td>
+                                        <td class="text-nowrap">{{ $package->customer->first_name }} {{ $package->customer->last_name }}</td>
+                                        <td class="text-nowrap">
                                             <div class="plate-container">
                                                 <div class="plate-box">
                                                     <span class="plate-text">{{ $package->plate_city }} {{ $package->plate_letters }} {{ $package->plate_numbers }}</span>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>{{ $package->servicePackage->name }}</td>
-                                        <td>{{ number_format($package->price, 2, ',', '.') }} ₺</td>
-                                        <td>{{ $package->start_date->format('d.m.Y') }}</td>
-                                        <td>{{ $package->end_date->format('d.m.Y') }}</td>
-                                        <td>
+                                        <td class="text-nowrap">{{ $package->servicePackage->name }}</td>
+                                        <td class="text-nowrap">{{ number_format($package->price, 2, ',', '.') }} ₺</td>
+                                        <td class="text-nowrap">{{ $package->start_date->format('d.m.Y') }}</td>
+                                        <td class="text-nowrap">{{ $package->end_date->format('d.m.Y') }}</td>
+                                        <td class="text-nowrap">
                                             @if($package->status == 'active')
                                                 <span class="badge bg-success">Aktif</span>
                                             @elseif($package->status == 'pending_payment')
@@ -109,7 +181,7 @@
                                                 <span class="badge bg-secondary">{{ $package->status }}</span>
                                             @endif
                                         </td>
-                                        <td>
+                                        <td class="text-nowrap">
                                             <div class="btn-group" role="group">
                                                 @if($package->status != 'active')
                                                     <a href="{{ route('packages.edit', $package->id) }}" class="btn btn-sm btn-primary">
@@ -168,6 +240,50 @@
 
 .btn-group .btn {
     margin-right: 2px;
+}
+
+@media (max-width: 768px) {
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .btn-group {
+        display: flex;
+        flex-wrap: nowrap;
+    }
+    
+    .btn-group .btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .col-12 {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    
+    .btn-group .btn {
+        padding: 0.25rem;
+    }
+    
+    .plate-box {
+        min-width: 100px;
+    }
+    
+    .plate-text {
+        font-size: 12px;
+    }
 }
 </style>
 @endsection 

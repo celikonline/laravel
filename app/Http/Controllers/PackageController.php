@@ -829,8 +829,30 @@ class PackageController extends Controller
 
     public function allPackages(Request $request)
     {
-        $query = Package::with(['customer', 'servicePackage'])
-            ->orderBy('updated_at', 'desc');
+        $query = Package::with(['customer', 'servicePackage']);
+
+        // Sıralama
+        $sort = $request->get('sort');
+        $direction = $request->get('direction', 'asc');
+
+        if ($sort) {
+            switch ($sort) {
+                case 'customer_name':
+                    $query->join('customers', 'packages.customer_id', '=', 'customers.id')
+                          ->orderBy('customers.first_name', $direction)
+                          ->orderBy('customers.last_name', $direction);
+                    break;
+                case 'plate':
+                    $query->orderBy('plate_city', $direction)
+                          ->orderBy('plate_letters', $direction)
+                          ->orderBy('plate_numbers', $direction);
+                    break;
+                default:
+                    $query->orderBy($sort, $direction);
+            }
+        } else {
+            $query->orderBy('updated_at', 'desc');
+        }
 
         // Arama filtresi
         if ($request->has('search') && !empty($request->search)) {
