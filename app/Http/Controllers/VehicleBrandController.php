@@ -12,9 +12,22 @@ class VehicleBrandController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $brands = VehicleBrand::orderBy('name')->paginate(10);
+        $query = VehicleBrand::query();
+
+        // Arama filtresi
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Durum filtresi
+        if ($request->has('status') && $request->status !== '') {
+            $query->where('is_active', $request->status);
+        }
+
+        $brands = $query->orderBy('name')->paginate(10);
+        
         return view('settings.vehicle-brands.index', compact('brands'));
     }
 

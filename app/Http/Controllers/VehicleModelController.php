@@ -28,7 +28,7 @@ class VehicleModelController extends Controller
      */
     public function create()
     {
-        $brands = VehicleBrand::where('status', true)
+        $brands = VehicleBrand::where('is_active', true)
             ->orderBy('name')
             ->pluck('name', 'id');
         return view('settings.vehicle-models.create', compact('brands'));
@@ -73,7 +73,7 @@ class VehicleModelController extends Controller
      */
     public function edit(VehicleModel $vehicleModel)
     {
-        $brands = VehicleBrand::where('status', true)
+        $brands = VehicleBrand::where('is_active', true)
             ->orderBy('name')
             ->pluck('name', 'id');
         return view('settings.vehicle-models.edit', compact('vehicleModel', 'brands'));

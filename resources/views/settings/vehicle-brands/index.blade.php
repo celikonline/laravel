@@ -25,6 +25,36 @@
                         </div>
                     @endif
 
+                    <!-- Filtre Formu -->
+                    <form action="{{ route('vehicle-brands.index') }}" method="GET" class="mb-4">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="text" name="search" class="form-control" placeholder="Marka adı ara..." value="{{ request('search') }}">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <select name="status" class="form-control">
+                                        <option value="">Tüm Durumlar</option>
+                                        <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Aktif</option>
+                                        <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Pasif</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search"></i> Filtrele
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <a href="{{ route('vehicle-brands.index') }}" class="btn btn-secondary">
+                                    <i class="fas fa-undo"></i> Sıfırla
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
@@ -72,7 +102,7 @@
                     </div>
 
                     <div class="d-flex justify-content-center mt-3">
-                        {{ $brands->links() }}
+                        {{ $brands->appends(request()->query())->links() }}
                     </div>
                 </div>
             </div>
