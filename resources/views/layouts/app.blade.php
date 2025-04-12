@@ -134,15 +134,22 @@
         .sidebar-brand {
             display: flex;
             align-items: center;
-            color: var(--primary-color);
+            justify-content: center;
+            padding: 1rem;
             text-decoration: none;
-            font-size: 1.5rem;
-            font-weight: 600;
         }
 
         .sidebar-brand img {
-            height: 40px;
-            margin-right: 0.5rem;
+            max-height: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-brand .logo {
+            display: block;
+        }
+
+        .sidebar-brand .logo-mini {
+            display: none;
         }
 
         .nav-item {
@@ -157,11 +164,22 @@
             border-radius: 0.5rem;
             transition: all 0.3s ease;
             position: relative;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nav-link p {
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .nav-link .right {
             margin-left: auto;
             transition: transform 0.3s ease;
+            flex-shrink: 0;
         }
 
         .nav-link.collapsed .right {
@@ -231,12 +249,157 @@
             left: var(--sidebar-width);
             height: 60px;
             background-color: var(--navbar-bg);
-            padding: 0 1rem;
+            padding: 0 1.5rem;
             display: flex;
             align-items: center;
-            justify-content: flex-end;
+            justify-content: space-between;
             z-index: 999;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .top-navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .new-package-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .new-package-btn:hover {
+            background-color: var(--primary-color);
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .new-package-btn i {
+            font-size: 1rem;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            padding: 0.5rem;
+            cursor: pointer;
+            margin-right: 1rem;
+        }
+
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .navbar-nav .nav-item {
+            position: relative;
+            margin: 0;
+            z-index: 1;
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--text-primary);
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 0.5rem;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .navbar-nav .nav-link i {
+            font-size: 1.25rem;
+        }
+
+        .navbar-nav .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            min-width: 200px;
+            z-index: 1000;
+        }
+
+        .navbar-nav .dropdown-item {
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .dropdown-item:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .navbar-nav .dropdown-item i {
+            width: 1.25rem;
+            text-align: center;
+        }
+
+        .navbar-nav .dropdown-divider {
+            border-top: 1px solid var(--border-color);
+            margin: 0.5rem 0;
+        }
+
+        .navbar-nav .dropdown-header {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .notifications-dropdown {
+            width: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .notifications-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            transform: translate(50%, -50%);
+            background-color: #ef4444;
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            min-width: 1.5rem;
+            text-align: center;
         }
 
         /* Card Styles */
@@ -313,16 +476,6 @@
             100% { transform: translateX(100%); }
         }
 
-        /* Footer Styles */
-        footer {
-            background-color: var(--navbar-bg) !important;
-            margin-left: var(--sidebar-width);
-        }
-
-        footer .text-muted {
-            color: var(--text-secondary) !important;
-        }
-
         /* Theme Toggle Button */
         .theme-toggle {
             cursor: pointer;
@@ -342,8 +495,13 @@
 
         /* Responsive Styles */
         @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
             .sidebar {
                 transform: translateX(-100%);
+                transition: transform 0.3s ease;
             }
 
             .sidebar.show {
@@ -352,14 +510,32 @@
 
             .main-content {
                 margin-left: 0;
+                padding: 4rem 1rem 1rem 1rem;
             }
 
             .top-navbar {
                 left: 0;
             }
 
-            footer {
-                margin-left: 0;
+            .new-package-btn span {
+                display: none;
+            }
+
+            .new-package-btn {
+                padding: 0.5rem;
+                border-radius: 50%;
+            }
+
+            .sidebar-toggle {
+                display: none;
+            }
+
+            .sidebar-brand .logo {
+                display: none;
+            }
+
+            .sidebar-brand .logo-mini {
+                display: block;
             }
         }
     </style>
@@ -374,8 +550,8 @@
             </div>
             <div class="sidebar-header">
                 <a href="{{ url('/') }}" class="sidebar-brand">
-                    <img src="{{ asset('images/logo.svg') }}" alt="Logo">
-                    <span>Vega Asist</span>
+                    <img src="{{ asset('images/logo.svg') }}" alt="Logo" class="logo">
+                    <img src="{{ asset('images/logo_mini.svg') }}" alt="Logo" class="logo-mini">
                 </a>
             </div>
 
@@ -417,13 +593,6 @@
                             <p>Tüm Paketler</p>
                         </a>
                     </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('packages.create') ? 'active' : '' }}" href="{{ route('packages.create') }}">
-                            <i class="fas fa-plus-circle"></i>
-                            <p>Yeni Paket</p>
-                        </a>
-                    </li>
                 </ul>
                 @endauth
             </nav>
@@ -431,95 +600,18 @@
 
         <!-- Top Navbar -->
         <nav class="top-navbar">
+            <div class="top-navbar-left">
+                <button class="menu-toggle" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="{{ route('packages.create') }}" class="new-package-btn {{ request()->routeIs('packages.create') ? 'active' : '' }}">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Yeni Paket</span>
+                </a>
+            </div>
             <ul class="navbar-nav ms-auto">
-                @guest
-                    @if (Route::has('login'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">
-                                <i class="fas fa-sign-in-alt"></i> {{ __('Login') }}
-                            </a>
-                        </li>
-                    @endif
-
-                    @if (Route::has('register'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">
-                                <i class="fas fa-user-plus"></i> {{ __('Register') }}
-                            </a>
-                        </li>
-                    @endif
-                @else
-                    <!-- Notifications Dropdown -->
-                    <li class="nav-item dropdown me-3">
-                        <a id="notificationsDropdown" class="nav-link dropdown-toggle position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-bell"></i>
-                            <x-notification-badge :count="auth()->user()->notifications()->where('is_read', false)->count()" />
-                        </a>
-
-                        <div class="dropdown-menu dropdown-menu-end notifications-dropdown" aria-labelledby="notificationsDropdown" style="width: 300px; max-height: 400px; overflow-y: auto;">
-                            <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
-                                <h6 class="mb-0">Bildirimler</h6>
-                                @if(auth()->user()->notifications()->where('is_read', false)->exists())
-                                    <form action="{{ route('notifications.markAllAsRead') }}" method="POST" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="btn btn-link btn-sm p-0 text-decoration-none">
-                                            Tümünü Okundu İşaretle
-                                        </button>
-                                    </form>
-                                @endif
-                            </div>
-
-                            <div class="notifications-list">
-                                @forelse(auth()->user()->notifications()->latest()->take(5)->get() as $notification)
-                                    <div class="dropdown-item {{ $notification->is_read ? '' : 'bg-light' }} border-bottom">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
-                                            <div class="dropdown">
-                                                <button class="btn btn-link btn-sm p-0 text-decoration-none" type="button" data-bs-toggle="dropdown">
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                </button>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    @if(!$notification->is_read)
-                                                        <form action="{{ route('notifications.markAsRead', $notification->id) }}" method="POST">
-                                                            @csrf
-                                                            <button type="submit" class="dropdown-item">
-                                                                <i class="fas fa-check me-2"></i> Okundu İşaretle
-                                                            </button>
-                                                        </form>
-                                                    @endif
-                                                    <form action="{{ route('notifications.destroy', $notification->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="dropdown-item text-danger">
-                                                            <i class="fas fa-trash me-2"></i> Sil
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h6 class="mb-1">{{ $notification->title }}</h6>
-                                        <p class="mb-1 small">{{ Str::limit($notification->message, 100) }}</p>
-                                        @if($notification->link)
-                                            <a href="{{ $notification->link }}" class="btn btn-link btn-sm p-0 text-decoration-none">
-                                                Detayları Görüntüle <i class="fas fa-arrow-right ms-1"></i>
-                                            </a>
-                                        @endif
-                                    </div>
-                                @empty
-                                    <div class="dropdown-item text-center text-muted py-3">
-                                        <i class="fas fa-bell-slash mb-2 d-block"></i>
-                                        Bildiriminiz bulunmamaktadır.
-                                    </div>
-                                @endforelse
-
-                                @if(auth()->user()->notifications()->count() > 5)
-                                    <a href="{{ route('notifications.index') }}" class="dropdown-item text-center py-2 text-primary">
-                                        Tüm Bildirimleri Görüntüle
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </li>
+                @auth
+                   
 
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -553,7 +645,7 @@
                             </form>
                         </div>
                     </li>
-                @endguest
+                @endauth
             </ul>
         </nav>
 
@@ -561,44 +653,6 @@
         <main class="main-content">
             @yield('content')
         </main>
-
-        <!-- Footer -->
-        <footer class="bg-white shadow-sm mt-5">
-            <div class="container py-4">
-                <div class="row">
-                    <div class="col-md-4 mb-4 mb-md-0">
-                        <h5 class="text-primary mb-3">VASist</h5>
-                        <p class="text-muted">Araç servis asistanınız olarak size en iyi hizmeti sunmak için buradayız.</p>
-                        <div class="social-links">
-                            <a href="#" class="text-muted me-3"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#" class="text-muted me-3"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="text-muted me-3"><i class="fab fa-instagram"></i></a>
-                            <a href="#" class="text-muted"><i class="fab fa-linkedin-in"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4 mb-md-0">
-                        <h5 class="text-primary mb-3">Hızlı Linkler</h5>
-                        <ul class="list-unstyled">
-                            <li class="mb-2"><a href="{{ route('dashboard') }}" class="text-muted text-decoration-none">Dashboard</a></li>
-                            <li class="mb-2"><a href="{{ route('packages.all') }}" class="text-muted text-decoration-none">Tüm Paketler</a></li>
-                            <li class="mb-2"><a href="{{ route('packages.create') }}" class="text-muted text-decoration-none">Yeni Paket</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-4">
-                        <h5 class="text-primary mb-3">İletişim</h5>
-                        <ul class="list-unstyled">
-                            <li class="mb-2 text-muted"><i class="fas fa-map-marker-alt me-2"></i> İstanbul, Türkiye</li>
-                            <li class="mb-2 text-muted"><i class="fas fa-phone me-2"></i> +90 (xxx) xxx xx xx</li>
-                            <li class="mb-2 text-muted"><i class="fas fa-envelope me-2"></i> info@vasist.com</li>
-                        </ul>
-                    </div>
-                </div>
-                <hr class="my-4">
-                <div class="text-center text-muted">
-                    <small>&copy; {{ date('Y') }} VASist. Tüm hakları saklıdır.</small>
-                </div>
-            </div>
-        </footer>
     </div>
 
     @stack('scripts')
@@ -634,19 +688,32 @@
             const sidebar = document.querySelector('.sidebar');
             const mainContent = document.querySelector('.main-content');
             const topNavbar = document.querySelector('.top-navbar');
-            const footer = document.querySelector('footer');
             
             sidebar.classList.toggle('collapsed');
             mainContent.classList.toggle('expanded');
             
             if (sidebar.classList.contains('collapsed')) {
                 topNavbar.style.left = '60px';
-                footer.style.marginLeft = '60px';
                 localStorage.setItem('sidebarCollapsed', 'true');
             } else {
                 topNavbar.style.left = 'var(--sidebar-width)';
-                footer.style.marginLeft = 'var(--sidebar-width)';
                 localStorage.setItem('sidebarCollapsed', 'false');
+            }
+        }
+
+        // Mobil menü toggle fonksiyonu
+        function toggleMobileMenu() {
+            const sidebar = document.querySelector('.sidebar');
+            const menuToggle = document.querySelector('.menu-toggle i');
+            
+            sidebar.classList.toggle('show');
+            
+            if (sidebar.classList.contains('show')) {
+                menuToggle.classList.remove('fa-bars');
+                menuToggle.classList.add('fa-times');
+            } else {
+                menuToggle.classList.remove('fa-times');
+                menuToggle.classList.add('fa-bars');
             }
         }
 
@@ -665,34 +732,24 @@
             if (sidebarCollapsed) {
                 toggleSidebar();
             }
-        });
 
-        // Mobil menü toggle
-        document.addEventListener('DOMContentLoaded', () => {
-            const sidebar = document.querySelector('.sidebar');
-            const menuToggle = document.querySelector('.menu-toggle');
-            
-            if (menuToggle) {
-                menuToggle.addEventListener('click', () => {
-                    sidebar.classList.toggle('show');
-                });
+            // Mobil görünümde menüyü otomatik kapat
+            if (window.innerWidth <= 768) {
+                const sidebar = document.querySelector('.sidebar');
+                sidebar.classList.remove('show');
             }
         });
 
-        // Alt menü toggle fonksiyonu
-        document.addEventListener('DOMContentLoaded', () => {
-            const submenuLinks = document.querySelectorAll('.nav-link[data-bs-toggle="collapse"]');
+        // Ekran boyutu değiştiğinde menüyü kontrol et
+        window.addEventListener('resize', () => {
+            const sidebar = document.querySelector('.sidebar');
+            const menuToggle = document.querySelector('.menu-toggle i');
             
-            submenuLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const target = document.querySelector(link.getAttribute('data-bs-target'));
-                    const isCollapsed = link.classList.contains('collapsed');
-                    
-                    link.classList.toggle('collapsed');
-                    target.classList.toggle('show');
-                });
-            });
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('show');
+                menuToggle.classList.remove('fa-times');
+                menuToggle.classList.add('fa-bars');
+            }
         });
     </script>
 </body>

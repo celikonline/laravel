@@ -37,10 +37,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/packages/{id}/process-payment', [PackageController::class, 'processPayment'])->name('packages.process-payment');
     Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
     
-   
     Route::match(['get', 'post'], 'payment/result', [PaymentController::class, 'paymentResult'])
         ->name('payment.result')
-        ->withoutMiddleware(['auth', \App\Http\Middleware\VerifyCsrfToken::class]);
+        ->withoutMiddleware(['auth', 'web', \App\Http\Middleware\VerifyCsrfToken::class]);
 
     // Paket işlemleri
     Route::get('/packages', [PackageController::class, 'index'])->name('packages.index');

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
 @section('content')
 <div class="container">
@@ -6,6 +6,10 @@
         <div class="col-md-6 col-lg-5">
             <div class="card login-card">
                 <div class="card-body p-5">
+                    <div class="logo-container">
+                        <img src="{{ asset('images/logo.svg') }}" alt="Logo" class="logo">
+                        <img src="{{ asset('images/logo_mini.svg') }}" alt="Logo" class="logo-mini">
+                    </div>
                     <div class="text-center mb-4">
                         <h2 class="fw-bold text-primary">Vega Asist</h2>
                         <p class="text-muted">Hesabınıza giriş yapın</p>
