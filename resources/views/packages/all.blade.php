@@ -21,7 +21,7 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="status">Durum</label>
-                                    <select class="form-control" id="status" name="status">
+                                    <select class="form-control" id="status" name="status" onchange="this.form.submit()">
                                         <option value="">Tümü</option>
                                         <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif</option>
                                         <option value="pending_payment" {{ request('status') == 'pending_payment' ? 'selected' : '' }}>Ödeme Bekliyor</option>
@@ -111,9 +111,11 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{{ route('packages.edit', $package->id) }}" class="btn btn-sm btn-primary">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
+                                                @if($package->status != 'active')
+                                                    <a href="{{ route('packages.edit', $package->id) }}" class="btn btn-sm btn-primary">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                @endif
                                                 @if($package->status == 'pending_payment')
                                                     <a href="{{ route('packages.payment', $package->id) }}" class="btn btn-sm btn-success active">
                                                         <i class="fas fa-credit-card"></i>
