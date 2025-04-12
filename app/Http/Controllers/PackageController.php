@@ -827,13 +827,50 @@ class PackageController extends Controller
         return view('packages.proposals', compact('packages'));
     }
 
-    public function allPackages()
+    public function allPackages(Request $request)
     {
-        $packages = Package::with(['customer', 'servicePackage'])
-            ->orderBy('updated_at', 'desc')
-            ->paginate(10);
-        
-        return view('packages.all', compact('packages'));
+        $query = Package::with(['customer', 'servicePackage'])
+            ->orderBy('updated_at', 'desc');
+
+        // Arama filtresi
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('contract_number', 'like', "%{$search}%")
+                  ->orWhereHas('customer', function($q) use ($search) {
+                      $q->where('first_name', 'like', "%{$search}%")
+                        ->orWhere('last_name', 'like', "%{$search}%");
+                  })
+                  ->orWhere('plate_city', 'like', "%{$search}%")
+                  ->orWhere('plate_letters', 'like', "%{$search}%")
+                  ->orWhere('plate_numbers', 'like', "%{$search}%");
+            });
+        }
+
+        // Durum filtresi
+        if ($request->has('status') && !empty($request->status)) {
+            $query->where('status', $request->status);
+        }
+
+        // Başlangıç tarihi filtresi
+        if ($request->has('start_date') && !empty($request->start_date)) {
+            $query->where('start_date', '>=', $request->start_date);
+        }
+
+        // Bitiş tarihi filtresi
+        if ($request->has('end_date') && !empty($request->end_date)) {
+            $query->where('end_date', '<=', $request->end_date);
+        }
+
+        // Servis paketi filtresi
+        if ($request->has('service_package_id') && !empty($request->service_package_id)) {
+            $query->where('service_package_id', $request->service_package_id);
+        }
+
+        $packages = $query->paginate(10);
+        $servicePackages = ServicePackage::where('is_active', true)->get();
+
+        return view('packages.all', compact('packages', 'servicePackages'));
     }
 
     /**
