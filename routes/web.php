@@ -77,6 +77,8 @@ Route::get('/packages/export-pdf', [PackageController::class, 'exportPdf'])->nam
         Route::get('/packages', [App\Http\Controllers\ReportController::class, 'packages'])->name('packages');
         Route::get('/packages/contract-preview', [App\Http\Controllers\ReportController::class, 'packagesContractPreview'])->name('packages.contract-preview');
         Route::get('/customers', [App\Http\Controllers\ReportController::class, 'customers'])->name('customers');
+        Route::get('/services', [App\Http\Controllers\ReportController::class, 'services'])->name('services');
+        Route::get('/financial', [App\Http\Controllers\ReportController::class, 'financial'])->name('financial');
     });
 
     // Audit Log Routes

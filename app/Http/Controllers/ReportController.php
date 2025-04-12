@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ReportMail;
 use PDF;
+use Illuminate\Support\Facades\Log;
 
 class ReportController extends Controller
 {
@@ -315,5 +316,89 @@ class ReportController extends Controller
         AuditLog::log('view', 'customers', $filters);
 
         return view('reports.customers', compact('topCustomers', 'registrationTrend'));
+    }
+
+    public function services(Request $request)
+    {
+        // Audit log için filtreleri hazırla
+        $filters = array_filter($request->all());
+
+        // Servis paketi bazında dağılım
+        $serviceDistribution = ServicePackage::withCount('packages')
+            ->orderBy('packages_count', 'desc')
+            ->get();
+
+        // Aylık servis kullanım trendi
+        $serviceTrend = Package::where('created_at', '>=', Carbon::now()->subMonths(12))
+            ->select(
+                DB::raw('count(*) as total'),
+                DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month")
+            )
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        // E-posta gönderme isteği varsa
+        if ($request->has('send_email')) {
+            $reportData = [
+                'serviceDistribution' => $serviceDistribution,
+                'serviceTrend' => $serviceTrend
+            ];
+            
+            Mail::to($request->user()->email)->send(new ReportMail('servisler', $reportData));
+
+            // E-posta gönderimi için audit log
+            AuditLog::log('email', 'services', $filters);
+
+            return redirect()->back()->with('success', 'Servis raporu e-posta olarak gönderildi.');
+        }
+
+        // Görüntüleme için audit log
+        AuditLog::log('view', 'services', $filters);
+
+        return view('reports.services', compact('serviceDistribution', 'serviceTrend'));
+    }
+
+    public function financial(Request $request)
+    {
+        // Son 12 ayın gelir trendi
+        // Audit log için filtreleri hazırla
+        $filters = array_filter($request->all());
+
+        // Aylık gelir trendi
+        $revenueTrend = Package::where('status', 'active')
+            ->where('created_at', '>=', Carbon::now()->subMonths(12))
+            ->select(
+                DB::raw('sum(price) as total'),
+                DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month")
+            )
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        // Servis paketi bazında gelir dağılımı
+        $revenueDistribution = ServicePackage::withSum('packages', 'price')
+            ->orderBy('packages_sum_price', 'desc')
+            ->get();
+
+        // E-posta gönderme isteği varsa
+        if ($request->has('send_email')) {
+            $reportData = [
+                'revenueTrend' => $revenueTrend,
+                'revenueDistribution' => $revenueDistribution
+            ];
+            
+            Mail::to($request->user()->email)->send(new ReportMail('finansal', $reportData));
+
+            // E-posta gönderimi için audit log
+            AuditLog::log('email', 'financial', $filters);
+
+            return redirect()->back()->with('success', 'Finansal rapor e-posta olarak gönderildi.');
+        }
+
+        // Görüntüleme için audit log
+        AuditLog::log('view', 'financial', $filters);
+
+        return view('reports.financial', compact('revenueTrend', 'revenueDistribution'));
     }
 } 
