@@ -579,10 +579,21 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('reports.customers') }}" class="nav-link {{ request()->routeIs('reports.customers') ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Müşteri Raporları</p>
+                                <a class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" href="{{ route('reports.index') }}">
+                                    <i class="fas fa-chart-bar"></i> Raporlar
                                 </a>
+                                <ul class="nav flex-column ms-3">
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ request()->routeIs('reports.customers') ? 'active' : '' }}" href="{{ route('reports.customers') }}">
+                                            <i class="fas fa-users"></i> Müşteri Raporu
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ request()->routeIs('reports.income') ? 'active' : '' }}" href="{{ route('reports.income') }}">
+                                            <i class="fas fa-money-bill-wave"></i> Gelir Raporu
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>

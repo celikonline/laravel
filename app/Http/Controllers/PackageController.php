@@ -121,7 +121,7 @@ class PackageController extends Controller
             'customer_type' => 'required|in:individual,corporate',
             'identity_number' => 'required|string',
             'first_name' => 'required|string',
-            'last_name' => 'required|string',
+            'last_name' => $request->customer_type === 'individual' ? 'required|string' : 'nullable|string',
             'phone_number' => 'required|string',
             'city_id' => 'required|exists:cities,id',
             'district_id' => 'required|exists:districts,id',

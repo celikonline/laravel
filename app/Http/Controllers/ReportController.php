@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\ReportMail;
 use PDF;
 use Illuminate\Support\Facades\Log;
+use App\Models\Payment;
 
 class ReportController extends Controller
 {
@@ -400,5 +401,52 @@ class ReportController extends Controller
         AuditLog::log('view', 'financial', $filters);
 
         return view('reports.financial', compact('revenueTrend', 'revenueDistribution'));
+    }
+
+    public function income()
+    {
+        // Toplam gelir
+        $totalIncome = Payment::where('status', 'completed')->sum('amount');
+
+        // Bu ayki gelir
+        $monthlyIncome = Payment::where('status', 'completed')
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->sum('amount');
+
+        // Son 12 aylık ortalama gelir
+        $last12Months = Payment::where('status', 'completed')
+            ->where('created_at', '>=', now()->subMonths(12))
+            ->selectRaw('SUM(amount) as total')
+            ->first();
+        $averageMonthlyIncome = $last12Months->total / 12;
+
+        // Aylık gelir trendi
+        $monthlyTrend = Payment::where('status', 'completed')
+            ->where('created_at', '>=', now()->subMonths(12))
+            ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, SUM(amount) as amount')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        // Ödeme yöntemlerine göre dağılım
+        $paymentMethods = Payment::where('status', 'completed')
+            ->selectRaw('payment_method as method, SUM(amount) as amount')
+            ->groupBy('payment_method')
+            ->get();
+
+        // Son ödemeler
+        $payments = Payment::with(['customer', 'package'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('reports.income', compact(
+            'totalIncome',
+            'monthlyIncome',
+            'averageMonthlyIncome',
+            'monthlyTrend',
+            'paymentMethods',
+            'payments'
+        ));
     }
 } 

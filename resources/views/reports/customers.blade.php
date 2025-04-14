@@ -124,12 +124,16 @@
                                 <td>{{ $customer->packages_count }}</td>
                                 <td>{{ number_format($customer->packages_sum_price, 2, ',', '.') }} ₺</td>
                                 <td>
-                                    {{ number_format($customer->packages_sum_price / $customer->packages_count, 2, ',', '.') }} ₺
+                                    @if($customer->packages_count > 0)
+                                        {{ number_format($customer->packages_sum_price / $customer->packages_count, 2, ',', '.') }} ₺
+                                    @else
+                                        0,00 ₺
+                                    @endif
                                 </td>
                                 <td>
                                     <div class="progress">
                                         <div class="progress-bar bg-success" role="progressbar" 
-                                             style="width: {{ ($customer->packages_sum_price / $topCustomers->max('packages_sum_price')) * 100 }}%">
+                                             style="width: {{ $topCustomers->max('packages_sum_price') > 0 ? ($customer->packages_sum_price / $topCustomers->max('packages_sum_price')) * 100 : 0 }}%">
                                         </div>
                                     </div>
                                 </td>

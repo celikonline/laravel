@@ -692,6 +692,15 @@ $(document).ready(function() {
             return false;
         }
 
+        // Soyad kontrolü (sadece bireysel müşteriler için)
+        if (customerType === 'individual') {
+            var lastName = $('input[name="last_name"]').val();
+            if (!lastName || lastName.trim() === '') {
+                alert('Lütfen soyadınızı giriniz.');
+                return false;
+            }
+        }
+
         // Plaka kontrolü
         formatPlate();
         
@@ -712,15 +721,15 @@ $(document).ready(function() {
         }
 
         // Sözleşme kontrolü
-       // if (!$('#terms').is(':checked')) {
-       //     alert('Lütfen KVKK Metnini okuyup onaylayınız.');
-       //     return false;
-       // }
+        if (!$('#terms').is(':checked')) {
+            alert('Lütfen KVKK Metnini okuyup onaylayınız.');
+            return false;
+        }
 
-        //if (!$('#agreement').is(':checked')) {
-        //    alert('Lütfen İstisnaları Satış Sözleşmesini okuyup onaylayınız.');
-        //    return false;
-        //}
+        if (!$('#agreement').is(':checked')) {
+            alert('Lütfen İstisnaları Satış Sözleşmesini okuyup onaylayınız.');
+            return false;
+        }
 
         // Tüm validasyonlar başarılı ise formu gönder
         console.log('Form gönderiliyor...');

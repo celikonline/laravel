@@ -7,6 +7,7 @@ use App\Http\Controllers\VehicleBrandController;
 use App\Http\Controllers\VehicleModelController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ReportController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -79,6 +80,7 @@ Route::get('/packages/export-pdf', [PackageController::class, 'exportPdf'])->nam
         Route::get('/customers', [App\Http\Controllers\ReportController::class, 'customers'])->name('customers');
         Route::get('/services', [App\Http\Controllers\ReportController::class, 'services'])->name('services');
         Route::get('/financial', [App\Http\Controllers\ReportController::class, 'financial'])->name('financial');
+        Route::get('/income', [ReportController::class, 'income'])->name('income');
     });
 
     // Audit Log Routes
