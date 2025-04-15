@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\VehicleBrand;
 use App\Models\VehicleModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class VehicleModelController extends Controller
 {
@@ -15,27 +16,27 @@ class VehicleModelController extends Controller
      */
     public function index(Request $request)
     {
-        $query = VehicleModel::with('brand');
+        $cacheKey = 'vehicle_models_index_' . md5(json_encode($request->all()));
+        $data = Cache::remember($cacheKey, now()->addHours(24), function () use ($request) {
+            $query = VehicleModel::with('brand')
+                ->when($request->brand_id, function ($q) use ($request) {
+                    return $q->where('brand_id', $request->brand_id);
+                })
+                ->when($request->name, function ($q) use ($request) {
+                    return $q->where('name', 'like', '%' . $request->name . '%');
+                })
+                ->when($request->is_active !== null, function ($q) use ($request) {
+                    return $q->where('is_active', $request->is_active);
+                })
+                ->orderBy('name');
 
-        // Marka filtresi
-        if ($request->has('brand_id') && $request->brand_id !== '') {
-            $query->where('brand_id', $request->brand_id);
-        }
+            return [
+                'models' => $query->paginate(10),
+                'brands' => VehicleBrand::where('is_active', true)->orderBy('name')->get()
+            ];
+        });
 
-        // Model adı arama filtresi
-        if ($request->has('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
-        }
-
-        // Durum filtresi
-        if ($request->has('status') && $request->status !== '') {
-            $query->where('is_active', $request->status);
-        }
-
-        $models = $query->orderBy('name')->paginate(10);
-        $brands = VehicleBrand::where('is_active', true)->orderBy('name')->pluck('name', 'id');
-        
-        return view('settings.vehicle-models.index', compact('models', 'brands'));
+        return view('settings.vehicle-models.index', $data);
     }
 
     /**
@@ -136,13 +137,16 @@ class VehicleModelController extends Controller
             ->with('success', 'Araç modeli başarıyla silindi.');
     }
 
-    public function getModelsByBrand($brandId)
+    public function getModelsByBrand(VehicleBrand $brand)
     {
-        $models = VehicleModel::where('brand_id', $brandId)
-            ->where('status', true)
-            ->orderBy('name')
-            ->get(['id', 'name']);
-        
+        $cacheKey = 'vehicle_models_by_brand_' . $brand->id;
+        $models = Cache::remember($cacheKey, now()->addHours(24), function () use ($brand) {
+            return $brand->models()
+                ->where('is_active', true)
+                ->orderBy('name')
+                ->get();
+        });
+
         return response()->json($models);
     }
 }

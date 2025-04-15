@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\VehicleBrand;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class VehicleBrandController extends Controller
 {
@@ -14,21 +15,23 @@ class VehicleBrandController extends Controller
      */
     public function index(Request $request)
     {
-        $query = VehicleBrand::query();
+        $cacheKey = 'vehicle_brands_index_' . md5(json_encode($request->all()));
+        $data = Cache::remember($cacheKey, now()->addHours(24), function () use ($request) {
+            $query = VehicleBrand::query()
+                ->when($request->name, function ($q) use ($request) {
+                    return $q->where('name', 'like', '%' . $request->name . '%');
+                })
+                ->when($request->is_active !== null, function ($q) use ($request) {
+                    return $q->where('is_active', $request->is_active);
+                })
+                ->orderBy('name');
 
-        // Arama filtresi
-        if ($request->has('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
-        }
+            return [
+                'brands' => $query->paginate(10)
+            ];
+        });
 
-        // Durum filtresi
-        if ($request->has('status') && $request->status !== '') {
-            $query->where('is_active', $request->status);
-        }
-
-        $brands = $query->orderBy('name')->paginate(10);
-        
-        return view('settings.vehicle-brands.index', compact('brands'));
+        return view('settings.vehicle-brands.index', $data);
     }
 
     /**

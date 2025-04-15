@@ -559,6 +559,12 @@
                 @auth
                 <ul class="nav nav-pills nav-sidebar flex-column">
                     <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('packages.all') ? 'active' : '' }}" href="{{ route('packages.all') }}">
+                            <i class="fas fa-box"></i>
+                            <p>Tüm Paketler</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                             <i class="fas fa-tachometer-alt"></i>
                             <p>Dashboard</p>
@@ -598,12 +604,7 @@
                         </ul>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('packages.all') ? 'active' : '' }}" href="{{ route('packages.all') }}">
-                            <i class="fas fa-box"></i>
-                            <p>Tüm Paketler</p>
-                        </a>
-                    </li>
+                   
                 </ul>
                 @endauth
             </nav>

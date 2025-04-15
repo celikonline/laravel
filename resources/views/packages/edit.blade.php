@@ -297,7 +297,7 @@ $(document).ready(function() {
             
             // Bitiş tarihini hesapla
             var endDate = new Date(startDate);
-            endDate.setDate(endDate.getDate() + durationDays);
+            endDate.setDate(endDate.getDate() + durationDays-1);
             var formattedEndDate = endDate.toISOString().split('T')[0];
             $('input[name="end_date"]').val(formattedEndDate);
         }

@@ -18,6 +18,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PackagesExport;
 use App\Services\PosnetService;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * @OA\Info(
@@ -229,16 +230,15 @@ class PackageController extends Controller
      */
     public function getVehicleModels($brandId)
     {
-        try {
-            $models = VehicleModel::where('brand_id', $brandId)
+        $cacheKey = 'vehicle_models_' . $brandId;
+        $models = Cache::remember($cacheKey, now()->addHours(24), function () use ($brandId) {
+            return VehicleModel::where('brand_id', $brandId)
                 ->where('is_active', true)
-                ->select('id', 'name')
+                ->orderBy('name')
                 ->get();
-            
-            return response()->json($models);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Araç modelleri alınamadı'], 500);
-        }
+        });
+
+        return response()->json($models);
     }
 
     /**
@@ -268,16 +268,14 @@ class PackageController extends Controller
      */
     public function getDistricts($cityId)
     {
-        try {
-            $districts = District::where('city_id', $cityId)
-                ->where('is_active', true)
-                ->select('id', 'name')
+        $cacheKey = 'districts_' . $cityId;
+        $districts = Cache::remember($cacheKey, now()->addHours(24), function () use ($cityId) {
+            return District::where('city_id', $cityId)
+                ->orderBy('name')
                 ->get();
-            
-            return response()->json($districts);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'İlçeler alınamadı'], 500);
-        }
+        });
+
+        return response()->json($districts);
     }
 
     /**

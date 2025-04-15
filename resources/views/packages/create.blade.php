@@ -548,7 +548,7 @@ $(document).ready(function() {
             var startDate = $('input[name="start_date"]').val();
             if(startDate) {
                 var endDate = new Date(startDate);
-                endDate.setDate(endDate.getDate() + parseInt(duration));
+                endDate.setDate(endDate.getDate() + parseInt(duration)-1);
                 
                 // Bitiş tarihini formata çevir (YYYY-MM-DD)
                 var formattedEndDate = endDate.toISOString().split('T')[0];

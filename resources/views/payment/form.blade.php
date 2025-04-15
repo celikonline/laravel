@@ -25,7 +25,7 @@
                         <div class="mb-3">
                             <label for="card_owner" class="form-label">{{ __('Kart Sahibi') }}</label>
                             <input type="text" class="form-control @error('card_owner') is-invalid @enderror" 
-                                id="card_owner" name="card_owner" value="Özgür Çelik" required>
+                                id="card_owner" name="card_owner" value="" required>
                             @error('card_owner')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -34,7 +34,7 @@
                         <div class="mb-3">
                             <label for="card_number" class="form-label">{{ __('Kart Numarası') }}</label>
                             <input type="text" class="form-control @error('card_number') is-invalid @enderror" 
-                                id="card_number" name="card_number" value="5400619340701616" 
+                                id="card_number" name="card_number" value="" 
                                 required maxlength="16" pattern="\d{16}">
                             @error('card_number')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -45,7 +45,7 @@
                             <div class="col-md-4">
                                 <label for="expiry_month" class="form-label">{{ __('Son Kullanma Ay') }}</label>
                                 <input type="text" class="form-control @error('expiry_month') is-invalid @enderror" 
-                                    id="expiry_month" name="expiry_month" value="07" 
+                                    id="expiry_month" name="expiry_month" value="" 
                                     required maxlength="2" pattern="\d{2}">
                                 @error('expiry_month')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -55,7 +55,7 @@
                             <div class="col-md-4">
                                 <label for="expiry_year" class="form-label">{{ __('Son Kullanma Yıl') }}</label>
                                 <input type="text" class="form-control @error('expiry_year') is-invalid @enderror" 
-                                    id="expiry_year" name="expiry_year" value="28" 
+                                    id="expiry_year" name="expiry_year" value="" 
                                     required maxlength="2" pattern="\d{2}">
                                 @error('expiry_year')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -65,7 +65,7 @@
                             <div class="col-md-4">
                                 <label for="cvv" class="form-label">{{ __('CVV') }}</label>
                                 <input type="text" class="form-control @error('cvv') is-invalid @enderror" 
-                                    id="cvv" name="cvv" value="111" 
+                                    id="cvv" name="cvv" value="" 
                                     required maxlength="3">
                                 @error('cvv')
                                     <div class="invalid-feedback">{{ $message }}</div>
