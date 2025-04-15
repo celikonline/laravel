@@ -227,13 +227,13 @@
                         <div class="mb-4">
                             <h5>4. Kaydet ve ödeme sayfasına geç</h5>
                             <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" name="terms" id="terms" required>
+                                <input class="form-check-input" type="checkbox" name="terms" id="terms" required checked>
                                 <label class="form-check-label" >
                                     <a href="#" class="text-decoration-none" id="openKvkkModal">KVKK Metni'ni okudum ve onaylıyorum </a>
                                 </label>
                             </div>
                             <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" name="agreement" id="agreement" required>
+                                <input class="form-check-input" type="checkbox" name="agreement" id="agreement" required checked>
                                 <label class="form-check-label" >
                                     <a href="#" class="text-decoration-none" id="openAgreementModal">Mesafeli Satış Sözleşmesi'ni okudum, onaylıyorum</a>
                                 </label>
