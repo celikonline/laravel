@@ -20,7 +20,7 @@ class PackagesController extends Controller
     public function index(Request $request): JsonResponse
     {
         $pageNumber = $request->get('page', 1);
-        $pageSize = $request->get('per_page', 10);
+        $pageSize = $request->get('per_page', 100);
         
         $packages = $this->packageService->getAllPaginated($pageNumber, $pageSize);
         return response()->json($packages);

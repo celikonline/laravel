@@ -15,7 +15,7 @@ class PackageService
         $this->packageRepository = $packageRepository;
     }
 
-    public function getAllPaginated(int $pageNumber = 1, int $pageSize = 10)
+    public function getAllPaginated(int $pageNumber = 1, int $pageSize = 100)
     {
         return $this->packageRepository->getAllPaginated($pageNumber, $pageSize);
     }
