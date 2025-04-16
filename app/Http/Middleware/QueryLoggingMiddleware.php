@@ -12,6 +12,9 @@ class QueryLoggingMiddleware
 
     public function handle($request, Closure $next)
     {
+        // Debug log
+        Log::info('QueryLoggingMiddleware started');
+
         // Query log'u aktifleştir
         DB::enableQueryLog();
 
@@ -19,6 +22,9 @@ class QueryLoggingMiddleware
 
         // Tüm sorguları al
         $queries = DB::getQueryLog();
+
+        // Debug log
+        Log::info('Number of queries: ' . count($queries));
 
         // Her sorgu için detaylı log oluştur
         foreach ($queries as $query) {

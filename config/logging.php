@@ -121,8 +121,9 @@ return [
         'query' => [
             'driver' => 'daily',
             'path' => storage_path('logs/query.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
+            'level' => 'debug',
             'days' => 14,
+            'permission' => 0664,
         ],
     ],
 
