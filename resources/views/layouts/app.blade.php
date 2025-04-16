@@ -575,30 +575,32 @@
                         <a href="#" class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" data-bs-toggle="collapse" data-bs-target="#reportsSubmenu">
                             <i class="fas fa-chart-bar"></i>
                             <p>Raporlar</p>
-                            <i class="right fas fa-angle-left"></i>
                         </a>
                         <ul class="nav nav-treeview collapse {{ request()->routeIs('reports.*') ? 'show' : '' }}" id="reportsSubmenu">
                             <li class="nav-item">
-                                <a href="{{ route('reports.packages') }}" class="nav-link {{ request()->routeIs('reports.packages') ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Paket Raporları</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" href="{{ route('reports.index') }}">
-                                    <i class="fas fa-chart-bar"></i> Raporlar
-                                </a>
+                               
                                 <ul class="nav flex-column ms-3">
+                                    <li class="nav-item">
+                                        <a href="{{ route('reports.index') }}" class="nav-link {{ request()->routeIs('reports.index') ? 'active' : '' }}">
+                                            <i class="fas fa-money-bill-wave"></i> Genel
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('reports.packages') }}" class="nav-link {{ request()->routeIs('reports.packages') ? 'active' : '' }}">
+                                            <i class="fas fa-money-bill-wave"></i> Paket Raporu
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ request()->routeIs('reports.revenue') ? 'active' : '' }}" href="{{ route('reports.revenue') }}">
+                                            <i class="fas fa-money-bill-wave"></i>  Gelir Raporu
+                                        </a>
+                                    </li>
                                     <li class="nav-item">
                                         <a class="nav-link {{ request()->routeIs('reports.customers') ? 'active' : '' }}" href="{{ route('reports.customers') }}">
                                             <i class="fas fa-users"></i> Müşteri Raporu
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link {{ request()->routeIs('reports.income') ? 'active' : '' }}" href="{{ route('reports.income') }}">
-                                            <i class="fas fa-money-bill-wave"></i> Gelir Raporu
-                                        </a>
-                                    </li>
+                                    
                                 </ul>
                             </li>
                         </ul>
@@ -609,6 +611,8 @@
                 @endauth
             </nav>
         </aside>
+
+        
 
         <!-- Top Navbar -->
         <nav class="top-navbar">
@@ -666,7 +670,9 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            @yield('content')
+            <div id="content-wrapper">
+                @yield('content')
+            </div>
         </main>
     </div>
 
@@ -765,6 +771,37 @@
                 menuToggle.classList.remove('fa-times');
                 menuToggle.classList.add('fa-bars');
             }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Menü linklerine tıklama olayı ekle
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Eğer alt menü açma/kapama butonu ise işlem yapma
+                    if (this.querySelector('.right')) {
+                        return;
+                    }
+                    
+                    e.preventDefault();
+                    const href = this.getAttribute('href');
+                    
+                    // Aktif menüyü güncelle
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // İçeriği yükle
+                    fetch(href)
+                        .then(response => response.text())
+                        .then(html => {
+                            document.getElementById('content-wrapper').innerHTML = html;
+                            // Sayfa yüklendikten sonra gerekli JavaScript kodlarını çalıştır
+                            if (typeof window.onPageLoad === 'function') {
+                                window.onPageLoad();
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                });
+            });
         });
     </script>
 </body>

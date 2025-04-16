@@ -1,6 +1,24 @@
 import './bootstrap';
 import 'bootstrap';
 
+// Sayfa yüklendiğinde çalışacak fonksiyonlar
+window.onPageLoad = function() {
+    // Bildirim sayısını güncelle
+    updateNotificationCount();
+    
+    // Bootstrap tooltip'leri aktifleştir
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+    
+    // Bootstrap popover'ları aktifleştir
+    const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+    popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl);
+    });
+};
+
 // Bildirim sayısını güncelleme fonksiyonu
 function updateNotificationCount() {
     /*fetch('/notifications/unread-count')
@@ -22,7 +40,9 @@ function updateNotificationCount() {
 //setInterval(updateNotificationCount, 30000);
 
 // Sayfa yüklendiğinde bildirim sayısını güncelle
-document.addEventListener('DOMContentLoaded', updateNotificationCount);
+document.addEventListener('DOMContentLoaded', function() {
+    window.onPageLoad();
+});
 
 // Bildirim işlemleri sonrası sayıyı güncelle
 document.addEventListener('click', function(e) {

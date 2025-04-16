@@ -5,21 +5,17 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Gelir Raporu</h2>
         <div class="btn-group">
-            <a href="{{ route('reports.index') }}" class="btn btn-outline-secondary">
-                <i class="fas fa-arrow-left"></i> Geri
+            <a href="{{ route('reports.index') }}" class="btn btn-outline-primary">
+                <i class="fas fa-box"></i> Genel
             </a>
-            <button type="button" class="btn btn-outline-primary" onclick="window.print()">
-                <i class="fas fa-print"></i> Yazdır
-            </button>
-            <a href="#" class="btn btn-outline-success" onclick="exportToExcel()">
-                <i class="fas fa-file-excel"></i> Excel
+            <a href="{{ route('reports.revenue') }}" class="btn btn-outline-primary">
+                <i class="fas fa-chart-line"></i> Gelir Raporu
             </a>
-            <a href="#" class="btn btn-outline-danger" onclick="exportToPDF()">
-                <i class="fas fa-file-pdf"></i> PDF
+            <a href="{{ route('reports.packages') }}" class="btn btn-outline-primary">
+                <i class="fas fa-box"></i> Paket Raporu
             </a>
-            <a href="{{ route('reports.revenue', ['send_email' => true] + request()->all()) }}" 
-               class="btn btn-outline-info">
-                <i class="fas fa-envelope"></i> E-posta Gönder
+            <a href="{{ route('reports.customers') }}" class="btn btn-outline-primary">
+                <i class="fas fa-users"></i> Müşteri Raporu
             </a>
         </div>
     </div>

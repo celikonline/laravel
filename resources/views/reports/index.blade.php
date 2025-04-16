@@ -5,6 +5,9 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Raporlar</h2>
         <div class="btn-group">
+            <a href="{{ route('reports.index') }}" class="btn btn-outline-primary">
+                <i class="fas fa-box"></i> Genel
+            </a>
             <a href="{{ route('reports.revenue') }}" class="btn btn-outline-primary">
                 <i class="fas fa-chart-line"></i> Gelir Raporu
             </a>
