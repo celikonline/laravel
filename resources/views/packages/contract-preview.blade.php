@@ -193,8 +193,8 @@
                         <td>{{ $package->plate_city }}</td>
                     </tr>
                     <tr>
-                        <th>Telefon / E-posta:</th>
-                        <td>{{ $package->customer->phone }} / {{ $package->customer->email }}</td>
+                        <th>Web Sitesi:</th>
+                        <td>https://vegaasist.com.tr</td>
                     </tr>
                 </table>
             </div>
@@ -223,7 +223,7 @@
                 (9+1 yolcu), açık-kapalı kasa kamyonet, panelvan tipi (3500 kg aşmamış) araçları kapsar. Motosiklet, çekici, kamyon, otobüs, 
                 ticari taksi, dolmuş, ambulans, iş makinası, Off-Road, traktör ve ticari amaçla kullanılan araçlar bu paketin hizmet kapsamı 
                 dışındadır.</p>
-                <p><strong>2.</strong> Türkiye genelinde asistans hizmeti kapsamında sunulan hizmetlere ………………… numaralı çağrı merkezi üzerinden 7/24 ulaşım 
+                <p><strong>2.</strong> Türkiye genelinde asistans hizmeti kapsamında sunulan hizmetlere 05079725688 numaralı çağrı merkezi üzerinden 7/24 ulaşım 
                 sağlanacaktır. Sağlanan hizmetlerin kapsam ve şartlarına www.vegaasist.com.tr den ulaşabilirsiniz.</p>
                 <p><strong>3.</strong> Sözleşme, başlangıç tarihinden itibaren 14 gün içerisinde iptali talep edilmemesi durumunda (satılır ise plaka değişikliği 
                 haricinde) sözleşme iptali yapılmayacaktır.</p>

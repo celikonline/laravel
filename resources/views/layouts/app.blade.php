@@ -109,7 +109,7 @@
             border-radius: 50%;
             width: 24px;
             height: 24px;
-            display: flex;
+            display: none; /* Menu'yu her zaman açık tutmak için toggle butonunu gizle */
             align-items: center;
             justify-content: center;
             cursor: pointer;
@@ -704,22 +704,20 @@
             }
         }
 
-        // Menüyü açıp kapatma fonksiyonu
+        // Menüyü açıp kapatma fonksiyonu - Menu her zaman açık kalacak
         function toggleSidebar() {
+            // Sidebar'ı her zaman açık tut, toggle işlemi yapma
             const sidebar = document.querySelector('.sidebar');
             const mainContent = document.querySelector('.main-content');
             const topNavbar = document.querySelector('.top-navbar');
             
-            sidebar.classList.toggle('collapsed');
-            mainContent.classList.toggle('expanded');
+            // Sidebar'ın açık kalmasını sağla
+            sidebar.classList.remove('collapsed');
+            mainContent.classList.remove('expanded');
+            topNavbar.style.left = 'var(--sidebar-width)';
             
-            if (sidebar.classList.contains('collapsed')) {
-                topNavbar.style.left = '60px';
-                localStorage.setItem('sidebarCollapsed', 'true');
-            } else {
-                topNavbar.style.left = 'var(--sidebar-width)';
-                localStorage.setItem('sidebarCollapsed', 'false');
-            }
+            // localStorage'dan collapsed state'i kaldır
+            localStorage.removeItem('sidebarCollapsed');
         }
 
         // Mobil menü toggle fonksiyonu
@@ -738,11 +736,10 @@
             }
         }
 
-        // Sayfa yüklendiğinde kaydedilmiş temayı ve menü durumunu uygula
+        // Sayfa yüklendiğinde kaydedilmiş temayı uygula
         document.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('theme');
             const themeIcon = document.querySelector('.theme-toggle i');
-            const sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
             
             if (savedTheme === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
@@ -750,13 +747,17 @@
                 themeIcon.classList.add('fa-sun');
             }
 
-            if (sidebarCollapsed) {
-                toggleSidebar();
-            }
-
+            // Sidebar'ı her zaman açık tut - collapsed state'i kaldır
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.querySelector('.main-content');
+            const topNavbar = document.querySelector('.top-navbar');
+            
+            sidebar.classList.remove('collapsed');
+            mainContent.classList.remove('expanded');
+            topNavbar.style.left = 'var(--sidebar-width)';
+            
             // Mobil görünümde menüyü otomatik kapat
             if (window.innerWidth <= 768) {
-                const sidebar = document.querySelector('.sidebar');
                 sidebar.classList.remove('show');
             }
         });

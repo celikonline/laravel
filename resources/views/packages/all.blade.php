@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
+<div class="container-fluid px-0">
+    <div class="row g-0">
         <div class="col-12">
-            <div class="card">
+            <div class="card border-0 rounded-0">
                 <div class="card-header">
                     <h3 class="card-title">Tüm Paketler</h3>
                 </div>
                 <div class="card-body">
                     <!-- Filtreleme Formu -->
-                    <form action="{{ route('packages.all') }}" method="GET" class="mb-4">
+                    <form action="{{ route('packages.all') }}" method="GET" class="mb-2 p-2 bg-light border rounded">
                         <div class="row g-3">
                             <div class="col-12 col-md-6 col-lg-2">
                                 <div class="form-group">
@@ -240,7 +240,9 @@
                         </table>
                     </div>
 
-                    <div class="d-flex justify-content-center mt-4">
+                </div>
+                <div class="card-footer bg-white border-top">
+                    <div class="d-flex justify-content-center">
                         {{ $packages->withQueryString()->links() }}
                     </div>
                 </div>
@@ -250,18 +252,86 @@
 </div>
 
 <style>
+/* Full Width Layout */
+.main-content {
+    padding: 60px 0 0 0 !important;
+    margin-left: var(--sidebar-width) !important;
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0 !important;
+        padding: 60px 0 0 0 !important;
+    }
+    
+    .table-responsive {
+        height: calc(100vh - 250px);
+    }
+    
+    .card-body {
+        padding: 0.5rem;
+    }
+    
+    .form-group label {
+        font-size: 0.875rem;
+    }
+    
+    .form-control, .form-select {
+        font-size: 0.875rem;
+        padding: 0.375rem 0.5rem;
+    }
+}
+
+.card {
+    height: calc(100vh - 60px);
+    overflow: hidden;
+}
+
+.card-body {
+    height: calc(100% - 120px);
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.card-footer {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+}
+
+.table-responsive {
+    height: calc(100vh - 200px);
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+}
+
+.table thead th {
+    position: sticky;
+    top: 0;
+    background-color: var(--table-header-bg) !important;
+    z-index: 10;
+    border-bottom: 2px solid var(--border-color);
+}
+
 .plate-container {
     display: inline-block;
 }
 
 .plate-box {
-    background-image: url('/images/plate-bg.png');
+    background-image: url('{{ asset('images/plate-bg.png') }}');
     background-size: contain;
     background-repeat: no-repeat;
+    background-position: center;
     padding: 4px 8px;
     border-radius: 4px;
-    min-width: 120px;
+    min-width: 100px;
+    max-width: 120px;
     text-align: center;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .plate-text {
@@ -281,9 +351,15 @@
         -webkit-overflow-scrolling: touch;
     }
     
+    .table {
+        min-width: 800px;
+        white-space: nowrap;
+    }
+    
     .btn-group {
         display: flex;
         flex-wrap: nowrap;
+        min-width: max-content;
     }
     
     .btn-group .btn {
@@ -297,6 +373,11 @@
     
     .card-body {
         padding: 1rem;
+    }
+    
+    th, td {
+        min-width: max-content;
+        padding: 0.5rem !important;
     }
 }
 
@@ -320,9 +401,17 @@
 }
 
 /* Buton Stilleri */
+.btn-group {
+    display: flex;
+    gap: 2px;
+    flex-wrap: nowrap;
+}
+
 .btn-group .btn {
-    margin-right: 2px;
     border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    flex-shrink: 0;
 }
 
 .btn-group .btn:last-child {
@@ -367,6 +456,38 @@
     font-size: 12px;
     white-space: nowrap;
     z-index: 1000;
+}
+
+/* Tablo Stilleri */
+.table {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.table td.text-nowrap,
+.table th.text-nowrap {
+    white-space: nowrap;
+}
+
+.table td:last-child,
+.table th:last-child {
+    width: 200px;
+    min-width: 200px;
+}
+
+.table tbody tr:hover {
+    background-color: var(--hover-bg);
+}
+
+@media (min-width: 1200px) {
+    .table {
+        table-layout: fixed;
+    }
+    
+    .table td.text-nowrap {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 </style>
 @endsection 
