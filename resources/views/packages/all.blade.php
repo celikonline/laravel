@@ -26,6 +26,7 @@
                                         <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif</option>
                                         <option value="pending_payment" {{ request('status') == 'pending_payment' ? 'selected' : '' }}>Ödeme Bekliyor</option>
                                         <option value="expired" {{ request('status') == 'expired' ? 'selected' : '' }}>Süresi Dolmuş</option>
+                                        <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>İptal Edildi</option>
                                         <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Pasif</option>
                                     </select>
                                 </div>
@@ -177,6 +178,10 @@
                                                 <span class="badge bg-warning">Ödeme Bekliyor</span>
                                             @elseif($package->status == 'expired')
                                                 <span class="badge bg-danger">Süresi Dolmuş</span>
+                                            @elseif($package->status == 'cancelled')
+                                                <span class="badge bg-danger">İptal Edildi</span>
+                                            @elseif($package->status == 'inactive')
+                                                <span class="badge bg-secondary">Pasif</span>
                                             @else
                                                 <span class="badge bg-secondary">{{ $package->status }}</span>
                                             @endif
@@ -184,19 +189,47 @@
                                         <td class="text-nowrap">
                                             <div class="btn-group" role="group">
                                                 @if($package->status != 'active')
-                                                    <a href="{{ route('packages.edit', $package->id) }}" class="btn btn-sm btn-primary">
+                                                    <a href="{{ route('packages.edit', $package->id) }}" class="btn btn-sm btn-primary" title="Düzenle">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                 @endif
                                                 @if($package->status == 'pending_payment')
-                                                    <a href="{{ route('packages.payment', $package->id) }}" class="btn btn-sm btn-success active">
+                                                    <a href="{{ route('packages.payment', $package->id) }}" class="btn btn-sm btn-success" title="Ödeme Yap">
                                                         <i class="fas fa-credit-card"></i>
                                                     </a>
+                                                    <form action="{{ route('packages.activate', $package->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Bu paketi aktif hale getirmek istediğinizden emin misiniz?')">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-info" title="Aktife Çek">
+                                                            <i class="fas fa-play"></i>
+                                                        </button>
+                                                    </form>
+                                                    <form action="{{ route('packages.cancel', $package->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Bu paketi iptal etmek istediğinizden emin misiniz?')">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-danger" title="İptal Et">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    </form>
                                                 @endif
-                                                <a href="{{ route('packages.contract-preview', $package->id) }}" class="btn btn-sm btn-outline-warning" target="_blank">
+                                                @if($package->status == 'cancelled')
+                                                    <form action="{{ route('packages.activate', $package->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Bu iptal edilmiş paketi aktif hale getirmek istediğinizden emin misiniz?')">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-info" title="Aktife Çek">
+                                                            <i class="fas fa-redo"></i>
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                                @if($package->status == 'active')
+                                                    <form action="{{ route('packages.cancel', $package->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Bu paketi iptal etmek istediğinizden emin misiniz?')">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-danger" title="İptal Et">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                                <a href="{{ route('packages.contract-preview', $package->id) }}" class="btn btn-sm btn-outline-warning" target="_blank" title="Sözleşme Önizleme">
                                                     <i class="fas fa-file-contract"></i>
                                                 </a>
-                                                <a href="{{ route('packages.receipt-preview', $package->id) }}" class="btn btn-sm btn-outline-danger" target="_blank">
+                                                <a href="{{ route('packages.receipt-preview', $package->id) }}" class="btn btn-sm btn-outline-danger" target="_blank" title="Makbuz Önizleme">
                                                     <i class="fas fa-receipt"></i>
                                                 </a>
                                             </div>
@@ -284,6 +317,56 @@
     .plate-text {
         font-size: 12px;
     }
+}
+
+/* Buton Stilleri */
+.btn-group .btn {
+    margin-right: 2px;
+    border-radius: 4px;
+}
+
+.btn-group .btn:last-child {
+    margin-right: 0;
+}
+
+/* Pending Payment Status için özel stil */
+.btn-group .btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: white;
+}
+
+.btn-group .btn-info:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+}
+
+/* Cancel button için özel stil */
+.btn-group .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+.btn-group .btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+/* Tooltip stilleri */
+.btn[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
 }
 </style>
 @endsection 

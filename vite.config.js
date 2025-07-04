@@ -9,13 +9,14 @@ export default defineConfig({
         }),
     ],
     server: {
-        host: '0.0.0.0',
+        host: 'localhost',
+        port: 5173,
         hmr: {
-            host: 'panel.vegaasist.com.tr',
-            protocol: 'wss',
+            host: 'localhost',
+            protocol: 'ws',
         },
         cors: {
-            origin: ['http://localhost:5173'],
+            origin: ['http://localhost:8000', 'http://127.0.0.1:8000'],
             methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
             allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
             credentials: true

@@ -51,7 +51,7 @@ body {
 .plate-container {
     display: flex;
     align-items: center;
-    background: url('../images/individual_turkish_plate.png') no-repeat center center;
+    background: url('/images/individual_turkish_plate.png') no-repeat center center;
     background-size: 100% 100%;
     padding: 6px 20px;
     border-radius: 4px;

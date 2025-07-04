@@ -47,7 +47,7 @@ class PackageController extends Controller
     {
         $packages = Package::with(['customer', 'servicePackage'])
             ->orderBy('updated_at', 'desc')
-            ->paginate(10);
+            ->paginate(100);
         
         return view('packages.index', compact('packages'));
     }
@@ -820,7 +820,7 @@ class PackageController extends Controller
         $packages = Package::with(['customer', 'servicePackage'])
             ->where('status', 'pending_payment')
             ->orderBy('updated_at', 'desc')
-            ->paginate(10);
+            ->paginate(100);
         
         return view('packages.proposals', compact('packages'));
     }
@@ -887,7 +887,7 @@ class PackageController extends Controller
             $query->where('service_package_id', $request->service_package_id);
         }
 
-        $packages = $query->paginate(10);
+        $packages = $query->paginate(100);
         $servicePackages = ServicePackage::where('is_active', true)->get();
 
         return view('packages.all', compact('packages', 'servicePackages'));
@@ -982,5 +982,56 @@ class PackageController extends Controller
                 'customer_type' => $customer->customer_type
             ]
         ]);
+    }
+
+    /**
+     * Cancel (iptal et) a package
+     */
+    public function deactivate($id)
+    {
+        try {
+            $package = Package::findOrFail($id);
+            
+            // Aktif veya ödeme bekliyor durumundaki paketleri iptal edebiliriz
+            if (!in_array($package->status, ['active', 'pending_payment'])) {
+                return redirect()->back()->with('error', 'Sadece aktif veya ödeme bekliyor durumundaki paketler iptal edilebilir.');
+            }
+            
+            $package->update([
+                'status' => 'cancelled',
+                'is_active' => false
+            ]);
+            
+            return redirect()->back()->with('success', 'Paket başarıyla iptal edildi.');
+            
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Paket iptal edilirken bir hata oluştu: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Activate (aktife al) a package from pending payment or cancelled
+     */
+    public function activate($id)
+    {
+        try {
+            $package = Package::findOrFail($id);
+            
+            // Ödeme bekliyor veya iptal edilmiş paketleri aktif hale getirebiliriz
+            if (!in_array($package->status, ['pending_payment', 'cancelled'])) {
+                return redirect()->back()->with('error', 'Sadece ödeme bekliyor veya iptal edilmiş paketler aktif hale getirilebilir.');
+            }
+            
+            $package->update([
+                'status' => 'active',
+                'payment_date' => now(),
+                'is_active' => true
+            ]);
+            
+            return redirect()->back()->with('success', 'Paket başarıyla aktif hale getirildi.');
+            
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Paket aktif hale getirilirken bir hata oluştu: ' . $e->getMessage());
+        }
     }
 }
