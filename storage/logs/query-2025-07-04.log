@@ -1,0 +1,420 @@
+[2025-07-04 12:25:44] local.INFO: Query: select * from `packages` | Time: 33.72ms  
+[2025-07-04 12:25:44] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 33.9ms  
+[2025-07-04 12:25:44] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 33.02ms  
+[2025-07-04 12:27:44] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 36.38ms  
+[2025-07-04 12:27:44] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'active' | Time: 34.35ms  
+[2025-07-04 12:27:44] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'pending_payment' | Time: 47.38ms  
+[2025-07-04 12:27:44] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'expired' | Time: 39.25ms  
+[2025-07-04 12:27:44] local.INFO: Query: select sum(price) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `status` = 'active' and `created_at` >= '2025-01-04 12:27:43' group by `month` order by `month` asc | Time: 35.65ms  
+[2025-07-04 12:27:44] local.INFO: Query: select * from `packages` order by `created_at` desc limit 100 | Time: 38.39ms  
+[2025-07-04 12:27:44] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 35.34ms  
+[2025-07-04 12:27:44] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 36.53ms  
+[2025-07-04 12:27:44] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 28.32ms  
+[2025-07-04 12:27:44] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 31.37ms  
+[2025-07-04 12:27:44] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 43.61ms  
+[2025-07-04 12:27:44] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 28.73ms  
+[2025-07-04 12:27:44] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 28.53ms  
+[2025-07-04 12:27:45] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 30.55ms  
+[2025-07-04 12:27:45] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 30.96ms  
+[2025-07-04 12:27:45] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:27:45' group by `month` order by `month` asc | Time: 30.19ms  
+[2025-07-04 12:27:45] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:27:45', '2025-07-04 12:27:45') | Time: 34.86ms  
+[2025-07-04 12:27:45] local.INFO: Query: select `customers`.*, (select count(*) from `packages` where `customers`.`id` = `packages`.`customer_id`) as `packages_count`, (select sum(`packages`.`price`) from `packages` where `customers`.`id` = `packages`.`customer_id`) as `packages_sum_price` from `customers` order by `packages_count` desc limit 10 | Time: 33.12ms  
+[2025-07-04 12:27:45] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `customers` where `created_at` >= '2024-07-04 12:27:45' group by `month` order by `month` asc | Time: 31.51ms  
+[2025-07-04 12:27:45] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'customers', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:27:45', '2025-07-04 12:27:45') | Time: 34.25ms  
+[2025-07-04 12:28:27] local.INFO: Query: select * from `packages` | Time: 28.75ms  
+[2025-07-04 12:28:27] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 28.64ms  
+[2025-07-04 12:28:27] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 28.42ms  
+[2025-07-04 12:35:18] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 34.13ms  
+[2025-07-04 12:35:18] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 42.8ms  
+[2025-07-04 12:35:18] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 35.59ms  
+[2025-07-04 12:35:18] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 52.19ms  
+[2025-07-04 12:35:18] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 32.94ms  
+[2025-07-04 12:35:20] local.INFO: Query: select * from `packages` | Time: 30.8ms  
+[2025-07-04 12:35:20] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 32.28ms  
+[2025-07-04 12:35:20] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 33.34ms  
+[2025-07-04 12:36:29] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 28.98ms  
+[2025-07-04 12:36:29] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 30.98ms  
+[2025-07-04 12:36:29] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:36:29' group by `month` order by `month` asc | Time: 29.97ms  
+[2025-07-04 12:36:29] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:36:29', '2025-07-04 12:36:29') | Time: 33.94ms  
+[2025-07-04 12:36:30] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 29.11ms  
+[2025-07-04 12:36:30] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 31.71ms  
+[2025-07-04 12:36:30] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 31.97ms  
+[2025-07-04 12:36:30] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 29.89ms  
+[2025-07-04 12:36:30] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 29.52ms  
+[2025-07-04 12:36:30] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 28.74ms  
+[2025-07-04 12:36:30] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 29.77ms  
+[2025-07-04 12:36:30] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 29.53ms  
+[2025-07-04 12:36:30] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 28.6ms  
+[2025-07-04 12:36:30] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 28.64ms  
+[2025-07-04 12:36:31] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 28.98ms  
+[2025-07-04 12:36:31] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'active' | Time: 30.53ms  
+[2025-07-04 12:36:31] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'pending_payment' | Time: 32.01ms  
+[2025-07-04 12:36:31] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'expired' | Time: 31.16ms  
+[2025-07-04 12:36:31] local.INFO: Query: select sum(price) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `status` = 'active' and `created_at` >= '2025-01-04 12:36:31' group by `month` order by `month` asc | Time: 31.26ms  
+[2025-07-04 12:36:31] local.INFO: Query: select * from `packages` order by `created_at` desc limit 100 | Time: 31.65ms  
+[2025-07-04 12:36:31] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 29.97ms  
+[2025-07-04 12:36:31] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 30.14ms  
+[2025-07-04 12:36:32] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 28.51ms  
+[2025-07-04 12:36:32] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 30.03ms  
+[2025-07-04 12:36:32] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 29.2ms  
+[2025-07-04 12:36:32] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 28.03ms  
+[2025-07-04 12:36:32] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 28.2ms  
+[2025-07-04 12:36:33] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 29.24ms  
+[2025-07-04 12:36:33] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 29.91ms  
+[2025-07-04 12:36:33] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:36:33' group by `month` order by `month` asc | Time: 28.79ms  
+[2025-07-04 12:36:33] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:36:33', '2025-07-04 12:36:33') | Time: 33.91ms  
+[2025-07-04 12:36:34] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 33.11ms  
+[2025-07-04 12:36:34] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'active' | Time: 33.4ms  
+[2025-07-04 12:36:34] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'pending_payment' | Time: 33.94ms  
+[2025-07-04 12:36:34] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'expired' | Time: 33.62ms  
+[2025-07-04 12:36:34] local.INFO: Query: select sum(price) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `status` = 'active' and `created_at` >= '2025-01-04 12:36:33' group by `month` order by `month` asc | Time: 33.53ms  
+[2025-07-04 12:36:34] local.INFO: Query: select * from `packages` order by `created_at` desc limit 100 | Time: 34.79ms  
+[2025-07-04 12:36:34] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 34.07ms  
+[2025-07-04 12:36:34] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 33.42ms  
+[2025-07-04 12:36:34] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 33.22ms  
+[2025-07-04 12:36:34] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 35.06ms  
+[2025-07-04 12:36:34] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 33.93ms  
+[2025-07-04 12:36:34] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 33.49ms  
+[2025-07-04 12:36:34] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 33.29ms  
+[2025-07-04 12:36:35] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 31.08ms  
+[2025-07-04 12:36:35] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 32.4ms  
+[2025-07-04 12:36:35] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 32ms  
+[2025-07-04 12:36:35] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 31.22ms  
+[2025-07-04 12:36:35] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 31.26ms  
+[2025-07-04 12:36:35] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 29.26ms  
+[2025-07-04 12:36:35] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 29.93ms  
+[2025-07-04 12:36:35] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 29.99ms  
+[2025-07-04 12:36:35] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 28.21ms  
+[2025-07-04 12:36:35] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 30.07ms  
+[2025-07-04 12:36:36] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 33.51ms  
+[2025-07-04 12:36:36] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 35.03ms  
+[2025-07-04 12:36:36] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:36:35' group by `month` order by `month` asc | Time: 33.64ms  
+[2025-07-04 12:36:36] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:36:36', '2025-07-04 12:36:36') | Time: 41.17ms  
+[2025-07-04 12:36:36] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 34.69ms  
+[2025-07-04 12:36:36] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 33.94ms  
+[2025-07-04 12:36:36] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:36:36' group by `month` order by `month` asc | Time: 34.15ms  
+[2025-07-04 12:36:36] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:36:36', '2025-07-04 12:36:36') | Time: 56.19ms  
+[2025-07-04 12:36:37] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 28.35ms  
+[2025-07-04 12:36:37] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'active' | Time: 28.7ms  
+[2025-07-04 12:36:37] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'pending_payment' | Time: 28.71ms  
+[2025-07-04 12:36:37] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'expired' | Time: 28.9ms  
+[2025-07-04 12:36:37] local.INFO: Query: select sum(price) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `status` = 'active' and `created_at` >= '2025-01-04 12:36:37' group by `month` order by `month` asc | Time: 29.14ms  
+[2025-07-04 12:36:37] local.INFO: Query: select * from `packages` order by `created_at` desc limit 100 | Time: 30.33ms  
+[2025-07-04 12:36:37] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 28.93ms  
+[2025-07-04 12:36:37] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 29.31ms  
+[2025-07-04 12:36:38] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 30.6ms  
+[2025-07-04 12:36:38] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 31.4ms  
+[2025-07-04 12:36:38] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 33.39ms  
+[2025-07-04 12:36:38] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 30.44ms  
+[2025-07-04 12:36:38] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 30.92ms  
+[2025-07-04 12:36:38] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 30.31ms  
+[2025-07-04 12:36:38] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 32.23ms  
+[2025-07-04 12:36:38] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 31.59ms  
+[2025-07-04 12:36:38] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 30.22ms  
+[2025-07-04 12:36:38] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 31.42ms  
+[2025-07-04 12:36:39] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 30.13ms  
+[2025-07-04 12:36:39] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'active' | Time: 28.87ms  
+[2025-07-04 12:36:39] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'pending_payment' | Time: 29.15ms  
+[2025-07-04 12:36:39] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'expired' | Time: 28.84ms  
+[2025-07-04 12:36:39] local.INFO: Query: select sum(price) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `status` = 'active' and `created_at` >= '2025-01-04 12:36:38' group by `month` order by `month` asc | Time: 30.01ms  
+[2025-07-04 12:36:39] local.INFO: Query: select * from `packages` order by `created_at` desc limit 100 | Time: 30.76ms  
+[2025-07-04 12:36:39] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 31.03ms  
+[2025-07-04 12:36:39] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 29.26ms  
+[2025-07-04 12:36:39] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 31.3ms  
+[2025-07-04 12:36:39] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 32.18ms  
+[2025-07-04 12:36:39] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:36:39' group by `month` order by `month` asc | Time: 31.76ms  
+[2025-07-04 12:36:39] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:36:39', '2025-07-04 12:36:39') | Time: 35.87ms  
+[2025-07-04 12:36:40] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 63.75ms  
+[2025-07-04 12:36:40] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 34.84ms  
+[2025-07-04 12:36:40] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 35.86ms  
+[2025-07-04 12:36:40] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 34.03ms  
+[2025-07-04 12:36:40] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 33.86ms  
+[2025-07-04 12:36:40] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 33.73ms  
+[2025-07-04 12:36:40] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 35.43ms  
+[2025-07-04 12:36:40] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:36:40' group by `month` order by `month` asc | Time: 34.54ms  
+[2025-07-04 12:36:40] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:36:40', '2025-07-04 12:36:40') | Time: 49.74ms  
+[2025-07-04 12:36:41] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 33.95ms  
+[2025-07-04 12:36:41] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'active' | Time: 34.56ms  
+[2025-07-04 12:36:41] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'pending_payment' | Time: 34.33ms  
+[2025-07-04 12:36:41] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'expired' | Time: 35.44ms  
+[2025-07-04 12:36:41] local.INFO: Query: select sum(price) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `status` = 'active' and `created_at` >= '2025-01-04 12:36:41' group by `month` order by `month` asc | Time: 36.16ms  
+[2025-07-04 12:36:41] local.INFO: Query: select * from `packages` order by `created_at` desc limit 100 | Time: 36.03ms  
+[2025-07-04 12:36:41] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 35ms  
+[2025-07-04 12:36:41] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 34.18ms  
+[2025-07-04 12:36:42] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 33.3ms  
+[2025-07-04 12:36:42] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 35.13ms  
+[2025-07-04 12:36:42] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 35.17ms  
+[2025-07-04 12:36:42] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 33.12ms  
+[2025-07-04 12:36:42] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 34.43ms  
+[2025-07-04 12:36:42] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 28.82ms  
+[2025-07-04 12:36:42] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 29.56ms  
+[2025-07-04 12:36:42] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 30.47ms  
+[2025-07-04 12:36:42] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 28.65ms  
+[2025-07-04 12:36:42] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 28.93ms  
+[2025-07-04 12:36:43] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 33.58ms  
+[2025-07-04 12:36:43] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'active' | Time: 33.74ms  
+[2025-07-04 12:36:43] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'pending_payment' | Time: 33.9ms  
+[2025-07-04 12:36:43] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'expired' | Time: 34.48ms  
+[2025-07-04 12:36:43] local.INFO: Query: select sum(price) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `status` = 'active' and `created_at` >= '2025-01-04 12:36:43' group by `month` order by `month` asc | Time: 33.81ms  
+[2025-07-04 12:36:43] local.INFO: Query: select * from `packages` order by `created_at` desc limit 100 | Time: 34.8ms  
+[2025-07-04 12:36:43] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 33.42ms  
+[2025-07-04 12:36:43] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 33.13ms  
+[2025-07-04 12:36:44] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 32.1ms  
+[2025-07-04 12:36:44] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 32.69ms  
+[2025-07-04 12:36:44] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:36:43' group by `month` order by `month` asc | Time: 31.45ms  
+[2025-07-04 12:36:44] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:36:43', '2025-07-04 12:36:43') | Time: 53.35ms  
+[2025-07-04 12:36:44] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 33.55ms  
+[2025-07-04 12:36:44] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'active' | Time: 33.61ms  
+[2025-07-04 12:36:44] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'pending_payment' | Time: 33.57ms  
+[2025-07-04 12:36:44] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'expired' | Time: 33.52ms  
+[2025-07-04 12:36:44] local.INFO: Query: select sum(price) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `status` = 'active' and `created_at` >= '2025-01-04 12:36:44' group by `month` order by `month` asc | Time: 34.51ms  
+[2025-07-04 12:36:44] local.INFO: Query: select * from `packages` order by `created_at` desc limit 100 | Time: 36.23ms  
+[2025-07-04 12:36:44] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 34.78ms  
+[2025-07-04 12:36:44] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 32.72ms  
+[2025-07-04 12:36:45] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 33.57ms  
+[2025-07-04 12:36:45] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 36.67ms  
+[2025-07-04 12:36:45] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:36:45' group by `month` order by `month` asc | Time: 33.57ms  
+[2025-07-04 12:36:45] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:36:45', '2025-07-04 12:36:45') | Time: 45.2ms  
+[2025-07-04 12:36:45] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 33.58ms  
+[2025-07-04 12:36:45] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 34.09ms  
+[2025-07-04 12:36:45] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 34.11ms  
+[2025-07-04 12:36:45] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 32.85ms  
+[2025-07-04 12:36:45] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 32.96ms  
+[2025-07-04 12:36:46] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 31.28ms  
+[2025-07-04 12:36:46] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 32.33ms  
+[2025-07-04 12:36:46] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 31.68ms  
+[2025-07-04 12:36:46] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 31.01ms  
+[2025-07-04 12:36:46] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 30.94ms  
+[2025-07-04 12:36:46] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 34.18ms  
+[2025-07-04 12:36:46] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 37.29ms  
+[2025-07-04 12:36:46] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 35.31ms  
+[2025-07-04 12:36:46] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 34.2ms  
+[2025-07-04 12:36:46] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 34.21ms  
+[2025-07-04 12:36:47] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 29.08ms  
+[2025-07-04 12:36:47] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'active' | Time: 29.14ms  
+[2025-07-04 12:36:47] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'pending_payment' | Time: 29.62ms  
+[2025-07-04 12:36:47] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'expired' | Time: 29.15ms  
+[2025-07-04 12:36:47] local.INFO: Query: select sum(price) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `status` = 'active' and `created_at` >= '2025-01-04 12:36:47' group by `month` order by `month` asc | Time: 29.16ms  
+[2025-07-04 12:36:47] local.INFO: Query: select * from `packages` order by `created_at` desc limit 100 | Time: 30.92ms  
+[2025-07-04 12:36:47] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 29.42ms  
+[2025-07-04 12:36:47] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 29.2ms  
+[2025-07-04 12:36:47] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 33.34ms  
+[2025-07-04 12:36:47] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 35.56ms  
+[2025-07-04 12:36:47] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 33.84ms  
+[2025-07-04 12:36:47] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 33.7ms  
+[2025-07-04 12:36:47] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 33.15ms  
+[2025-07-04 12:36:50] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 33.53ms  
+[2025-07-04 12:36:50] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'active' | Time: 38.26ms  
+[2025-07-04 12:36:50] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'pending_payment' | Time: 34.72ms  
+[2025-07-04 12:36:50] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'expired' | Time: 32.91ms  
+[2025-07-04 12:36:50] local.INFO: Query: select sum(price) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `status` = 'active' and `created_at` >= '2025-01-04 12:36:49' group by `month` order by `month` asc | Time: 33.45ms  
+[2025-07-04 12:36:50] local.WARNING: SLOW QUERY: select * from `packages` order by `created_at` desc limit 100 | Time: 120.75ms  
+[2025-07-04 12:36:50] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 33.18ms  
+[2025-07-04 12:36:50] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 33.28ms  
+[2025-07-04 12:36:50] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 31.67ms  
+[2025-07-04 12:36:50] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 31.07ms  
+[2025-07-04 12:36:50] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:36:50' group by `month` order by `month` asc | Time: 31.1ms  
+[2025-07-04 12:36:50] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:36:50', '2025-07-04 12:36:50') | Time: 33.14ms  
+[2025-07-04 12:36:51] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 31.24ms  
+[2025-07-04 12:36:51] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 32.88ms  
+[2025-07-04 12:36:51] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 30.7ms  
+[2025-07-04 12:36:51] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 34.97ms  
+[2025-07-04 12:36:51] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 30.53ms  
+[2025-07-04 12:36:51] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 33.68ms  
+[2025-07-04 12:36:51] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 36ms  
+[2025-07-04 12:36:51] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 34.04ms  
+[2025-07-04 12:36:51] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 33.16ms  
+[2025-07-04 12:36:51] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 34.46ms  
+[2025-07-04 12:37:00] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 29.48ms  
+[2025-07-04 12:37:00] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 30.97ms  
+[2025-07-04 12:37:00] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 29.48ms  
+[2025-07-04 12:37:00] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 28.76ms  
+[2025-07-04 12:37:00] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 29.69ms  
+[2025-07-04 12:38:03] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 29.67ms  
+[2025-07-04 12:38:03] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 31.14ms  
+[2025-07-04 12:38:03] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 30.19ms  
+[2025-07-04 12:38:03] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 30.01ms  
+[2025-07-04 12:38:03] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 29.7ms  
+[2025-07-04 12:38:03] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 33.51ms  
+[2025-07-04 12:38:03] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 35.69ms  
+[2025-07-04 12:38:03] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:38:03' group by `month` order by `month` asc | Time: 33.64ms  
+[2025-07-04 12:38:03] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:38:03', '2025-07-04 12:38:03') | Time: 42.44ms  
+[2025-07-04 12:38:04] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 33.54ms  
+[2025-07-04 12:38:04] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'active' | Time: 35.52ms  
+[2025-07-04 12:38:04] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'pending_payment' | Time: 34.51ms  
+[2025-07-04 12:38:04] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'expired' | Time: 33.74ms  
+[2025-07-04 12:38:04] local.INFO: Query: select sum(price) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `status` = 'active' and `created_at` >= '2025-01-04 12:38:04' group by `month` order by `month` asc | Time: 34.82ms  
+[2025-07-04 12:38:04] local.INFO: Query: select * from `packages` order by `created_at` desc limit 100 | Time: 36.38ms  
+[2025-07-04 12:38:04] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 34.88ms  
+[2025-07-04 12:38:04] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 34.17ms  
+[2025-07-04 12:38:04] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 31.01ms  
+[2025-07-04 12:38:04] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 33.72ms  
+[2025-07-04 12:38:04] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 31.11ms  
+[2025-07-04 12:38:04] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 31.37ms  
+[2025-07-04 12:38:04] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 31.07ms  
+[2025-07-04 12:38:08] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 30.83ms  
+[2025-07-04 12:38:08] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 48.18ms  
+[2025-07-04 12:38:08] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 31.54ms  
+[2025-07-04 12:38:08] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 30.4ms  
+[2025-07-04 12:38:08] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 30.44ms  
+[2025-07-04 12:38:08] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 29.49ms  
+[2025-07-04 12:38:08] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 29.39ms  
+[2025-07-04 12:38:08] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:38:08' group by `month` order by `month` asc | Time: 29.83ms  
+[2025-07-04 12:38:08] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:38:08', '2025-07-04 12:38:08') | Time: 33.86ms  
+[2025-07-04 12:38:09] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 28.51ms  
+[2025-07-04 12:38:09] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'active' | Time: 30.74ms  
+[2025-07-04 12:38:09] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'pending_payment' | Time: 29.11ms  
+[2025-07-04 12:38:09] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'expired' | Time: 28.97ms  
+[2025-07-04 12:38:09] local.INFO: Query: select sum(price) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `status` = 'active' and `created_at` >= '2025-01-04 12:38:09' group by `month` order by `month` asc | Time: 28.91ms  
+[2025-07-04 12:38:09] local.INFO: Query: select * from `packages` order by `created_at` desc limit 100 | Time: 30.13ms  
+[2025-07-04 12:38:09] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 29.13ms  
+[2025-07-04 12:38:09] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 28.68ms  
+[2025-07-04 12:38:09] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 29.03ms  
+[2025-07-04 12:38:09] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 31.35ms  
+[2025-07-04 12:38:09] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 28.49ms  
+[2025-07-04 12:38:09] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 28.54ms  
+[2025-07-04 12:38:09] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 28.53ms  
+[2025-07-04 12:38:12] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 32.1ms  
+[2025-07-04 12:38:12] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 32.9ms  
+[2025-07-04 12:38:12] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:38:12' group by `month` order by `month` asc | Time: 32.01ms  
+[2025-07-04 12:38:12] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:38:12', '2025-07-04 12:38:12') | Time: 56.91ms  
+[2025-07-04 12:38:13] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 35.01ms  
+[2025-07-04 12:38:13] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'active' | Time: 32.92ms  
+[2025-07-04 12:38:13] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'pending_payment' | Time: 33.62ms  
+[2025-07-04 12:38:13] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'expired' | Time: 33.19ms  
+[2025-07-04 12:38:13] local.INFO: Query: select sum(price) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `status` = 'active' and `created_at` >= '2025-01-04 12:38:13' group by `month` order by `month` asc | Time: 34.42ms  
+[2025-07-04 12:38:13] local.INFO: Query: select * from `packages` order by `created_at` desc limit 100 | Time: 48.75ms  
+[2025-07-04 12:38:13] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 33.46ms  
+[2025-07-04 12:38:13] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 33.21ms  
+[2025-07-04 12:38:14] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 33.75ms  
+[2025-07-04 12:38:14] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 35.33ms  
+[2025-07-04 12:38:14] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 35.13ms  
+[2025-07-04 12:38:14] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 34.04ms  
+[2025-07-04 12:38:14] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 33.85ms  
+[2025-07-04 12:38:14] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 29.87ms  
+[2025-07-04 12:38:14] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 31.48ms  
+[2025-07-04 12:38:14] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 29.18ms  
+[2025-07-04 12:38:14] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 28.41ms  
+[2025-07-04 12:38:14] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 28.06ms  
+[2025-07-04 12:38:58] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 37.1ms  
+[2025-07-04 12:38:58] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 34.44ms  
+[2025-07-04 12:38:58] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:38:58' group by `month` order by `month` asc | Time: 34.57ms  
+[2025-07-04 12:38:58] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:38:58', '2025-07-04 12:38:58') | Time: 36.45ms  
+[2025-07-04 12:38:59] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 29.77ms  
+[2025-07-04 12:38:59] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'active' | Time: 30.48ms  
+[2025-07-04 12:38:59] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'pending_payment' | Time: 30.21ms  
+[2025-07-04 12:38:59] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'expired' | Time: 30.28ms  
+[2025-07-04 12:38:59] local.INFO: Query: select sum(price) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `status` = 'active' and `created_at` >= '2025-01-04 12:38:59' group by `month` order by `month` asc | Time: 30.66ms  
+[2025-07-04 12:38:59] local.INFO: Query: select * from `packages` order by `created_at` desc limit 100 | Time: 31.16ms  
+[2025-07-04 12:38:59] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 30.28ms  
+[2025-07-04 12:38:59] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 30.32ms  
+[2025-07-04 12:39:00] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 33.48ms  
+[2025-07-04 12:39:00] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 34.3ms  
+[2025-07-04 12:39:00] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 34.86ms  
+[2025-07-04 12:39:00] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 33.4ms  
+[2025-07-04 12:39:00] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 33.36ms  
+[2025-07-04 12:39:00] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 33.13ms  
+[2025-07-04 12:39:00] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 34.36ms  
+[2025-07-04 12:39:00] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 34.65ms  
+[2025-07-04 12:39:00] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 33.29ms  
+[2025-07-04 12:39:00] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 33.95ms  
+[2025-07-04 12:39:07] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 29.24ms  
+[2025-07-04 12:39:07] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 30.43ms  
+[2025-07-04 12:39:07] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 30ms  
+[2025-07-04 12:39:07] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 28.77ms  
+[2025-07-04 12:39:07] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 30.29ms  
+[2025-07-04 12:39:07] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 30.48ms  
+[2025-07-04 12:39:07] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 31.02ms  
+[2025-07-04 12:39:07] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 31.28ms  
+[2025-07-04 12:39:07] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 30.22ms  
+[2025-07-04 12:39:07] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 32.29ms  
+[2025-07-04 12:39:08] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 30.99ms  
+[2025-07-04 12:39:08] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 31.6ms  
+[2025-07-04 12:39:08] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:39:08' group by `month` order by `month` asc | Time: 32.03ms  
+[2025-07-04 12:39:08] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:39:08', '2025-07-04 12:39:08') | Time: 34.34ms  
+[2025-07-04 12:39:08] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 30.27ms  
+[2025-07-04 12:39:08] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'active' | Time: 30.8ms  
+[2025-07-04 12:39:08] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'pending_payment' | Time: 31.17ms  
+[2025-07-04 12:39:08] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'expired' | Time: 31.23ms  
+[2025-07-04 12:39:08] local.INFO: Query: select sum(price) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `status` = 'active' and `created_at` >= '2025-01-04 12:39:08' group by `month` order by `month` asc | Time: 31.29ms  
+[2025-07-04 12:39:08] local.INFO: Query: select * from `packages` order by `created_at` desc limit 100 | Time: 46.98ms  
+[2025-07-04 12:39:08] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 30.3ms  
+[2025-07-04 12:39:08] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 29.86ms  
+[2025-07-04 12:39:39] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 33.31ms  
+[2025-07-04 12:39:39] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 34.19ms  
+[2025-07-04 12:39:39] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:39:39' group by `month` order by `month` asc | Time: 34.06ms  
+[2025-07-04 12:39:39] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:39:39', '2025-07-04 12:39:39') | Time: 36.21ms  
+[2025-07-04 12:39:40] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 33.89ms  
+[2025-07-04 12:39:40] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 34.28ms  
+[2025-07-04 12:39:40] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 33.95ms  
+[2025-07-04 12:39:40] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 33.89ms  
+[2025-07-04 12:39:40] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 33.6ms  
+[2025-07-04 12:39:41] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 29.31ms  
+[2025-07-04 12:39:41] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'active' | Time: 28.83ms  
+[2025-07-04 12:39:41] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'pending_payment' | Time: 29.58ms  
+[2025-07-04 12:39:41] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'expired' | Time: 29.16ms  
+[2025-07-04 12:39:41] local.INFO: Query: select sum(price) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `status` = 'active' and `created_at` >= '2025-01-04 12:39:41' group by `month` order by `month` asc | Time: 28.97ms  
+[2025-07-04 12:39:41] local.INFO: Query: select * from `packages` order by `created_at` desc limit 100 | Time: 29.77ms  
+[2025-07-04 12:39:41] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 29.07ms  
+[2025-07-04 12:39:41] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 41.26ms  
+[2025-07-04 12:39:42] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 33.27ms  
+[2025-07-04 12:39:42] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 33.93ms  
+[2025-07-04 12:39:42] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 33.84ms  
+[2025-07-04 12:39:42] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 32.99ms  
+[2025-07-04 12:39:42] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 34.02ms  
+[2025-07-04 12:39:42] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 31.38ms  
+[2025-07-04 12:39:42] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 32.49ms  
+[2025-07-04 12:39:42] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 32.08ms  
+[2025-07-04 12:39:42] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 30.59ms  
+[2025-07-04 12:39:42] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 31.1ms  
+[2025-07-04 12:39:43] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 33.43ms  
+[2025-07-04 12:39:43] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 35.51ms  
+[2025-07-04 12:39:43] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 34.79ms  
+[2025-07-04 12:39:43] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 33.44ms  
+[2025-07-04 12:39:43] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 33.26ms  
+[2025-07-04 12:39:43] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 30.83ms  
+[2025-07-04 12:39:43] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 30.86ms  
+[2025-07-04 12:39:43] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:39:43' group by `month` order by `month` asc | Time: 29.98ms  
+[2025-07-04 12:39:43] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:39:43', '2025-07-04 12:39:43') | Time: 54.07ms  
+[2025-07-04 12:40:03] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 29.42ms  
+[2025-07-04 12:40:03] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'active' | Time: 30.19ms  
+[2025-07-04 12:40:03] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'pending_payment' | Time: 30.55ms  
+[2025-07-04 12:40:03] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'expired' | Time: 29.9ms  
+[2025-07-04 12:40:03] local.INFO: Query: select sum(price) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `status` = 'active' and `created_at` >= '2025-01-04 12:40:02' group by `month` order by `month` asc | Time: 29.47ms  
+[2025-07-04 12:40:03] local.INFO: Query: select * from `packages` order by `created_at` desc limit 100 | Time: 31.4ms  
+[2025-07-04 12:40:03] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 32.23ms  
+[2025-07-04 12:40:03] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 29.86ms  
+[2025-07-04 12:40:03] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 32.79ms  
+[2025-07-04 12:40:03] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 34.48ms  
+[2025-07-04 12:40:03] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:40:03' group by `month` order by `month` asc | Time: 34.26ms  
+[2025-07-04 12:40:03] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:40:03', '2025-07-04 12:40:03') | Time: 46.45ms  
+[2025-07-04 12:40:04] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 49.83ms  
+[2025-07-04 12:40:04] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 32.04ms  
+[2025-07-04 12:40:04] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 30.63ms  
+[2025-07-04 12:40:04] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 30.97ms  
+[2025-07-04 12:40:04] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 31.17ms  
+[2025-07-04 12:40:05] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 33.49ms  
+[2025-07-04 12:40:05] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 47.79ms  
+[2025-07-04 12:40:05] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 34.37ms  
+[2025-07-04 12:40:05] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 33.6ms  
+[2025-07-04 12:40:05] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 32.1ms  
+[2025-07-04 12:40:05] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 34.74ms  
+[2025-07-04 12:40:05] local.INFO: Query: select * from `packages` order by `updated_at` desc limit 100 offset 0 | Time: 37.07ms  
+[2025-07-04 12:40:05] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 35.1ms  
+[2025-07-04 12:40:05] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 35.19ms  
+[2025-07-04 12:40:05] local.INFO: Query: select * from `service_packages` where `is_active` = '1' | Time: 33.62ms  
+[2025-07-04 12:40:06] local.INFO: Query: select `status`, count(*) as total from `packages` group by `status` | Time: 33.4ms  
+[2025-07-04 12:40:06] local.INFO: Query: select `service_packages`.*, (select count(*) from `packages` where `service_packages`.`id` = `packages`.`service_package_id`) as `packages_count` from `service_packages` order by `packages_count` desc | Time: 34.73ms  
+[2025-07-04 12:40:06] local.INFO: Query: select count(*) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `created_at` >= '2024-07-04 12:40:06' group by `month` order by `month` asc | Time: 34.86ms  
+[2025-07-04 12:40:06] local.INFO: Query: insert into `audit_logs` (`user_id`, `action`, `module`, `old_values`, `new_values`, `filters`, `ip_address`, `user_agent`, `updated_at`, `created_at`) values (1, 'view', 'packages', '', '', '[]', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36', '2025-07-04 12:40:06', '2025-07-04 12:40:06') | Time: 48.44ms  
+[2025-07-04 12:40:06] local.INFO: Query: select count(*) as aggregate from `packages` | Time: 28.55ms  
+[2025-07-04 12:40:06] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'active' | Time: 28.76ms  
+[2025-07-04 12:40:06] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'pending_payment' | Time: 29.35ms  
+[2025-07-04 12:40:06] local.INFO: Query: select count(*) as aggregate from `packages` where `status` = 'expired' | Time: 29.97ms  
+[2025-07-04 12:40:06] local.INFO: Query: select sum(price) as total, DATE_FORMAT(created_at, '%Y-%m') as month from `packages` where `status` = 'active' and `created_at` >= '2025-01-04 12:40:06' group by `month` order by `month` asc | Time: 30.97ms  
+[2025-07-04 12:40:06] local.INFO: Query: select * from `packages` order by `created_at` desc limit 100 | Time: 29.4ms  
+[2025-07-04 12:40:06] local.INFO: Query: select * from `customers` where `customers`.`id` in (1, 5, 6, 7, 8, 9, 10, 11, 12, 13) | Time: 29.94ms  
+[2025-07-04 12:40:06] local.INFO: Query: select * from `service_packages` where `service_packages`.`id` in (1) | Time: 29.32ms  
+[2025-07-04 13:30:27] local.INFO: Query: select * from `customers` where `customers`.`id` = 13 limit 1 | Time: 32.37ms  
+[2025-07-04 13:30:27] local.INFO: Query: select * from `vehicle_brands` where `vehicle_brands`.`id` = 91 limit 1 | Time: 31.52ms  
+[2025-07-04 13:30:27] local.INFO: Query: select * from `vehicle_models` where `vehicle_models`.`id` = 511 limit 1 | Time: 31.57ms  

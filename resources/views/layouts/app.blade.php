@@ -549,7 +549,7 @@
                 <i class="fas fa-chevron-left"></i>
             </div>
             <div class="sidebar-header">
-                <a href="{{ url('/') }}" class="sidebar-brand">
+                <a href="{{ url('/') }}" class="sidebar-brand" >
                     <img src="{{ asset('images/logo.svg') }}" alt="Logo" class="logo">
                     <img src="{{ asset('images/logo_mini.svg') }}" alt="Logo" class="logo-mini">
                 </a>
@@ -559,54 +559,37 @@
                 @auth
                 <ul class="nav nav-pills nav-sidebar flex-column">
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('packages.all') ? 'active' : '' }}" href="{{ route('packages.all') }}">
+                        <a class="nav-link {{ request()->routeIs('packages.all') ? 'active' : '' }}" href="{{ route('packages.all') }}" >
                             <i class="fas fa-box"></i>
                             <p>Tüm Paketler</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                        <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" >
                             <i class="fas fa-tachometer-alt"></i>
                             <p>Dashboard</p>
                         </a>
                     </li>
-
                     <li class="nav-item">
-                        <a href="#" class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" data-bs-toggle="collapse" data-bs-target="#reportsSubmenu">
-                            <i class="fas fa-chart-bar"></i>
-                            <p>Raporlar</p>
+                        <a href="{{ route('reports.index') }}" class="nav-link {{ request()->routeIs('reports.index') ? 'active' : '' }}" >
+                            <i class="fas fa-money-bill-wave"></i> Genel Raporu
                         </a>
-                        <ul class="nav nav-treeview collapse {{ request()->routeIs('reports.*') ? 'show' : '' }}" id="reportsSubmenu">
-                            <li class="nav-item">
-                               
-                                <ul class="nav flex-column ms-3">
-                                    <li class="nav-item">
-                                        <a href="{{ route('reports.index') }}" class="nav-link {{ request()->routeIs('reports.index') ? 'active' : '' }}">
-                                            <i class="fas fa-money-bill-wave"></i> Genel
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{ route('reports.packages') }}" class="nav-link {{ request()->routeIs('reports.packages') ? 'active' : '' }}">
-                                            <i class="fas fa-money-bill-wave"></i> Paket Raporu
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link {{ request()->routeIs('reports.revenue') ? 'active' : '' }}" href="{{ route('reports.revenue') }}">
-                                            <i class="fas fa-money-bill-wave"></i>  Gelir Raporu
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link {{ request()->routeIs('reports.customers') ? 'active' : '' }}" href="{{ route('reports.customers') }}">
-                                            <i class="fas fa-users"></i> Müşteri Raporu
-                                        </a>
-                                    </li>
-                                    
-                                </ul>
-                            </li>
-                        </ul>
                     </li>
-
-                   
+                    <li class="nav-item">
+                        <a href="{{ route('reports.packages') }}" class="nav-link {{ request()->routeIs('reports.packages') ? 'active' : '' }}" >
+                            <i class="fas fa-money-bill-wave"></i> Paket Raporu
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('reports.revenue') ? 'active' : '' }}" href="{{ route('reports.revenue') }}" >
+                            <i class="fas fa-money-bill-wave"></i>  Gelir Raporu
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('reports.customers') ? 'active' : '' }}" href="{{ route('reports.customers') }}" >
+                            <i class="fas fa-users"></i> Müşteri Raporu
+                        </a>
+                    </li>
                 </ul>
                 @endauth
             </nav>
@@ -620,7 +603,7 @@
                 <button class="menu-toggle" onclick="toggleMobileMenu()">
                     <i class="fas fa-bars"></i>
                 </button>
-                <a href="{{ route('packages.create') }}" class="new-package-btn {{ request()->routeIs('packages.create') ? 'active' : '' }}">
+                <a href="{{ route('packages.create') }}" class="new-package-btn {{ request()->routeIs('packages.create') ? 'active' : '' }}" >
                     <i class="fas fa-plus-circle"></i>
                     <span>Yeni Paket</span>
                 </a>
@@ -636,21 +619,21 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                            <a class="dropdown-item" href="{{ route('profile.edit') }}" >
                                 <i class="fas fa-user-edit"></i> Profil
                             </a>
-                            <a class="dropdown-item" href="{{ route('audit.index') }}">
+                            <a class="dropdown-item" href="{{ route('audit.index') }}" >
                                 <i class="fas fa-history"></i> Sistem Kayıtları
                             </a>
                             <div class="dropdown-divider"></div>
                             <h6 class="dropdown-header">Ayarlar</h6>
-                            <a class="dropdown-item" href="{{ route('vehicle-brands.index') }}">
+                            <a class="dropdown-item" href="{{ route('vehicle-brands.index') }}" >
                                 <i class="fas fa-car"></i> Araç Markaları
                             </a>
-                            <a class="dropdown-item" href="{{ route('vehicle-models.index') }}">
+                            <a class="dropdown-item" href="{{ route('vehicle-models.index') }}" >
                                 <i class="fas fa-car-side"></i> Araç Modelleri
                             </a>
-                            <a class="dropdown-item" href="{{ route('customers.index') }}">
+                            <a class="dropdown-item" href="{{ route('customers.index') }}" >
                                 <i class="fas fa-users"></i> Müşteriler
                             </a>
                             <div class="dropdown-divider"></div>
@@ -774,36 +757,7 @@
             }
         });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            // Menü linklerine tıklama olayı ekle
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    // Eğer alt menü açma/kapama butonu ise işlem yapma
-                    if (this.querySelector('.right')) {
-                        return;
-                    }
-                    
-                    e.preventDefault();
-                    const href = this.getAttribute('href');
-                    
-                    // Aktif menüyü güncelle
-                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // İçeriği yükle
-                    fetch(href)
-                        .then(response => response.text())
-                        .then(html => {
-                            document.getElementById('content-wrapper').innerHTML = html;
-                            // Sayfa yüklendikten sonra gerekli JavaScript kodlarını çalıştır
-                            if (typeof window.onPageLoad === 'function') {
-                                window.onPageLoad();
-                            }
-                        })
-                        .catch(error => console.error('Error:', error));
-                });
-            });
-        });
+        // Menü linkleri artık normal şekilde çalışacak - JavaScript müdahalesi yok
     </script>
 </body>
 </html>

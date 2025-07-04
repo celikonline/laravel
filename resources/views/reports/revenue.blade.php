@@ -32,19 +32,19 @@
         <div class="card-body">
             <form method="GET" action="{{ route('reports.revenue') }}" class="row g-3" id="filterForm">
                 <!-- Tarih Filtreleri -->
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label for="start_date" class="form-label">Başlangıç Tarihi</label>
                     <input type="date" class="form-control" id="start_date" name="start_date" 
                            value="{{ request('start_date', $startDate->format('Y-m-d')) }}">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label for="end_date" class="form-label">Bitiş Tarihi</label>
                     <input type="date" class="form-control" id="end_date" name="end_date" 
                            value="{{ request('end_date', $endDate->format('Y-m-d')) }}">
                 </div>
 
                 <!-- Durum Filtresi -->
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label for="status" class="form-label">Durum</label>
                     <select class="form-select" id="status" name="status">
                         <option value="">Tümü</option>
@@ -57,7 +57,7 @@
                 </div>
 
                 <!-- Müşteri Filtresi -->
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label for="customer_id" class="form-label">Müşteri</label>
                     <select class="form-select" id="customer_id" name="customer_id">
                         <option value="">Tümü</option>
@@ -70,7 +70,7 @@
                 </div>
 
                 <!-- Servis Paketi Filtresi -->
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label for="service_package_id" class="form-label">Servis Paketi</label>
                     <select class="form-select" id="service_package_id" name="service_package_id">
                         <option value="">Tümü</option>
@@ -83,19 +83,19 @@
                 </div>
 
                 <!-- Fiyat Aralığı Filtreleri -->
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label for="min_price" class="form-label">Min. Tutar</label>
                     <input type="number" class="form-control" id="min_price" name="min_price" 
                            value="{{ request('min_price') }}" placeholder="0">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label for="max_price" class="form-label">Max. Tutar</label>
                     <input type="number" class="form-control" id="max_price" name="max_price" 
                            value="{{ request('max_price') }}" placeholder="10000">
                 </div>
 
                 <!-- Arama -->
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label for="search" class="form-label">Arama</label>
                     <input type="text" class="form-control" id="search" name="search" 
                            value="{{ request('search') }}" 
@@ -103,7 +103,7 @@
                 </div>
 
                 <!-- Butonlar -->
-                <div class="col-md-3 d-flex align-items-end">
+                <div class="col-md-2 d-flex align-items-end">
                     <div class="btn-group w-100">
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-filter"></i> Filtrele

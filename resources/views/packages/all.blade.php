@@ -61,11 +61,16 @@
                                     <label class="form-label d-block">&nbsp;</label>
                                     <div class="d-flex gap-2">
                                         <button type="submit" class="btn btn-primary flex-grow-1">Filtrele</button>
-                                        <a href="{{ route('packages.all') }}" class="btn btn-secondary">Temizle</a>
+                                        <a href="{{ route('packages.export-filtered', request()->query()) }}" class="btn btn-success">
+                                            <i class="fas fa-file-csv"></i> CSV İndir
+                                        </a>
+                                        
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
+                       
                     </form>
 
                     <div class="table-responsive">
@@ -226,10 +231,10 @@
                                                         </button>
                                                     </form>
                                                 @endif
-                                                <a href="{{ route('packages.contract-preview', $package->id) }}" class="btn btn-sm btn-outline-warning" target="_blank" title="Sözleşme Önizleme">
+                                                <a href="{{ route('packages.contract-preview', $package->id) }}" class="btn btn-sm btn-outline-success" target="_blank" title="Sözleşme Önizleme">
                                                     <i class="fas fa-file-contract"></i>
                                                 </a>
-                                                <a href="{{ route('packages.receipt-preview', $package->id) }}" class="btn btn-sm btn-outline-danger" target="_blank" title="Makbuz Önizleme">
+                                                <a href="{{ route('packages.receipt-preview', $package->id) }}" class="btn btn-sm btn-outline-info" target="_blank" title="Makbuz Önizleme">
                                                     <i class="fas fa-receipt"></i>
                                                 </a>
                                             </div>

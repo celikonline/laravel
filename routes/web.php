@@ -67,6 +67,7 @@ Route::get('/packages/{package}/receipt-preview', [PackageController::class, 're
 Route::get('/packages/download-agreement', [PackageController::class, 'downloadTemplateAgreementPdf'])->name('packages.download-agreement');
 Route::get('/packages/download-kvkk', [PackageController::class, 'downloadKvkkPdf'])->name('packages.download-kvkk');
 Route::get('/packages/all', [PackageController::class, 'allPackages'])->name('packages.all');
+Route::get('/packages/export-filtered', [PackageController::class, 'exportFilteredPackages'])->name('packages.export-filtered');
 Route::post('/packages/{id}/cancel', [PackageController::class, 'deactivate'])->name('packages.cancel');
 Route::post('/packages/{id}/activate', [PackageController::class, 'activate'])->name('packages.activate');
 Route::get('/packages/export-csv', [PackageController::class, 'exportCsv'])->name('packages.export-csv');

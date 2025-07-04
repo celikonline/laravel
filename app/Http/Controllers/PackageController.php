@@ -893,6 +893,47 @@ class PackageController extends Controller
         return view('packages.all', compact('packages', 'servicePackages'));
     }
 
+    public function exportFilteredPackages(Request $request)
+    {
+        $query = Package::with(['customer', 'servicePackage']);
+
+        // Aynı filtreleri uygula
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('contract_number', 'like', "%{$search}%")
+                  ->orWhereHas('customer', function($q) use ($search) {
+                      $q->where('first_name', 'like', "%{$search}%")
+                        ->orWhere('last_name', 'like', "%{$search}%");
+                  })
+                  ->orWhere('plate_city', 'like', "%{$search}%")
+                  ->orWhere('plate_letters', 'like', "%{$search}%")
+                  ->orWhere('plate_numbers', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->has('status') && !empty($request->status)) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->has('start_date') && !empty($request->start_date)) {
+            $query->where('start_date', '>=', $request->start_date);
+        }
+
+        if ($request->has('end_date') && !empty($request->end_date)) {
+            $query->where('end_date', '<=', $request->end_date);
+        }
+
+        if ($request->has('service_package_id') && !empty($request->service_package_id)) {
+            $query->where('service_package_id', $request->service_package_id);
+        }
+
+        $packages = $query->get();
+
+        $export = new PackagesExport($packages);
+        return $export->export();
+    }
+
     /**
      * Generate service agreement for the package
      */
